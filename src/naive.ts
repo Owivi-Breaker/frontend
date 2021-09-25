@@ -41,7 +41,9 @@ import {
     NGradientText,
     NGrid,
     NGridItem,
-    NThing
+    NThing,
+    NCollapse,
+    NCollapseItem
 } from 'naive-ui'
 
 export default create({
@@ -85,6 +87,8 @@ export default create({
         NGradientText,
         NGrid,
         NGridItem,
-        NThing
+        NThing,
+        NCollapse,
+        NCollapseItem
     ]
 })
