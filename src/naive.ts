@@ -38,7 +38,10 @@ import {
     NDialogProvider,
     NMessageProvider,
     NLoadingBarProvider,
-    NGradientText
+    NGradientText,
+    NGrid,
+    NGridItem,
+    NThing
 } from 'naive-ui'
 
 export default create({
@@ -79,6 +82,9 @@ export default create({
         NDialogProvider,
         NMessageProvider,
         NLoadingBarProvider,
-        NGradientText
+        NGradientText,
+        NGrid,
+        NGridItem,
+        NThing
     ]
 })

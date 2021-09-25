@@ -17,3 +17,4 @@ import { useOsTheme, darkTheme } from 'naive-ui'
 const osTheme = useOsTheme()
 const theme = computed(() => (osTheme.value === 'dark' ? darkTheme : null))
 </script>
+
