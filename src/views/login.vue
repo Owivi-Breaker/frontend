@@ -6,7 +6,7 @@
             <n-input v-model:value="formValue.username" placeholder="用户名" />
         </n-form-item>
         <n-form-item label="密码" path="password">
-            <n-input v-model:value="formValue.password" placeholder="密码" @keyup.enter="PostLogin" />
+            <n-input v-model:value="formValue.password" placeholder="密码" @keyup.enter="PostLogin" type="password" />
         </n-form-item>
         <n-form-item>
             <n-checkbox v-model:checked="needSave">记住我</n-checkbox>
