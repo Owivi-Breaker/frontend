@@ -34,6 +34,14 @@ const routes: RouteRecordRaw[] = [
             title: 'Sign In'
         }
     },
+    {
+        name: 'register',
+        path: '/register',
+        component: () => import('../views/register.vue'),
+        meta: {
+            title: 'Register'
+        }
+    },
     // render layout
     {
         name: 'layout',

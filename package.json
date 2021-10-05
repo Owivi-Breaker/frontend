@@ -8,10 +8,13 @@
   },
   "dependencies": {
     "@vicons/ionicons-v5": "0.0.4",
-    "vue": "^3.2.6"
+    "qs": "^6.10.1",
+    "vue": "^3.2.6",
+    "vue-tsc": "^0.3.0"
   },
   "devDependencies": {
     "@antv/g2": "^4.1.25",
+    "@types/qs": "^6.9.7",
     "@vicons/antd": "^0.11.0",
     "@vicons/carbon": "^0.11.0",
     "@vicons/fa": "^0.11.0",
@@ -28,7 +31,6 @@
     "vfonts": "^0.1.0",
     "vite": "^2.5.4",
     "vue-router": "^4.0.11",
-    "vue-tsc": "^0.2.2",
     "vuejs-avataaars": "^4.0.1"
   }
 }
