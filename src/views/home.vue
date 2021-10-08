@@ -14,4 +14,6 @@
 
 <script lang="ts" setup>
 import { PlayerCard } from '../components'
+import { storage } from '../utils';
+storage.remove("token")
 </script>

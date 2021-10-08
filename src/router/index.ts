@@ -7,6 +7,10 @@ const router = createRouter({ history, routes })
 
 // Authorize (Make sure that is the first hook.)
 router.beforeEach(to => {
+    if (to.meta.title) {
+        let title: any = to.meta.title;
+        document.title = title;
+    }
     const token = storage.get('token')
     // allreay authorized
     if (to.name === 'login' && token != null) {

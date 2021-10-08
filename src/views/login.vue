@@ -12,12 +12,12 @@
             <n-checkbox v-model:checked="needSave">记住我</n-checkbox>
         </n-form-item>
         <n-form-item>
-            <n-button v-on:click="PostLogin" attr-type="button">进入OwiviOsa</n-button>
+            <n-button type="primary" v-on:click="PostLogin" attr-type="button">进入OwiviOsa</n-button>
         </n-form-item>
     </n-form>
     <div>
         还没有账号？
-        <a id="registerLink" href="/register" v-on:click="GoRegister">点我注册</a>
+        <a id="registerLink" href="/register">点我注册</a>
     </div>
 </template>
 <script lang="ts" setup>
@@ -65,7 +65,6 @@ function GetCookie(): void {
     if (document.cookie.length > 0) {
         let cookie: string[] = document.cookie.split("; ");
         cookie.forEach(function (element): void {
-            console.log(element)
             let result: string[] = element.split("=");
             if (result[0] === "username") {
                 formValue.value.username = result[1];
@@ -81,7 +80,6 @@ function PostLogin(): void {
         if (!errors) {
             axios({
                 method: "post",
-                baseURL: "http://s3.s100.vip:35881/",
                 url: "/login",
                 data: qs.stringify({
                     username: formValue.value.username,
@@ -96,12 +94,18 @@ function PostLogin(): void {
                 }
                 setTimeout(() => { router.push({ name: "home" }); }, 1000); // 在本地运行时为了先显示登录成功的消息后跳转页面的等待，后期部署删除
             }).catch(error => {
+                console.log(error.message)
                 switch (error.message) {
-                    case "Request failed with status code 401":
-                        message.error("登录失败，用户名或密码错误。");
-                        break;
+                    case "Request failed with status code 404":
                     case "Network Error":
                         message.error("登录失败，网络错误。");
+                        break;
+                    case "Request failed with status code 401":
+                        switch (error.response.data.detail) {
+                            case "Incorrect username or password":
+                                message.error("登录失败，用户名或密码错误。");
+                                break;
+                        }
                         break;
                     default:
                         message.error("登录失败。");
@@ -112,9 +116,6 @@ function PostLogin(): void {
             message.error("登录失败。");
         }
     })
-}
-function GoRegister(): void {
-    router.push({ name: "register" });
 }
 </script>
 <style>

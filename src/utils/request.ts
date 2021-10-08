@@ -3,8 +3,7 @@ import axios from 'axios'
 const service = axios.create(
     {
         // baseURL: process.env.VUE_APP_BASE_API,
-        baseURL: 'http://localhost:8000/api/v1',
-        //baseURL: 'http://192.168.1.105:8000/api',
+        baseURL: "http://s3.s100.vip:35881/",
         timeout: 6 * 1000
     }
 )
