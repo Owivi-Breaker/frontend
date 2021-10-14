@@ -15,6 +15,11 @@
 <script lang="ts" setup>
 import { PlayerCard } from '../components'
 import { storage } from '../utils';
+import { Router, useRouter } from "vue-router";
+import { useMessage } from "naive-ui";
+import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
+let message: MessageApiInjection = useMessage();
+let router: Router = useRouter();
 let token: string = storage.get("token");
 if (!token) {
     HandleTokenError();
@@ -45,4 +50,8 @@ axios({
             break;
     }
 })
+function HandleTokenError(): void {
+    message.error("登录失效，请重新登陆。");
+    setTimeout(() => { router.push({ name: "login" }); }, 1000);
+}
 </script>
