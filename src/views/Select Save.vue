@@ -1,19 +1,13 @@
 <template>
-   <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
-   <p id="title"></p>
-   <n-form id="form" :show-label="false" :model="formValue" :rules="rules" ref="formRef">
-       <n-form>
-       <n-form-item label="选择存档:">
-        <select id="myarchive">
-        <option>请选择</option>
-        </select>
-        </n-form-item>
-        </n-form>
-        <n-form-item>
-         <n-button type="primary"  v-on:click="leagueShowModal = true" attr-type="button">新建存档</n-button>
-        </n-form-item>
-        <n-form-item>
-              <n-modal v-model:show="leagueShowModal">
+    <div style="text-align: center;">
+        <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
+        <n-select class="selectSave" placeholder="请选择" v-model:value="choseSave" :options="saveList">
+            <template #empty style="text-align: center;">Oops!什么都没有</template>
+        </n-select>
+        <n-button class="newSaveButton" type="primary" v-on:click="leagueShowModal = true" attr-type="button">新建存档</n-button>
+        <n-button class="beginGameButton" type="primary" v-on:click="Enter" attr-type="button">开始游戏</n-button>
+    </div>
+    <n-modal v-model:show="leagueShowModal">
         <n-card class="leagueModalCard" title="新建存档" :bordered="false" size="huge">
             <template #header-extra></template>
             <n-form>
@@ -62,27 +56,17 @@
         </n-card>
     </n-modal>
     <n-modal v-model:show="loadShowModal" :mask-closable="false">
-        <n-card class="loadModalCard" title="请稍候" :bordered="true" size="huge">
-            <n-spin size="medium" />
-        </n-card>
-    </n-modal>
-    <n-modal v-model:show="loadShowModal2" :mask-closable="false">
-        <n-card  class="loadModalCard2" title="创建成功" :bordered="true" size="huge">
-            <n-icon size="80" color="#0e7a0d">
-                <Ios-Checkmark/>
+        <n-card class="loadModalCard" :title="loadTitle" :bordered="true" size="huge">
+            <n-spin v-if="!loadComplete" size="medium" />
+            <n-icon v-if="loadComplete" size="80" color="#18a058">
+                <Ios-Checkmark />
             </n-icon>
         </n-card>
     </n-modal>
-            <n-button type="primary" v-on:click="Enter" attr-type="button">开始游戏</n-button>
-        </n-form-item>
-   </n-form>
 </template>
-
-
 <script lang="ts" setup>
-import { PlayerCard } from '../components'
 import axios from 'axios';
-import { ref } from "vue";
+import { ref, defineComponent } from "vue";
 import { Ref } from "@vue/reactivity";
 import { storage } from '../utils';
 import { useMessage } from "naive-ui";
@@ -90,9 +74,7 @@ import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
 import FiveLeagues from "../json/Five Leagues List.json";
 import SuperLeagues from "../json/Super Leagues List.json";
 import { Router, useRouter } from "vue-router";
-import { IosCheckmark } from '@vicons/ionicons4'
-import { defineComponent } from 'vue'
-
+import { IosCheckmark } from '@vicons/ionicons4';
 let leagueShowModal: Ref<boolean> = ref(false);
 let leagueValue: Ref<string> = ref("五大联赛");
 let leagueOptions: Ref<Array<{ label: string, value: string }>> = ref([
@@ -104,16 +86,58 @@ let teamList: Ref<Array<{ name: string, finance: number, reputation: number }>> 
 let showGoButton: Ref<number> = ref(-1);
 let competetionList: Ref = ref();
 let loadShowModal: Ref<boolean> = ref(false);
-let loadShowModal2: Ref<boolean> = ref(false);
+let loadComplete: Ref<boolean> = ref(false);
 let token: string = storage.get("token");
 let message: MessageApiInjection = useMessage();
 let router: Router = useRouter();
+let saveList: Ref<Array<object>> = ref([]);
+let choseSave: Ref<any> = ref(null);
+let loadTitle: Ref<string> = ref("请稍候");
 defineComponent({
-  components: {
-    IosCheckmark
-  }
+    components: {
+        IosCheckmark
+    }
+});
+if (!token) {
+    HandleTokenError();
+}
+axios({
+    method: "GET",
+    url: "/login/users/show-saves",
+    headers: {
+        authorization: `Bearer ${token}`
+    }
+}).then(response => {
+    saveList.value = response.data;
+    saveList.value.forEach(function (element: any) {
+        element.value = element.id;
+        element.label = "时间" + element.time + "，赛季" + element.season;
+    });
+}).catch(error => {
+    switch (error.message) {
+        case "Request failed with status code 404":
+        case "Network Error":
+            message.error("网络错误。");
+            break;
+        case "Request failed with status code 401":
+            switch (error.response.data.detail) {
+                case "Could not validate credentials":
+                    storage.remove("token");
+                    HandleTokenError();
+                    break;
+            }
+            break;
+        default:
+            message.error("网络错误。");
+            break;
+    }
 })
-
+function Enter(): void {
+    if (choseSave.value) {
+        storage.set("saveID", choseSave.value);
+        router.push({ name: "home" });
+    }
+}
 function SelectLeagues(): void {
     competetionList.value = [];
     if (leagueValue.value === "五大联赛") {
@@ -139,7 +163,7 @@ function ChangeCompetetion(key: any, item: any): void {
 }
 function HandleTokenError(): void {
     message.error("登录失效，请重新登陆。");
-    setTimeout(() => { router.push({ name: "login" }); }, 1000); // 在本地运行时为了先显示登录成功的消息后跳转页面的等待，后期部署删除
+    setTimeout(() => { router.push({ name: "login" }); }, 1000);
 }
 function NewSave(index: number): void {
     if (!token) {
@@ -156,14 +180,11 @@ function NewSave(index: number): void {
             type: leagueValue.value === "五大联赛" ? "five_leagues" : "super_leagues",
             player_club_name: teamList.value[index].name
         },
-    }).then(response =>{if(response.status!=200){
-        loadShowModal.value = false; 
-        storage.set("saveID", response.data.id);}
-        else if(response.status==200)
-        {
-            loadShowModal.value = true;
-            loadShowModal2.value = false;
-        }
+    }).then(response => {
+        storage.set("saveID", response.data.id);
+        loadComplete.value = true;
+        loadTitle.value = "创建成功";
+        setTimeout(() => { router.push({ name: "login" }); }, 2000);
     }).catch(error => {
         switch (error.message) {
             case "Request failed with status code 404":
@@ -182,31 +203,11 @@ function NewSave(index: number): void {
                 message.error("创建失败。");
                 break;
         }
-    })
-}     
-
-function GetArchive(): void {
-    axios({
-        method: "GET",
-        url: "/login/users/show-saves",
-        headers:{
-            authorization:`Bearer ${token}`
-        }
-    }).then(response => {
-        console.log(response)
-    })      
+    });
 }
-
-function Enter(): void {
-    setTimeout(() => { router.push({ name: "home" }); }, 1000);
-}
-
 </script>
-
-
 <style>
- body {
-    text-align: center;
+body {
     padding-top: 150px;
     background-image: url("../assets/背景.png");
 }
@@ -217,23 +218,10 @@ function Enter(): void {
     display: inline-block;
     width: 300px;
 }
-.n-input {
-    margin-top: 20px;
+.selectSave {
+    margin: 0 auto;
     width: 300px;
-    padding: 5px;
-    border-radius: 20px;
-}
-.n-button {
-    padding: 20px;
-    color:white;
-    width: 300px;
-    border-radius: 20px;
-}
-label {
-    color:white;
-}
-.n-checkbox {
-    margin-left: 15px;
+    text-align: left;
 }
 .leagueModalCard {
     width: 400px;
@@ -274,17 +262,5 @@ label {
     width: 320px;
     height: 180px;
     text-align: center;
-}
-.option{
-    margin: 100px;
-    width: 140px;
-    height: 40px;
-    border: 1px solid #cccccc;
-    position: relative;
-}
-select{
-    border: 1px solid #ffffff;
-    width: 300px;
-    height: 30px;
 }
 </style>
