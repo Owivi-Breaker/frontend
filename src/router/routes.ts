@@ -41,6 +41,14 @@ const routes: RouteRecordRaw[] = [
             title: "注册"
         }
     },
+    {
+        name: 'selectsave',
+        path: '/selectsave',
+        component: () => import('../views/selectsave.vue'),
+        meta: {
+            title: "读档"
+        }
+    },
     // render layout
     {
         name: 'layout',

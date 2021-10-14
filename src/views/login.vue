@@ -1,23 +1,25 @@
 <template>
-    <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
-    <p id="title">登录</p>
-    <n-form id="form" :show-label="false" :model="formValue" :rules="rules" ref="formRef">
-        <n-form-item label="用户名" path="username">
-            <n-input v-model:value="formValue.username" placeholder="用户名" />
-        </n-form-item>
-        <n-form-item label="密码" path="password">
-            <n-input v-model:value="formValue.password" placeholder="密码" @keyup.enter="PostLogin" type="password" />
-        </n-form-item>
-        <n-form-item>
-            <n-checkbox v-model:checked="needSave">记住我</n-checkbox>
-        </n-form-item>
-        <n-form-item>
-            <n-button type="primary" v-on:click="PostLogin" attr-type="button">进入OwiviOsa</n-button>
-        </n-form-item>
-    </n-form>
-    <div>
-        还没有账号？
-        <a id="registerLink" href="/register">点我注册</a>
+     <div style="text-align: center;">
+        <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
+        <p id="title">登录</p>
+        <n-form id="form" :show-label="false" :model="formValue" :rules="rules" ref="formRef">
+            <n-form-item label="用户名" path="username">
+                <n-input class="roundInput" v-model:value="formValue.username" placeholder="用户名" />
+            </n-form-item>
+            <n-form-item label="密码" path="password">
+                <n-input class="roundInput" v-model:value="formValue.password" placeholder="密码" @keyup.enter="PostLogin" type="password" />
+            </n-form-item>
+            <n-form-item>
+                <n-checkbox v-model:checked="needSave">记住我</n-checkbox>
+            </n-form-item>
+            <n-form-item>
+                <n-button class="roundButton" type="primary" v-on:click="PostLogin" attr-type="button">进入OwiviOsa</n-button>
+            </n-form-item>
+        </n-form>
+        <div>
+            还没有账号？
+            <a id="registerLink" href="/register">点我注册</a>
+        </div>
     </div>
 </template>
 <script lang="ts" setup>
@@ -92,7 +94,7 @@ function PostLogin(): void {
                 if (needSave.value) {
                     SetCookie(formValue.value.username, formValue.value.password, 7);
                 }
-                setTimeout(() => { router.push({ name: "home" }); }, 1000); // 在本地运行时为了先显示登录成功的消息后跳转页面的等待，后期部署删除
+                setTimeout(() => { router.push({ name: "selectsave" }); }, 1000); // 在本地运行时为了先显示登录成功的消息后跳转页面的等待，后期部署删除
             }).catch(error => {
                 console.log(error.message)
                 switch (error.message) {
@@ -120,7 +122,6 @@ function PostLogin(): void {
 </script>
 <style>
 body {
-    text-align: center;
     padding-top: 150px;
     background-image: url("../assets/背景.png");
 }
@@ -135,13 +136,13 @@ body {
     display: inline-block;
     width: 300px;
 }
-.n-input {
+.roundInput {
     margin-top: 20px;
     width: 300px;
     padding: 5px;
     border-radius: 20px;
 }
-.n-button {
+.roundButton {
     padding: 20px;
     color: white;
     width: 300px;

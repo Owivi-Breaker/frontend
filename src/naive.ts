@@ -19,6 +19,7 @@ import {
     NCheckbox,
     NTabs,
     NTabPane,
+    NSpin,
     NList,
     NListItem,
     NDropdown,
@@ -48,6 +49,7 @@ import {
     NGridItem,
     NThing,
     NCollapse,
+    NSelect,
     NCollapseItem
 } from 'naive-ui'
 
@@ -61,6 +63,7 @@ export default create({
         NA,
         NIcon,
         NImage,
+        NSpin,
         NAvatar,
         NButton,
         NBadge,
@@ -84,6 +87,7 @@ export default create({
         NTooltip,
         NPopover,
         NSpace,
+        NSelect,
         NLayout,
         NLayoutSider,
         NLayoutHeader,
