@@ -63,7 +63,7 @@
     <n-modal v-model:show="loadShowModal" :mask-closable="false">
         <n-card class="loadModalCard" :title="loadTitle" :bordered="true" size="huge">
             <n-spin v-if="!loadComplete" size="medium" />
-            <n-icon v-if="loadComplete" size="80" color="#18a058">
+            <n-icon class="completeCreateSaveIcon" v-if="loadComplete" size="80" color="#18a058">
                 <Ios-Checkmark />
             </n-icon>
         </n-card>
@@ -293,5 +293,8 @@ body {
     width: 320px;
     height: 180px;
     text-align: center;
+}
+.completeCreateSaveIcon {
+    margin-top: -30px;
 }
 </style>
