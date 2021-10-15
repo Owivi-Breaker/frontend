@@ -1,11 +1,14 @@
 <template>
-    <div style="text-align: center;">
+    <div class="selectSaveDiv">
         <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
+        <p class="title">选择存档</p>
         <n-select class="selectSave" placeholder="请选择" v-model:value="choseSave" :options="saveList">
             <template #empty style="text-align: center;">Oops!什么都没有</template>
         </n-select>
-        <n-button class="newSaveButton" type="primary" v-on:click="leagueShowModal = true" attr-type="button">新建存档</n-button>
-        <n-button class="beginGameButton" type="primary" v-on:click="Enter" attr-type="button">开始游戏</n-button>
+        <div class="saveButtonDiv">
+            <n-button class="newSaveButton" type="primary" v-on:click="leagueShowModal = true" attr-type="button">新建存档</n-button>
+            <n-button class="beginGameButton" type="primary" v-on:click="Enter" attr-type="button">开始游戏</n-button>
+        </div>
     </div>
     <n-modal v-model:show="leagueShowModal">
         <n-card class="leagueModalCard" title="新建存档" :bordered="false" size="huge">
@@ -208,19 +211,35 @@ function NewSave(index: number): void {
 </script>
 <style>
 body {
-    padding-top: 150px;
     background-image: url("../assets/背景.png");
+}
+.selectSaveDiv {
+    text-align: center;
+    width: 300px;
+    height: 290px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 #logo {
     width: 100px;
 }
-#form {
-    display: inline-block;
-    width: 300px;
+.title {
+    color: white;
+    font-size: 20px;
+}
+.saveButtonDiv {
+    margin-top: 20px;
+    text-align: left;
+}
+.beginGameButton {
+    margin-left: 131px;
 }
 .selectSave {
-    margin: 0 auto;
-    width: 300px;
+    margin-top: 20px;
     text-align: left;
 }
 .leagueModalCard {

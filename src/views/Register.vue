@@ -1,5 +1,5 @@
 <template>
-    <div style="text-align: center;">
+    <div class="registerDiv">
         <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
         <p id="title">注册</p>
         <n-form id="form" :show-label="false" :model="formValue" :rules="rules" ref="formRef">
@@ -136,8 +136,18 @@ function ShowProtocol(): void {
 </script>
 <style>
 body {
-    padding-top: 125px;
     background-image: url("../assets/背景.png");
+}
+.registerDiv {
+    text-align: center;
+    width: 300px;
+    height: 610px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 #logo {
     width: 100px;

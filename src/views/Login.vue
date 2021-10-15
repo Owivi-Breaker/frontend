@@ -1,5 +1,5 @@
 <template>
-    <div style="text-align: center;">
+    <div class="loginDiv">
         <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
         <p id="title">登录</p>
         <n-form id="form" :show-label="false" :model="formValue" :rules="rules" ref="formRef">
@@ -122,8 +122,18 @@ function PostLogin(): void {
 </script>
 <style>
 body {
-    padding-top: 150px;
     background-image: url("../assets/背景.png");
+}
+.loginDiv {
+    text-align: center;
+    width: 300px;
+    height: 520px;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }
 #logo {
     width: 100px;
