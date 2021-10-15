@@ -2,7 +2,7 @@
     <div class="selectSaveDiv">
         <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
         <p class="title">选择存档</p>
-        <n-select class="selectSave" placeholder="请选择" v-model:value="choseSave" :options="saveList">
+        <n-select class="selectSave" placeholder="请选择" v-model:value="choseSave" :options="saveList" v-on:click="GetSave" v-bind:loading="isSelectLoading">
             <template #empty style="text-align: center;">Oops!什么都没有</template>
         </n-select>
         <div class="saveButtonDiv">
@@ -94,6 +94,7 @@ let token: string = storage.get("token");
 let message: MessageApiInjection = useMessage();
 let router: Router = useRouter();
 let saveList: Ref<Array<object>> = ref([]);
+let isSelectLoading: Ref<boolean> = ref(false);
 let choseSave: Ref<any> = ref(null);
 let loadTitle: Ref<string> = ref("请稍候");
 defineComponent({
@@ -101,40 +102,45 @@ defineComponent({
         IosCheckmark
     }
 });
-if (!token) {
-    HandleTokenError();
-}
-axios({
-    method: "GET",
-    url: "/login/users/show-saves",
-    headers: {
-        authorization: `Bearer ${token}`
+GetSave();
+function GetSave(): void {
+    if (!token) {
+        HandleTokenError();
     }
-}).then(response => {
-    saveList.value = response.data;
-    saveList.value.forEach(function (element: any) {
-        element.value = element.id;
-        element.label = "时间" + element.time + "，赛季" + element.season;
+    isSelectLoading.value = true;
+    axios({
+        method: "GET",
+        url: "/login/users/show-saves",
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    }).then(response => {
+        saveList.value = response.data;
+        saveList.value.forEach(function (element: any) {
+            element.value = element.id;
+            element.label = "时间" + element.time + "，赛季" + element.season;
+        });
+    }).catch(error => {
+        switch (error.message) {
+            case "Request failed with status code 404":
+            case "Network Error":
+                message.error("网络错误。");
+                break;
+            case "Request failed with status code 401":
+                switch (error.response.data.detail) {
+                    case "Could not validate credentials":
+                        storage.remove("token");
+                        HandleTokenError();
+                        break;
+                }
+                break;
+            default:
+                message.error("网络错误。");
+                break;
+        }
     });
-}).catch(error => {
-    switch (error.message) {
-        case "Request failed with status code 404":
-        case "Network Error":
-            message.error("网络错误。");
-            break;
-        case "Request failed with status code 401":
-            switch (error.response.data.detail) {
-                case "Could not validate credentials":
-                    storage.remove("token");
-                    HandleTokenError();
-                    break;
-            }
-            break;
-        default:
-            message.error("网络错误。");
-            break;
-    }
-})
+    isSelectLoading.value = false;
+}
 function Enter(): void {
     if (choseSave.value) {
         storage.set("saveID", choseSave.value);
