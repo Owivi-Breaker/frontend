@@ -3,7 +3,9 @@
         <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
         <p class="title">选择存档</p>
         <n-select class="selectSave" placeholder="请选择" v-model:value="choseSave" :options="saveList" v-on:click="GetSave" v-bind:loading="isSelectLoading">
-            <template #empty style="text-align: center;">Oops!什么都没有</template>
+            <template #empty>
+                <div class="emptySelectSaveDiv">Oops!什么都没有</div>
+            </template>
         </n-select>
         <div class="saveButtonDiv">
             <n-button class="newSaveButton" type="primary" v-on:click="leagueShowModal = true" attr-type="button">新建存档</n-button>
@@ -264,6 +266,10 @@ body {
 }
 .teamBar {
     max-height: 600px;
+}
+.emptySelectSaveDiv {
+    width: 300px;
+    margin-left: -19px;
 }
 .teamCard {
     display: inline-block;
