@@ -66,14 +66,13 @@
     </div>
 </template>
 <script lang="ts" setup>
-import axios from "axios";
 import { ref } from "vue";
 import { Ref } from "@vue/reactivity";
 import { Router, useRouter } from "vue-router";
 import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
 import { useMessage } from "naive-ui";
-import { createUserAPI } from '@/api/user'
-import { getProtocolAPI } from '@/api/login'
+import { createUserAPI } from '@/api/user';
+import { getProtocolAPI } from '@/api/login';
 
 
 let formRef: Ref = ref(null);
@@ -167,7 +166,7 @@ const ShowProtocol = (): void => {
     getProtocolAPI()
         .then(response => {
             protocol.value = response.data;
-        })
+        });
     showModal.value = true;
 }
 </script>

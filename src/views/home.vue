@@ -20,5 +20,5 @@
 </template>
 
 <script lang="ts" setup>
-import { PlayerCard } from '@/components'
+import PlayerCard from '@PlayerCard.vue';
 </script>

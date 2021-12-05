@@ -1,35 +1,19 @@
 <template>
     <div class="loginDiv">
-        <img
-            id="logo"
-            name="logo"
-            src="https://www.naiveui.com/assets/naivelogo.93278402.svg"
-            alt="logo"
-        />
+        <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
         <p id="title">登录</p>
         <n-form id="form" :show-label="false" :model="formValue" :rules="rules" ref="formRef">
             <n-form-item label="用户名" path="username">
                 <n-input class="roundInput" v-model:value="formValue.username" placeholder="用户名" />
             </n-form-item>
             <n-form-item label="密码" path="password">
-                <n-input
-                    class="roundInput"
-                    v-model:value="formValue.password"
-                    placeholder="密码"
-                    @keyup.enter="PostLogin"
-                    type="password"
-                />
+                <n-input class="roundInput" v-model:value="formValue.password" placeholder="密码" @keyup.enter="PostLogin" type="password" />
             </n-form-item>
             <n-form-item>
                 <n-checkbox v-model:checked="needSave">记住我</n-checkbox>
             </n-form-item>
             <n-form-item>
-                <n-button
-                    class="roundButton"
-                    type="primary"
-                    v-on:click="PostLogin"
-                    attr-type="button"
-                >进入OwiviOsa</n-button>
+                <n-button class="roundButton" type="primary" v-on:click="PostLogin" attr-type="button">进入OwiviOsa</n-button>
             </n-form-item>
         </n-form>
         <div>
@@ -152,7 +136,7 @@ const PostLogin = (): void => {
 
 <style>
 body {
-    background-image: url("../assets/背景.png");
+    background-image: url("../assets/background.png");
 }
 .loginDiv {
     text-align: center;

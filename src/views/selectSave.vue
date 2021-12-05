@@ -1,37 +1,15 @@
 <template>
     <div class="selectSaveDiv">
-        <img
-            id="logo"
-            name="logo"
-            src="https://www.naiveui.com/assets/naivelogo.93278402.svg"
-            alt="logo"
-        />
+        <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
         <p class="title">选择存档</p>
-        <n-select
-            class="selectSave"
-            placeholder="请选择"
-            v-model:value="choseSave"
-            :options="saveList"
-            v-on:click="GetSave"
-            v-bind:loading="isSelectLoading"
-        >
+        <n-select class="selectSave" placeholder="请选择" v-model:value="choseSave" :options="saveList" v-on:click="GetSave" v-bind:loading="isSelectLoading">
             <template #empty>
                 <div class="emptySelectSaveDiv">Oops!什么都没有</div>
             </template>
         </n-select>
         <div class="saveButtonDiv">
-            <n-button
-                class="newSaveButton"
-                type="primary"
-                v-on:click="leagueShowModal = true"
-                attr-type="button"
-            >新建存档</n-button>
-            <n-button
-                class="beginGameButton"
-                type="primary"
-                v-on:click="Enter"
-                attr-type="button"
-            >开始游戏</n-button>
+            <n-button class="newSaveButton" type="primary" v-on:click="leagueShowModal = true" attr-type="button">新建存档</n-button>
+            <n-button class="beginGameButton" type="primary" v-on:click="Enter" attr-type="button">开始游戏</n-button>
         </div>
     </div>
     <n-modal v-model:show="leagueShowModal">
@@ -39,11 +17,7 @@
             <template #header-extra></template>
             <n-form>
                 <n-form-item label="我要玩的联赛：">
-                    <n-select
-                        class="leagueSelect"
-                        v-model:value="leagueValue"
-                        :options="leagueOptions"
-                    />
+                    <n-select class="leagueSelect" v-model:value="leagueValue" :options="leagueOptions" />
                 </n-form-item>
                 <n-button type="primary" v-on:click="SelectLeagues">下一步</n-button>&nbsp;
                 <n-button v-on:click="leagueShowModal = false">关闭</n-button>
@@ -57,12 +31,7 @@
             <n-layout has-sider>
                 <n-layout-sider content-style>
                     <n-scrollbar class="competetionMenuBar">
-                        <n-menu
-                            :default-value="competitionList[0].label"
-                            @update:value="ChangeCompetetion"
-                            :collapsed-width="64"
-                            :options="competitionList"
-                        />
+                        <n-menu :default-value="competitionList[0].label" @update:value="ChangeCompetetion" :collapsed-width="64" :options="competitionList" />
                     </n-scrollbar>
                 </n-layout-sider>
                 <n-layout>
@@ -80,27 +49,14 @@
                                 声望：{{ teamList[index].reputation }}
                                 <br />
                             </div>
-                            <n-button
-                                class="goButton"
-                                type="primary"
-                                v-show="showGoButton == index"
-                                v-on:click="NewSave(index)"
-                            >就选他！</n-button>
+                            <n-button class="goButton" type="primary" v-show="showGoButton == index" v-on:click="NewSave(index)">就选他！</n-button>
                         </n-card>
                     </n-scrollbar>
                 </n-layout>
             </n-layout>
             <template #footer>
-                <n-button
-                    class="bottomButton"
-                    style="right: 120px;"
-                    v-on:click="clubShowModal = false; leagueShowModal = true;"
-                >返回</n-button>
-                <n-button
-                    class="bottomButton"
-                    style="right: 50px;"
-                    v-on:click="clubShowModal = false;"
-                >关闭</n-button>
+                <n-button class="bottomButton" style="right: 120px;" v-on:click="clubShowModal = false; leagueShowModal = true;">返回</n-button>
+                <n-button class="bottomButton" style="right: 50px;" v-on:click="clubShowModal = false;">关闭</n-button>
             </template>
         </n-card>
     </n-modal>
@@ -243,7 +199,7 @@ const NewSave = (index: number): void => {
 
 <style>
 body {
-    background-image: url("../assets/背景.png");
+    background-image: url("../assets/background.png");
 }
 .selectSaveDiv {
     text-align: center;
