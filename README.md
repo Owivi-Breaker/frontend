@@ -28,7 +28,7 @@ yarn
 ```
 ### run 
 ```bash
-yarn run
+yarn run dev
 # or
-npm run serve
+npm run dev
 ```
