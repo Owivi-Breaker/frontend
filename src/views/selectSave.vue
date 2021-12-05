@@ -181,7 +181,7 @@ const NewSave = (index: number): void => {
             storage.set("saveID", response.id);
             loadComplete.value = true;
             loadTitle.value = "创建成功";
-            setTimeout(() => { router.push({ name: "login" }); }, 2000);
+            setTimeout(() => { router.push({ name: "home" }); }, 2000);
         }).catch(error => {
             switch (error.message) {
                 case "Request failed with status code 404":
