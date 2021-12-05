@@ -56,11 +56,13 @@ let menuOptions: Array<object> = [
         icon: RenderIcon(BookIcon)
     },
 ];
-function ExitLogin(): void {
+
+const ExitLogin = (): void => {
     storage.remove("token");
     storage.remove("saveID");
     router.push({ name: "login" });
 }
+
 function RenderIcon(icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) });
 }

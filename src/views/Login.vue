@@ -1,19 +1,35 @@
 <template>
     <div class="loginDiv">
-        <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
+        <img
+            id="logo"
+            name="logo"
+            src="https://www.naiveui.com/assets/naivelogo.93278402.svg"
+            alt="logo"
+        />
         <p id="title">登录</p>
         <n-form id="form" :show-label="false" :model="formValue" :rules="rules" ref="formRef">
             <n-form-item label="用户名" path="username">
                 <n-input class="roundInput" v-model:value="formValue.username" placeholder="用户名" />
             </n-form-item>
             <n-form-item label="密码" path="password">
-                <n-input class="roundInput" v-model:value="formValue.password" placeholder="密码" @keyup.enter="PostLogin" type="password" />
+                <n-input
+                    class="roundInput"
+                    v-model:value="formValue.password"
+                    placeholder="密码"
+                    @keyup.enter="PostLogin"
+                    type="password"
+                />
             </n-form-item>
             <n-form-item>
                 <n-checkbox v-model:checked="needSave">记住我</n-checkbox>
             </n-form-item>
             <n-form-item>
-                <n-button class="roundButton" type="primary" v-on:click="PostLogin" attr-type="button">进入OwiviOsa</n-button>
+                <n-button
+                    class="roundButton"
+                    type="primary"
+                    v-on:click="PostLogin"
+                    attr-type="button"
+                >进入OwiviOsa</n-button>
             </n-form-item>
         </n-form>
         <div>
@@ -23,19 +39,20 @@
     </div>
 </template>
 <script lang="ts" setup>
-import axios from "axios";
 import qs from "qs";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { Ref } from "@vue/reactivity";
 import { Router, useRouter } from "vue-router";
 import { storage } from "../utils";
 import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
 import { useMessage } from "naive-ui";
-let formRef: Ref = ref(null);
+import { loginAPI } from "@/api/login"
+
+
 let formValue: Ref<{ username: string; password: string; }> = ref({ username: "", password: "" });
-let needSave: Ref<boolean> = ref(true);
 let message: MessageApiInjection = useMessage();
-let router: Router = useRouter();
+
+
 let rules: object = {
     username: {
         required: true,
@@ -56,14 +73,11 @@ let rules: object = {
         trigger: ["input", "blur"]
     }
 };
-GetCookie();
-function SetCookie(username: string, password: string, exdays: number): void {
-    let exdate: Date = new Date();
-    exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays);
-    window.document.cookie = "username" + "=" + username + ";path=/;expires=" + exdate.toUTCString();
-    window.document.cookie = "password" + "=" + password + ";path=/;expires=" + exdate.toUTCString();
-}
-function GetCookie(): void {
+
+
+
+/* 自动填入cookie中的账号密码 */
+const GetCookie = (): void => {
     if (document.cookie.length > 0) {
         let cookie: string[] = document.cookie.split("; ");
         cookie.forEach(function (element): void {
@@ -76,50 +90,66 @@ function GetCookie(): void {
         });
     }
 }
-function PostLogin(): void {
+onMounted(
+    () => {
+        GetCookie();
+    }
+)
+
+
+/* 登录模块 */
+let formRef: Ref = ref(null); // 登录信息表格
+let needSave: Ref<boolean> = ref(true); // 是否记住账号密码
+let router: Router = useRouter();
+const SetCookie = (username: string, password: string, exdays: number): void => {
+    let exdate: Date = new Date();
+    exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays);
+    window.document.cookie = "username" + "=" + username + ";path=/;expires=" + exdate.toUTCString();
+    window.document.cookie = "password" + "=" + password + ";path=/;expires=" + exdate.toUTCString();
+}
+const PostLogin = (): void => {
     SetCookie('', '', -1);
     formRef.value.validate((errors: boolean) => {
         if (!errors) {
-            axios({
-                method: "post",
-                url: "/login",
-                data: qs.stringify({
+            loginAPI(
+                qs.stringify({
                     username: formValue.value.username,
                     password: formValue.value.password
-                }),
-            }).then(response => {
-                message.success("登录成功。");
-                let token: string = response.data.access_token;
-                storage.set("token", token);
-                if (needSave.value) {
-                    SetCookie(formValue.value.username, formValue.value.password, 7);
-                }
-                setTimeout(() => { router.push({ name: "selectSave" }); }, 1000);
-            }).catch(error => {
-                console.log(error.message)
-                switch (error.message) {
-                    case "Request failed with status code 404":
-                    case "Network Error":
-                        message.error("登录失败，网络错误。");
-                        break;
-                    case "Request failed with status code 401":
-                        switch (error.response.data.detail) {
-                            case "Incorrect username or password":
-                                message.error("登录失败，用户名或密码错误。");
-                                break;
-                        }
-                        break;
-                    default:
-                        message.error("登录失败。");
-                        break;
-                }
-            });
+                }))
+                .then(response => {
+                    message.success("登录成功");
+                    let token: string = response.access_token;
+                    storage.set("token", token);
+                    if (needSave.value) {
+                        SetCookie(formValue.value.username, formValue.value.password, 7);
+                    }
+                    setTimeout(() => { router.push({ name: "selectSave" }); }, 1000);
+                }).catch(error => {
+                    switch (error.message) {
+                        case "Request failed with status code 404":
+                        case "Network Error":
+                            message.error("登录失败，网络错误。");
+                            break;
+                        case "Request failed with status code 401":
+                            switch (error.response.data.detail) {
+                                case "Incorrect username or password":
+                                    message.error("登录失败，用户名或密码错误。");
+                                    break;
+                            }
+                            break;
+                        default:
+                            message.error("登录失败: ", error.message);
+                            break;
+                    }
+                });
         } else {
-            message.error("登录失败。");
+            message.error("由于未知原因，登陆失败");
         }
     })
 }
 </script>
+
+
 <style>
 body {
     background-image: url("../assets/背景.png");

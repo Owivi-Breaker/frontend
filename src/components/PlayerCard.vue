@@ -2,7 +2,7 @@
     <n-card title="梅西">
         <template #header-extra>
             <svg class="avatar">
-                <avataaars />
+                <Avataaars />
             </svg>
         </template>
         <div>巴塞罗那</div>
@@ -22,7 +22,6 @@
 <script lang="ts" setup>
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
 import { CashOutline as CashIcon, WineOutline as WineIcon } from "@vicons/ionicons5"
-import { defineComponent } from 'vue';
 </script>
 
 <style>

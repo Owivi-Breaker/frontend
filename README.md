@@ -1,25 +1,34 @@
 # Demo
 ## Usage
 ### install
-```shell
+```bash
 # for naive-ui
-npm i -D naive-ui
-npm i -D vfonts
+yarn add naive-ui
+yarn add vfonts
 # for xicons
-npm i -D @vicons/fluent
-npm i -D @vicons/ionicons4
-npm i -D @vicons/ionicons5
-npm i -D @vicons/antd
-npm i -D @vicons/material
-npm i -D @vicons/fa # font awesome
-npm i -D @vicons/tabler
-npm i -D @vicons/carbon
+yarn add @vicons/fluent
+yarn add @vicons/ionicons4
+yarn add @vicons/ionicons5
+yarn add @vicons/antd
+yarn add @vicons/material
+yarn add @vicons/fa # font awesome
+yarn add @vicons/tabler
+yarn add @vicons/carbon
 # for vue-router
-npm i -D vue-router@next  
+yarn add vue-router@next  
 # for axios
-npm i -D axios   
+yarn add axios   
+```
+
+If `package.json` is complete, just run:
+```bash
+yarn install
+# or
+yarn
 ```
 ### run 
-```shell
+```bash
+yarn run
+# or
 npm run serve
 ```

@@ -4,7 +4,7 @@ const mainRoutes: RouteRecordRaw[] = [
     {
         name: 'home',
         path: '/',
-        component: () => import('../views/Home.vue'),
+        component: () => import('../views/home.vue'),
         meta: {
             title: "主页",
             requiresAuth: true // 需要登陆才能访问
@@ -28,7 +28,7 @@ const routes: RouteRecordRaw[] = [
     {
         name: 'login',
         path: '/login',
-        component: () => import('../views/Login.vue'),
+        component: () => import('../views/login.vue'),
         meta: {
             title: "登录"
         }
@@ -36,7 +36,7 @@ const routes: RouteRecordRaw[] = [
     {
         name: 'register',
         path: '/register',
-        component: () => import('../views/Register.vue'),
+        component: () => import('../views/register.vue'),
         meta: {
             title: "注册"
         }
@@ -44,7 +44,7 @@ const routes: RouteRecordRaw[] = [
     {
         name: 'selectSave',
         path: '/select-save',
-        component: () => import('../views/Select Save.vue'),
+        component: () => import('../views/selectSave.vue'),
         meta: {
             title: "选择存档"
         }
@@ -58,7 +58,7 @@ const routes: RouteRecordRaw[] = [
     },
     // ## not found page
     {
-        name: 'not-found',
+        name: 'notFound',
         path: '/:path*',
         component: () => import('../views/error.vue'),
         meta: {
@@ -67,4 +67,4 @@ const routes: RouteRecordRaw[] = [
     }
 ]
 
-export default routes
+export { routes }

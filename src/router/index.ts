@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { storage } from '../utils'
-import routes from './routes'
+import { routes } from './routes'
 const history = createWebHistory()
 // 创建路由实例并传递 `routes` 配置
 const router = createRouter({ history, routes })
