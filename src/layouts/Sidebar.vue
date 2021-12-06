@@ -72,7 +72,18 @@ const menuOptions = [
         icon: renderIcon(BookIcon),
     },
     {
-        label: '阵容',
+        label: () => h(
+            RouterLink,
+            {
+                to: {
+                    name: 'player',
+                    params: {
+                        lang: 'zh-CN'
+                    }
+                }
+            },
+            { default: () => '阵容' }
+        ),
         key: 'tactics',
         icon: renderIcon(BookIcon)
     },

@@ -1,15 +1,160 @@
 <template>
-    <va-data-table :items="PlayerData" v-show="showTable">
-        <template #header(translated_name)>姓名</template>
-        <template #header(translated_nationality)>国籍</template>
-        <template #cell()="{ source: age }">{{ age + 100 }}</template>
-    </va-data-table>
+    <n-h1>球员数据</n-h1>
+    <n-data-table :columns="columns" :data="playerData" striped />
 </template>
 
 <script lang="ts" setup>
 import { getClubPlayerAPI } from '@/api/player';
-import { onMounted, reactive, ref, computed } from 'vue'
+import { onMounted, h, ref, computed } from 'vue'
+import { NTag } from 'naive-ui'
 
+
+const judgeColorByRating = (rating: number) => {
+    // TODO 颜色
+    if (rating >= 90) {
+        return '#008000'
+    }
+    if (rating >= 80) {
+        return '#32CD32'
+    }
+    if (rating >= 70) {
+        return '#FFD700'
+    }
+    if (rating >= 60) {
+        return '#FF8C00'
+    }
+    else {
+        return '#FF4500'
+    }
+}
+
+const columns = [
+    {
+        title: '姓名',
+        key: '姓名'
+    },
+    {
+        title: '年龄',
+        key: '年龄',
+        render(row: any) {
+            return h(
+                NTag,
+                {
+                    style: {
+                        marginRight: '6px'
+                    },
+                    type: 'info'
+                },
+                {
+                    default: () => row['年龄']
+                }
+            )
+        }
+    },
+    {
+        title: '国籍',
+        key: '国籍'
+    },
+    {
+        title: '射门',
+        key: '射门',
+        render(row: any) {
+            return h(
+                'p',
+                {
+                    style: {
+                        color: judgeColorByRating(row['射门'])
+
+                    },
+                },
+                {
+                    default: () => row['射门']
+                }
+            )
+        }
+    },
+    {
+        title: '过人',
+        key: '过人',
+        render(row: any) {
+            return h(
+                'p',
+                {
+                    style: {
+                        color: judgeColorByRating(row['过人'])
+                    },
+                },
+                {
+                    default: () => row['过人']
+                }
+            )
+        }
+    },
+    {
+        title: '防守',
+        key: '防守',
+        render(row: any) {
+            return h(
+                'p',
+                {
+                    style: {
+                        color: judgeColorByRating(row['防守'])
+                    },
+                },
+                {
+                    default: () => row['防守']
+                }
+            )
+        }
+    },
+    {
+        title: '体力',
+        key: '体力',
+        render(row: any) {
+            return h(
+                'p',
+                {
+                    style: {
+                        color: judgeColorByRating(row['体力'])
+                    },
+                },
+                {
+                    default: () => row['体力']
+                }
+            )
+        }
+    },
+    {
+        title: '速度',
+        key: '速度',
+        render(row: any) {
+            return h(
+                'p',
+                {
+                    style: {
+                        color: judgeColorByRating(row['速度'])
+                    },
+                },
+                {
+                    default: () => row['速度']
+                }
+            )
+        }
+    },
+    {
+        title: '守门',
+        key: '守门'
+    },
+
+    {
+        title: '侵略',
+        key: '侵略'
+    },
+    {
+        title: '任意球',
+        key: '任意球'
+    }
+]
 
 /* 获取球员数据 */
 let rawPlayerData = ref([])
@@ -25,7 +170,7 @@ onMounted(
 )
 
 /* 处理球员数据 */
-const PlayerData = computed(() =>
+const playerData = computed(() =>
     rawPlayerData.value.map(handleRawPlayerData)
 )
 

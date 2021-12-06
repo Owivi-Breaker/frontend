@@ -19,6 +19,7 @@ const mainRoutes: RouteRecordRaw[] = [
             requiresAuth: true // 需要登陆才能访问
         }
     },
+
     {
         name: 'about',
         path: '/about',

@@ -50,7 +50,10 @@ import {
     NThing,
     NCollapse,
     NSelect,
-    NCollapseItem
+    NCollapseItem,
+    NStatistic,
+    NDataTable,
+    NProgress
 } from 'naive-ui'
 
 export default create({
@@ -103,6 +106,9 @@ export default create({
         NGridItem,
         NThing,
         NCollapse,
-        NCollapseItem
+        NCollapseItem,
+        NStatistic,
+        NDataTable,
+        NProgress
     ]
 })
