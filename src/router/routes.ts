@@ -4,9 +4,18 @@ const mainRoutes: RouteRecordRaw[] = [
     {
         name: 'home',
         path: '/',
-        component: () => import('../views/Home.vue'),
+        component: () => import('../views/home.vue'),
         meta: {
             title: "主页",
+            requiresAuth: true // 需要登陆才能访问
+        }
+    },
+    {
+        name: 'player',
+        path: '/player',
+        component: () => import('../views/player.vue'),
+        meta: {
+            title: "球员",
             requiresAuth: true // 需要登陆才能访问
         }
     },
