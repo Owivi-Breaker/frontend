@@ -75,13 +75,19 @@ import { createUserAPI } from '@/api/user';
 import { getProtocolAPI } from '@/api/login';
 
 
-let formRef: Ref = ref(null);
-let formValue: Ref<{ username: string; password: string; passwordAgain: string; }> = ref({ username: "", password: "", passwordAgain: "" });
-let readProtocol: Ref<boolean> = ref(true);
-let showModal: Ref<boolean> = ref(false);
+interface Form {
+    username: string;
+    password: string;
+    passwordAgain: string;
+}
+
+let formRef = ref(null);
+let formValue = ref<Form>({ username: "", password: "", passwordAgain: "" });
+let readProtocol = ref<boolean>(true);
+let showModal = ref<boolean>(false);
 let message: MessageApiInjection = useMessage();
 let router: Router = useRouter();
-let protocol: Ref<string> = ref("");
+let protocol = ref<string>("");
 
 
 

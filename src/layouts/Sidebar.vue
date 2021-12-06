@@ -1,7 +1,14 @@
 
 
 <template>
-    <n-layout-sider bordered show-trigger collapse-mode="width" :collapsed-width="64" :width="240" :native-scrollbar="false">
+    <n-layout-sider
+        bordered
+        show-trigger
+        collapse-mode="width"
+        :collapsed-width="64"
+        :width="240"
+        :native-scrollbar="false"
+    >
         <div class="icon">
             <img class="img" alt="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" />
         </div>
@@ -53,7 +60,7 @@ const menuOptions = [
             RouterLink,
             {
                 to: {
-                    name: 'login',
+                    name: 'player',
                     params: {
                         lang: 'zh-CN'
                     }
@@ -61,13 +68,22 @@ const menuOptions = [
             },
             { default: () => '球员' }
         ),
-        key: 'players',
+        key: 'player',
         icon: renderIcon(BookIcon),
-
-
     },
     {
-        label: '阵容',
+        label: () => h(
+            RouterLink,
+            {
+                to: {
+                    name: 'player',
+                    params: {
+                        lang: 'zh-CN'
+                    }
+                }
+            },
+            { default: () => '阵容' }
+        ),
         key: 'tactics',
         icon: renderIcon(BookIcon)
     },

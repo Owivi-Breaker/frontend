@@ -1,5 +1,5 @@
 <template>
-    <h1>球员列表</h1>
+    <n-h2>球员列表</n-h2>
     <n-grid cols="2" x-gap="12">
         <n-gi>
             <PlayerCard></PlayerCard>
@@ -20,5 +20,5 @@
 </template>
 
 <script lang="ts" setup>
-import PlayerCard from '@PlayerCard.vue';
+import PlayerCard from '@/components/PlayerCard.vue';
 </script>
