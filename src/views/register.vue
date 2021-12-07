@@ -1,51 +1,23 @@
 <template>
     <div class="registerDiv">
-        <img
-            id="logo"
-            name="logo"
-            src="https://www.naiveui.com/assets/naivelogo.93278402.svg"
-            alt="logo"
-        />
+        <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
         <p id="title">注册</p>
         <n-form id="form" :show-label="false" :model="formValue" :rules="rules" ref="formRef">
             <n-form-item label="用户名" path="username">
                 <n-input class="roundInput" v-model:value="formValue.username" placeholder="用户名" />
             </n-form-item>
             <n-form-item label="密码" path="password">
-                <n-input
-                    class="roundInput"
-                    v-model:value="formValue.password"
-                    placeholder="密码"
-                    @keyup="ClearPasswordAgain"
-                    type="password"
-                />
+                <n-input class="roundInput" v-model:value="formValue.password" placeholder="密码" @keyup="ClearPasswordAgain" type="password" />
             </n-form-item>
             <n-form-item label="重复密码" path="passwordAgain">
-                <n-input
-                    class="roundInput"
-                    v-model:value="formValue.passwordAgain"
-                    placeholder="重复密码"
-                    @keyup.enter="PostRegister"
-                    type="password"
-                />
+                <n-input class="roundInput" v-model:value="formValue.passwordAgain" placeholder="重复密码" @keyup.enter="PostRegister" type="password" />
             </n-form-item>
             <n-form-item>
-                <n-checkbox
-                    v-model:checked="readProtocol"
-                    style="--label-padding:0px 0px 0px 8px;"
-                >我已阅读并同意</n-checkbox>
-                <p
-                    @click="ShowProtocol"
-                    style="text-decoration: underline; margin: 0px; cursor: pointer;"
-                >使用条款</p>
+                <n-checkbox v-model:checked="readProtocol" style="--label-padding:0px 0px 0px 8px;">我已阅读并同意</n-checkbox>
+                <p @click="ShowProtocol" style="text-decoration: underline; margin: 0px; cursor: pointer;">使用条款</p>
             </n-form-item>
             <n-form-item>
-                <n-button
-                    class="roundButton"
-                    type="primary"
-                    v-on:click="PostRegister"
-                    attr-type="button"
-                >立即注册</n-button>
+                <n-button class="roundButton" type="primary" v-on:click="PostRegister" attr-type="button">立即注册</n-button>
             </n-form-item>
         </n-form>
         <div>
@@ -81,7 +53,7 @@ interface Form {
     passwordAgain: string;
 }
 
-let formRef = ref(null);
+let formRef: Ref<any> = ref(null);
 let formValue = ref<Form>({ username: "", password: "", passwordAgain: "" });
 let readProtocol = ref<boolean>(true);
 let showModal = ref<boolean>(false);
