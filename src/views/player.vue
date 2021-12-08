@@ -1,14 +1,22 @@
 <template>
     <n-h1>球员数据</n-h1>
-    <n-data-table :columns="columns" :data="playerData" striped />
+    <n-data-table v-if="!isLoading" :columns="columns" :data="playerData" striped />
+    <n-modal v-model:show="isLoading" :mask-closable="false">
+        <n-card class="loadModalCard" :title="loadTitle" :bordered="true" size="huge">
+            <n-spin v-if="isLoading" size="medium" />
+            <n-icon class="completeCreateSaveIcon" v-if="!isLoading" size="80" color="#18a058">
+                <Ios-Checkmark />
+            </n-icon>
+        </n-card>
+    </n-modal>
 </template>
-
 <script lang="ts" setup>
 import { getClubPlayerAPI } from '@/api/player';
-import { onMounted, h, ref, computed } from 'vue'
-import { NTag } from 'naive-ui'
-
-
+import { defineComponent, h, ref, computed } from 'vue';
+import { NTag } from 'naive-ui';
+import { Ref } from "@vue/reactivity";
+import { IosCheckmark } from '@vicons/ionicons4';
+// todo get token and return
 const judgeColorByRating = (rating: number) => {
     // TODO 颜色
     if (rating >= 90) {
@@ -157,41 +165,47 @@ const columns = [
 ]
 
 /* 获取球员数据 */
-let rawPlayerData = ref([])
-let showTable = ref(false)
-onMounted(
-    () => {
-        getClubPlayerAPI({ club_id: 1 })
-            .then((res) => {
-                rawPlayerData.value = res
-                showTable.value = true
-            })
+let rawPlayerData: Ref<Array<object>> = ref([]);
+let isLoading: Ref<boolean> = ref(true);
+let loadTitle: Ref<String> = ref("请稍候");
+defineComponent({
+    components: {
+        IosCheckmark
     }
-)
-
+});
+getClubPlayerAPI({ club_id: 1 })
+    .then((response) => {
+        rawPlayerData.value = response;
+        isLoading.value = false;
+    });
 /* 处理球员数据 */
 const playerData = computed(() =>
     rawPlayerData.value.map(handleRawPlayerData)
 )
-
-const handleRawPlayerData = (value: any) => {
-    let a: any = {}
-
-    a['姓名'] = value.translated_name
-    a['年龄'] = value.age
-    a['国籍'] = value.translated_nationality
+function handleRawPlayerData(value: any): object {
+    let result: any = {};
+    result['姓名'] = value.translated_name
+    result['年龄'] = value.age
+    result['国籍'] = value.translated_nationality
     // a['出生日期'] = value.birth_date
-    a['射门'] = parseInt(value.shooting)
-    a['过人'] = parseInt(value.dribbling)
-    a['防守'] = parseInt(value.interception)
-    a['速度'] = parseInt(value.pace)
-    a['体力'] = parseInt(value.stamina)
-    a['守门'] = parseInt(value.goalkeeping)
-    a['侵略'] = parseInt(value.aggression)
-    a['任意球'] = parseInt(value.free_kick)
-
-    return a
+    result['射门'] = parseInt(value.shooting)
+    result['过人'] = parseInt(value.dribbling)
+    result['防守'] = parseInt(value.interception)
+    result['速度'] = parseInt(value.pace)
+    result['体力'] = parseInt(value.stamina)
+    result['守门'] = parseInt(value.goalkeeping)
+    result['侵略'] = parseInt(value.aggression)
+    result['任意球'] = parseInt(value.free_kick)
+    return result;
 }
-
-
 </script>
+<style>
+.loadModalCard {
+    width: 320px;
+    height: 180px;
+    text-align: center;
+}
+.completeCreateSaveIcon {
+    margin-top: -30px;
+}
+</style>
