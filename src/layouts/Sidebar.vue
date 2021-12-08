@@ -1,43 +1,28 @@
-
-
 <template>
-    <n-layout-sider
-        bordered
-        show-trigger
-        collapse-mode="width"
-        :collapsed-width="64"
-        :width="240"
-        :native-scrollbar="false"
-    >
+    <n-layout-sider bordered show-trigger collapse-mode="width" :collapsed-width="64" :width="240" :native-scrollbar="false">
         <div class="icon">
             <img class="img" alt="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" />
         </div>
-
         <n-divider></n-divider>
         <n-menu :collapsed-width="64" :collapsed-icon-size="22" :options="menuOptions" />
     </n-layout-sider>
 </template>
 
-
-
 <script lang="ts" setup>
-import { defineComponent, h, ref } from 'vue'
+import { defineComponent, h, ref } from 'vue';
 import { RouterLink } from 'vue-router';
 import {
     BookOutline as BookIcon,
     PersonOutline as PersonIcon,
     WineOutline as WineIcon,
-
-} from '@vicons/ionicons5'
+} from '@vicons/ionicons5';
 import { NIcon } from 'naive-ui';
 
 
 const inverted = ref(false)
-
 function renderIcon(icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) })
 }
-
 const menuOptions = [
     {
         label: () => h(
@@ -69,21 +54,22 @@ const menuOptions = [
             { default: () => '球员' }
         ),
         key: 'player',
-        icon: renderIcon(BookIcon),
+        icon: renderIcon(PersonIcon),
     },
     {
-        label: () => h(
-            RouterLink,
-            {
-                to: {
-                    name: 'player',
-                    params: {
-                        lang: 'zh-CN'
-                    }
-                }
-            },
-            { default: () => '阵容' }
-        ),
+        label: '阵容',
+        // () => h(
+        //     RouterLink,
+        //     {
+        //         to: {
+        //             name: 'player',
+        //             params: {
+        //                 lang: 'zh-CN'
+        //             }
+        //         }
+        //     },
+        //     { default: () => '阵容' }
+        // ),
         key: 'tactics',
         icon: renderIcon(BookIcon)
     },
@@ -127,26 +113,22 @@ const menuOptions = [
 ]
 </script>
 
-
 <style scoped>
 .nav {
     padding: 10px 1px 10px 1px;
     text-align: center;
 }
-
 .icon {
     padding: 10px 1px 10px 1px;
     overflow: hidden;
     height: 64px;
     display: flex;
     justify-content: center;
-    /* align-items: center; */
     width: 100%;
     box-sizing: border-box;
     border-bottom: solid 1px rgb(239, 239, 245);
     transition: 0.25s border-bottom-color;
 }
-
 .img {
     width: 75%;
     object-fit: scale-down;
