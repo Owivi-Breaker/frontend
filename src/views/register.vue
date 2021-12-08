@@ -7,17 +7,17 @@
                 <n-input class="roundInput" v-model:value="formValue.username" placeholder="用户名" />
             </n-form-item>
             <n-form-item label="密码" path="password">
-                <n-input class="roundInput" v-model:value="formValue.password" placeholder="密码" @keyup="ClearPasswordAgain" type="password" />
+                <n-input class="roundInput" v-model:value="formValue.password" placeholder="密码" @keyup="clearPasswordAgain" type="password" />
             </n-form-item>
             <n-form-item label="重复密码" path="passwordAgain">
-                <n-input class="roundInput" v-model:value="formValue.passwordAgain" placeholder="重复密码" @keyup.enter="PostRegister" type="password" />
+                <n-input class="roundInput" v-model:value="formValue.passwordAgain" placeholder="重复密码" @keyup.enter="postRegister" type="password" />
             </n-form-item>
             <n-form-item>
                 <n-checkbox v-model:checked="readProtocol" style="--label-padding:0px 0px 0px 8px;">我已阅读并同意</n-checkbox>
-                <p @click="ShowProtocol" style="text-decoration: underline; margin: 0px; cursor: pointer;">使用条款</p>
+                <p @click="showProtocol" style="text-decoration: underline; margin: 0px; cursor: pointer;">使用条款</p>
             </n-form-item>
             <n-form-item>
-                <n-button class="roundButton" type="primary" v-on:click="PostRegister" attr-type="button">立即注册</n-button>
+                <n-button class="roundButton" type="primary" v-on:click="postRegister" attr-type="button">立即注册</n-button>
             </n-form-item>
         </n-form>
         <div>
@@ -52,17 +52,13 @@ interface Form {
     password: string;
     passwordAgain: string;
 }
-
 let formRef: Ref<any> = ref(null);
-let formValue = ref<Form>({ username: "", password: "", passwordAgain: "" });
-let readProtocol = ref<boolean>(true);
-let showModal = ref<boolean>(false);
+let formValue: Ref<Form> = ref({ username: "", password: "", passwordAgain: "" });
+let readProtocol: Ref<boolean> = ref(true);
+let showModal: Ref<boolean> = ref(false);
 let message: MessageApiInjection = useMessage();
 let router: Router = useRouter();
-let protocol = ref<string>("");
-
-
-
+let protocol: Ref<string> = ref("");
 /* 用户注册 */
 // 表单规则
 let rules: object = {
@@ -98,8 +94,7 @@ let rules: object = {
         trigger: ["input", "blur"]
     }
 };
-
-const PostRegister = (): void => {
+function postRegister(): void {
     formRef.value.validate((errors: boolean) => {
         if (!errors) {
             createUserAPI({
@@ -133,23 +128,17 @@ const PostRegister = (): void => {
         }
     })
 }
-
-
-const ClearPasswordAgain = (): void => {
+function clearPasswordAgain(): void {
     formValue.value.passwordAgain = "";
 }
-
 /* 展示协议 */
-const ShowProtocol = (): void => {
-    getProtocolAPI()
-        .then(response => {
-            protocol.value = response.data;
-        });
+function showProtocol(): void {
+    getProtocolAPI().then(response => {
+        protocol.value = response;
+    });
     showModal.value = true;
 }
 </script>
-
-
 <style>
 body {
     background-image: url("../assets/background.png");
