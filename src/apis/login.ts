@@ -11,7 +11,7 @@ const loginAPI = (params: any) => {
 }
 
 const getProtocolAPI = () => {
-    return http.get('/login/protocol', null)
+    return http.get('/test/protocol', null)
 }
 
 export { testAPI, loginAPI, getProtocolAPI }

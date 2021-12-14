@@ -81,7 +81,7 @@ import fiveLeagues from "@/assets/json/five-leagues-list.json";
 import superLeagues from "@/assets/json/super-leagues-list.json";
 import { Router, useRouter } from "vue-router";
 import { IosCheckmark } from '@vicons/ionicons4';
-import { getSaveAPI, createSaveAPI } from '@/api/save'
+import { getSaveAPI, createSaveAPI } from '@/apis/save'
 
 
 let leagueOptions: Ref<Array<{ label: string, value: string }>> = ref([

@@ -43,8 +43,8 @@ import { Ref } from "@vue/reactivity";
 import { Router, useRouter } from "vue-router";
 import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
 import { useMessage } from "naive-ui";
-import { createUserAPI } from '@/api/user';
-import { getProtocolAPI } from '@/api/login';
+import { createUserAPI } from '@/apis/user';
+import { getProtocolAPI } from '@/apis/login';
 
 
 interface Form {

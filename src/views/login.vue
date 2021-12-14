@@ -30,7 +30,7 @@ import { Router, useRouter } from "vue-router";
 import { storage } from "../utils";
 import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
 import { useMessage } from "naive-ui";
-import { loginAPI } from "@/api/login"
+import { loginAPI } from "@/apis/login"
 
 
 let formValue: Ref<{ username: string; password: string; }> = ref({ username: "", password: "" });
