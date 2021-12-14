@@ -5,7 +5,7 @@ const getPlayersByClubAPI = (params: { club_id: number }) => {
     // 获取指定club_id的所有球员
     return http.get(`/club/${params.club_id}/player`, params)
 }
-const getAllPlayersAPI = (params: { skip?: number; limit?: number; }) => {
+const getPlayersAPI = (params: { skip?: number; limit?: number; }) => {
     // 获取指定club_id的所有球员
     return http.get(`/player`, params)
 }
@@ -31,6 +31,7 @@ const getPlayerTotalGameDataAPI = (params: GameData) => {
 }
 
 export {
-    getPlayersByClubAPI, getAllPlayersAPI,
-    getPlayerByIdAPI, getPlayerGameDataAPI, getPlayerTotalGameDataAPI
+    getPlayersByClubAPI, getPlayersAPI,
+    getPlayerByIdAPI, getPlayerGameDataAPI,
+    getPlayerTotalGameDataAPI
 }

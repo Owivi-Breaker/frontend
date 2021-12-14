@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { storage } from '../utils'
-import { useMessage } from "naive-ui";
-import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
+import {storage} from '../utils'
+import {useMessage} from "naive-ui";
+import {MessageApiInjection} from "naive-ui/lib/message/src/MessageProvider";
 import router from '@/router'
 
 const message: MessageApiInjection = useMessage();// 报错消息组件，好像不能这么写
@@ -32,12 +32,11 @@ service.interceptors.request.use(
                 }
             } else if (config.method === 'get') {
                 config.params = {
-                    sessionid: saveID,
+                    save_id: saveID,
                     ...config.params
                 }
             }
         }
-
 
 
         return config;
@@ -47,7 +46,6 @@ service.interceptors.request.use(
         return Promise.reject(error);
     }
 )
-
 
 
 // 响应拦截器
@@ -83,7 +81,9 @@ service.interceptors.response.use(
                             //message.error("未授权或授权失效，请重新登录");// TODO 好像没有用，要搞一个单独的message-provider组件
                             //$vaToast.init({ message: 'Top-right', position: 'top-right' })
                             storage.remove("token");
-                            setTimeout(() => { router.push({ name: "login" }); }, 1000);
+                            setTimeout(() => {
+                                router.push({name: "login"});
+                            }, 1000);
                             break;
                     }
                     break;
@@ -124,8 +124,7 @@ service.interceptors.response.use(
                     //error.message = `连接错误${error.response.status}`
                     console.log(`连接错误${error.response.status}`)
             }
-        }
-        else {
+        } else {
             // 超时处理
             if (JSON.stringify(error).includes('timeout')) {
                 console.log('服务器响应超时，请刷新当前页');
