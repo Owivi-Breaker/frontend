@@ -19,6 +19,15 @@ const mainRoutes: RouteRecordRaw[] = [
             requiresAuth: true // 需要登陆才能访问
         }
     },
+    {
+        name: 'playerPerform',
+        path: '/playerPerform',
+        component: () => import('../views/playerPerform.vue'),
+        meta: {
+            title: "球员",
+            requiresAuth: true // 需要登陆才能访问
+        }
+    },
 
     {
         name: 'about',

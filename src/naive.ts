@@ -53,7 +53,8 @@ import {
     NCollapseItem,
     NStatistic,
     NDataTable,
-    NProgress
+    NProgress,
+    NTime
 } from 'naive-ui'
 
 export default create({
@@ -109,6 +110,7 @@ export default create({
         NCollapseItem,
         NStatistic,
         NDataTable,
-        NProgress
+        NProgress,
+        NTime
     ]
 })

@@ -57,6 +57,22 @@ const menuOptions = [
         icon: renderIcon(PersonIcon),
     },
     {
+        label: () => h(
+            RouterLink,
+            {
+                to: {
+                    name: 'playerPerform',
+                    params: {
+                        lang: 'zh-CN'
+                    }
+                }
+            },
+            { default: () => '球员表现' }
+        ),
+        key: 'playerPerform',
+        icon: renderIcon(PersonIcon),
+    },
+    {
         label: '阵容',
         // () => h(
         //     RouterLink,

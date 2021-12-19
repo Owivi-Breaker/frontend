@@ -1,7 +1,7 @@
 import axios from 'axios'
-import {storage} from '../utils'
-import {useMessage} from "naive-ui";
-import {MessageApiInjection} from "naive-ui/lib/message/src/MessageProvider";
+import { storage } from '../utils'
+import { useMessage } from "naive-ui";
+import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
 import router from '@/router'
 
 const message: MessageApiInjection = useMessage();// 报错消息组件，好像不能这么写
@@ -75,14 +75,14 @@ service.interceptors.response.use(
                         case 'Incorrect username or password':
                             //message.error("账号或密码错误");
                             break;
-                        case 'Not authenticated':
+                        case "Could not validate credentials":
                             // token 过期处理
                             //error.message = '未授权或授权失效，请重新登录'
                             //message.error("未授权或授权失效，请重新登录");// TODO 好像没有用，要搞一个单独的message-provider组件
                             //$vaToast.init({ message: 'Top-right', position: 'top-right' })
                             storage.remove("token");
                             setTimeout(() => {
-                                router.push({name: "login"});
+                                router.push({ name: "login" });
                             }, 1000);
                             break;
                     }

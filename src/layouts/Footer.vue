@@ -5,7 +5,7 @@
             <n-text type="error">♥</n-text>
             <n-a href="https://github.com/Trouvaille0198">MelonSoul</n-a>. Licensed under the MIT License.
         </n-p>
-        <n-p>&copy; {{ new Date().getFullYear() }} Sun’s. All rights reserved.</n-p>
+        <n-p>&copy; {{ new Date().getFullYear() }} Sun's. All rights reserved.</n-p>
     </n-layout-footer>
 </template>
 

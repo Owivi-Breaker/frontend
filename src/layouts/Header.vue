@@ -1,6 +1,7 @@
 <template>
     <n-layout-header bordered>
         <n-menu mode="horizontal" :inverted="inverted" :options="menuOptions" />
+        <span class="curTime">今天是&nbsp;{{ nowTime }}</span>
         <n-button class="exitButton" :bordered="false" v-on:click="showExitModal = true">
             <n-icon size="30">
                 <exit-outline />
@@ -22,6 +23,7 @@ import { NIcon } from 'naive-ui';
 import { BookOutline as BookIcon, ExitOutline, Exit } from '@vicons/ionicons5';
 import { Router, useRouter } from "vue-router";
 import { storage } from '../utils';
+import { getSaveAPI } from '@/apis/save';
 let inverted: Ref<boolean> = ref(false);
 let showExitModal: Ref<boolean> = ref(false);
 let router: Router = useRouter();
@@ -56,7 +58,15 @@ let menuOptions: Array<object> = [
         icon: RenderIcon(BookIcon)
     },
 ];
-
+let nowTime: Ref<string> = ref("");
+// 等待接口
+getSaveAPI().then(response => {
+    console.log(response);
+}).catch(error => {
+    switch (error.message) {
+    }
+})
+nowTime.value = "2021-12-19";
 const ExitLogin = (): void => {
     storage.remove("token");
     storage.remove("saveID");
@@ -68,6 +78,12 @@ function RenderIcon(icon: any) {
 }
 </script>
 <style>
+.curTime {
+    position: absolute;
+    right: 100px;
+    margin-top: 10px;
+    font-size: 15px;
+}
 .exitButton {
     position: absolute;
     right: 10px;

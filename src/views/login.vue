@@ -28,9 +28,9 @@ import { ref, onMounted } from "vue";
 import { Ref } from "@vue/reactivity";
 import { Router, useRouter } from "vue-router";
 import { storage } from "../utils";
-import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
+import { MessageApiInjection, MessageOptions } from "naive-ui/lib/message/src/MessageProvider";
 import { useMessage } from "naive-ui";
-import { loginAPI } from "@/apis/login"
+import { loginAPI } from "../apis/login"
 
 
 let formValue: Ref<{ username: string; password: string; }> = ref({ username: "", password: "" });
@@ -100,7 +100,7 @@ const PostLogin = (): void => {
                     username: formValue.value.username,
                     password: formValue.value.password
                 }))
-                .then(response => {
+                .then((response: { access_token: string; }) => {
                     message.success("登录成功");
                     let token: string = response.access_token;
                     storage.set("token", token);
@@ -108,7 +108,7 @@ const PostLogin = (): void => {
                         SetCookie(formValue.value.username, formValue.value.password, 7);
                     }
                     setTimeout(() => { router.push({ name: "selectSave" }); }, 1000);
-                }).catch(error => {
+                }).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
                     switch (error.message) {
                         case "Request failed with status code 404":
                         case "Network Error":
