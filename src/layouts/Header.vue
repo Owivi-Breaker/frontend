@@ -17,13 +17,15 @@
     </n-modal>
 </template>
 <script lang="ts" setup>
-import { defineComponent, h, ref } from 'vue';
+import { defineComponent, h, ref } from "vue";
 import { Ref } from "@vue/reactivity";
-import { NIcon } from 'naive-ui';
-import { BookOutline as BookIcon, ExitOutline, Exit } from '@vicons/ionicons5';
+import { NIcon } from "naive-ui";
+import { BookOutline as BookIcon, ExitOutline, Exit } from "@vicons/ionicons5";
 import { Router, useRouter } from "vue-router";
-import { storage } from '../utils';
-import { getSaveAPI } from '@/apis/save';
+import { useMessage } from "naive-ui";
+import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
+import { storage } from "../utils";
+import { getDateAPI } from "@/apis/frontPage";
 let inverted: Ref<boolean> = ref(false);
 let showExitModal: Ref<boolean> = ref(false);
 let router: Router = useRouter();
@@ -35,44 +37,45 @@ defineComponent({
 });
 let menuOptions: Array<object> = [
     {
-        label: '且听风吟',
-        key: 'hear-the-wind-sing',
+        label: "且听风吟",
+        key: "hear-the-wind-sing",
         icon: RenderIcon(BookIcon)
     },
     {
-        label: '1973年的弹珠玩具',
-        key: 'pinball-1973',
+        label: "1973年的弹珠玩具",
+        key: "pinball-1973",
         icon: RenderIcon(BookIcon),
         disabled: true,
         children: [
             {
-                label: '鼠',
-                key: 'rat'
+                label: "鼠",
+                key: "rat"
             }
         ]
     },
     {
-        label: '寻羊冒险记',
-        key: 'a-wild-sheep-chase',
+        label: "寻羊冒险记",
+        key: "a-wild-sheep-chase",
         disabled: true,
         icon: RenderIcon(BookIcon)
     },
 ];
 let nowTime: Ref<string> = ref("");
-// 等待接口
-getSaveAPI().then(response => {
-    console.log(response);
+let message: MessageApiInjection = useMessage();
+getDateAPI().then(response => {
+    nowTime.value = response;
 }).catch(error => {
     switch (error.message) {
+        default:
+            message.error("网络错误");
+            break;
     }
 })
-nowTime.value = "2021-12-19";
 const ExitLogin = (): void => {
     storage.remove("token");
     storage.remove("saveID");
     router.push({ name: "login" });
 }
-
 function RenderIcon(icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) });
 }
