@@ -1,12 +1,16 @@
 <template>
     <n-layout-header bordered>
-        <n-menu mode="horizontal" :inverted="inverted" :options="menuOptions" />
-        <span class="curDate">今天是&nbsp;{{ curDate }}</span>
-        <n-button class="exitButton" :bordered="false" v-on:click="showExitModal = true">
-            <n-icon size="30">
-                <exit-outline />
-            </n-icon>
-        </n-button>
+        <n-space align="center" justify="space-between">
+            <n-menu mode="horizontal" :inverted="inverted" :options="menuOptions" />
+            <n-space align="center" justify="end">
+                <span class="curDate">今天是&nbsp;{{ curDate }}</span>
+                <n-button class="exitButton" :bordered="false" v-on:click="showExitModal = true">
+                    <n-icon size="30">
+                        <exit-outline />
+                    </n-icon>
+                </n-button>
+            </n-space>
+        </n-space>
     </n-layout-header>
     <n-modal v-model:show="showExitModal">
         <n-card class="exitModalCard" title="提示" :bordered="false" size="huge">
@@ -86,15 +90,7 @@ function RenderIcon(icon: any) {
 </script>
 <style>
 .curDate {
-    position: absolute;
-    right: 100px;
-    margin-top: 10px;
     font-size: 15px;
-}
-.exitButton {
-    position: absolute;
-    right: 10px;
-    margin-top: 5px;
 }
 .exitModalCard {
     width: 300px;
