@@ -74,12 +74,11 @@ const GetCookie = (): void => {
         });
     }
 }
-onMounted(
-    () => {
-        GetCookie();
-    }
-)
 
+storage.remove("token");
+storage.remove("saveID");
+console.log(storage.get('saveID'))
+GetCookie();
 
 /* 登录模块 */
 let formRef: Ref = ref(null); // 登录信息表格

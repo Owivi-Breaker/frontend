@@ -20,25 +20,24 @@ service.interceptors.request.use(
         // 设置token
         const token = storage.get('token');
         if (token) {
-            config.headers['authorization'] = 'Bearer ' + token
+            config.headers['authorization'] = 'Bearer ' + token;
         }
+
         // 在此统一添加saveID
-        const saveID = storage.get('saveID')
+        const saveID = storage.get('saveID');
         if (saveID) {
             if (config.method === 'post') {
                 config.data = {
                     saveID: saveID,
                     ...config.data
-                }
+                };
             } else if (config.method === 'get') {
                 config.params = {
                     save_id: saveID,
                     ...config.params
-                }
+                };
             }
         }
-
-
         return config;
     },
     error => {
