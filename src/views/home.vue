@@ -4,6 +4,6 @@
 </template>
 
 <script lang="ts" setup>
-import NextGameHome from '@/components/NextGameHome.vue';
-import MainBoxHome from '@/components/MailBoxHome.vue';
+import NextGameHome from "@/components/NextGameHome.vue";
+import MailBoxHome from "@/components/MailBoxHome.vue";
 </script>
