@@ -17,16 +17,32 @@
 </template>
 <script lang="ts" setup>
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import { Ref } from "@vue/reactivity";
+import { useMessage } from "naive-ui";
+import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
+import { getDateAPI } from "@/apis/user";
+import { getSaveAPI } from "@/apis/save";
+import { getClubByIdAPI } from "@/apis/club";
 let teams: Ref<Array<string>> = ref(["广州恒大", "山东鲁能"]);
 let nextGameDate: Ref<string> = ref("2021-12-20");
 let distance: Ref<Number> = ref(0);
-let curDate: string = "2021-12-19"; // 等待接口
-let oldTime: number = (new Date(curDate)).getTime() / 1000;
-distance.value = (new Date(nextGameDate.value).getTime() / 1000 - oldTime) / 24 / 60 / 60;
+let message: MessageApiInjection = useMessage();
+onMounted(
+    () => {
+        getDateAPI().then(response => {
+            let curDate: number = (new Date(response.date)).getTime() / 1000;
+            distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
+        }).catch(error => {
+            switch (error.message) {
+                default:
+                    message.error("网络错误");
+                    break;
+            }
+        });
+    }
+)
 </script>
-
 <style>
 .nextGameCard {
     margin-bottom: 16px;

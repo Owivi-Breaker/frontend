@@ -74,12 +74,13 @@ const GetCookie = (): void => {
         });
     }
 }
-
-storage.remove("token");
-storage.remove("saveID");
-console.log(storage.get('saveID'))
-GetCookie();
-
+onMounted(
+    () => {
+        storage.remove("token");
+        storage.remove("saveID");
+        GetCookie();
+    }
+);
 /* 登录模块 */
 let formRef: Ref = ref(null); // 登录信息表格
 let needSave: Ref<boolean> = ref(true); // 是否记住账号密码

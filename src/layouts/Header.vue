@@ -1,7 +1,7 @@
 <template>
     <n-layout-header bordered>
         <n-menu mode="horizontal" :inverted="inverted" :options="menuOptions" />
-        <span class="curTime">今天是&nbsp;{{ nowTime }}</span>
+        <span class="curDate">今天是&nbsp;{{ curDate }}</span>
         <n-button class="exitButton" :bordered="false" v-on:click="showExitModal = true">
             <n-icon size="30">
                 <exit-outline />
@@ -17,7 +17,7 @@
     </n-modal>
 </template>
 <script lang="ts" setup>
-import { defineComponent, h, ref } from "vue";
+import { defineComponent, h, ref, onMounted } from "vue";
 import { Ref } from "@vue/reactivity";
 import { NIcon } from "naive-ui";
 import { BookOutline as BookIcon, ExitOutline, Exit } from "@vicons/ionicons5";
@@ -25,7 +25,7 @@ import { Router, useRouter } from "vue-router";
 import { useMessage } from "naive-ui";
 import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
 import { storage } from "../utils";
-import { getDateAPI } from "@/apis/frontPage";
+import { getDateAPI } from "@/apis/user";
 let inverted: Ref<boolean> = ref(false);
 let showExitModal: Ref<boolean> = ref(false);
 let router: Router = useRouter();
@@ -60,17 +60,21 @@ let menuOptions: Array<object> = [
         icon: RenderIcon(BookIcon)
     },
 ];
-let nowTime: Ref<string> = ref("");
+let curDate: Ref<string> = ref("");
 let message: MessageApiInjection = useMessage();
-getDateAPI().then(response => {
-    nowTime.value = response;
-}).catch(error => {
-    switch (error.message) {
-        default:
-            message.error("网络错误");
-            break;
+onMounted(
+    () => {
+        getDateAPI().then(response => {
+            curDate.value = response.date;
+        }).catch(error => {
+            switch (error.message) {
+                default:
+                    message.error("网络错误");
+                    break;
+            }
+        });
     }
-})
+)
 const ExitLogin = (): void => {
     storage.remove("token");
     storage.remove("saveID");
@@ -81,7 +85,7 @@ function RenderIcon(icon: any) {
 }
 </script>
 <style>
-.curTime {
+.curDate {
     position: absolute;
     right: 100px;
     margin-top: 10px;

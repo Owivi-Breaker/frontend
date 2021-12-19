@@ -1,8 +1,8 @@
 import http from '@/utils/http';
-
-
 const createUserAPI = (params: any) => {
-    return http.post("/user", params) // api名字改掉
+    return http.post("/user", params);
 }
-
-export {createUserAPI}
+const getDateAPI = () => {
+    return http.get("/user/save/date", null);
+}
+export { createUserAPI, getDateAPI };
