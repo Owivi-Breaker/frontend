@@ -1,10 +1,11 @@
 {
   "name": "naive-learning",
   "version": "0.0.0",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc --noEmit && vite build",
-    "serve": "vite preview"
+    "serve": "vite --mode production"
   },
   "dependencies": {
     "@vicons/ionicons-v5": "0.0.4",

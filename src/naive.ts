@@ -4,6 +4,8 @@ import {
     // component
     NH1,
     NH2,
+    NH3,
+    NH4,
     NP,
     NText,
     NA,
@@ -61,6 +63,8 @@ export default create({
     components: [
         NH1,
         NH2,
+        NH3,
+        NH4,
         NScrollbar,
         NP,
         NText,

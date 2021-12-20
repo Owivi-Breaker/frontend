@@ -1,4 +1,4 @@
-import { RouteRecordRaw } from 'vue-router'
+import {RouteRecordRaw} from 'vue-router'
 
 const mainRoutes: RouteRecordRaw[] = [
     {
@@ -24,7 +24,7 @@ const mainRoutes: RouteRecordRaw[] = [
         path: '/playerPerform',
         component: () => import('../views/playerPerform.vue'),
         meta: {
-            title: "球员",
+            title: "数据",
             requiresAuth: true // 需要登陆才能访问
         }
     },
@@ -40,7 +40,6 @@ const mainRoutes: RouteRecordRaw[] = [
     },
 
 ]
-
 
 
 const routes: RouteRecordRaw[] = [
@@ -86,4 +85,4 @@ const routes: RouteRecordRaw[] = [
     }
 ]
 
-export { routes }
+export {routes}
