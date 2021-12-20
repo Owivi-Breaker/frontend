@@ -76,8 +76,8 @@ const GetCookie = (): void => {
 }
 onMounted(
     () => {
-        // storage.remove("token");
-        // storage.remove("saveID");
+        storage.remove("token");
+        storage.remove("saveID");
         GetCookie();
     }
 );

@@ -1,6 +1,10 @@
 <template>
     <NextGameHome></NextGameHome>
-    <MailBoxHome></MailBoxHome>
+    <n-grid cols="2" x-gap="20">
+        <n-gi>
+            <MailBoxHome></MailBoxHome>
+        </n-gi>
+    </n-grid>
 </template>
 
 <script lang="ts" setup>
