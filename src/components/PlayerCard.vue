@@ -44,7 +44,7 @@
                 <n-progress
                     :color="getColor(playerData.capa.shooting)"
                     :percentage="playerData.capa.shooting"
-                    fill-border-radius="12px 0 12px 12px"
+                    fill-border-radius="12px 0px 0px 12px"
                     height="10"
                     type="line"
                     unit=""/>
@@ -58,7 +58,7 @@
                 <n-progress
                     :color="getColor(playerData.capa.passing)"
                     :percentage="playerData.capa.passing"
-                    fill-border-radius="12px 0 12px 12px"
+                    fill-border-radius="12px 0px 0px 12px"
                     height="10"
                     type="line"
                     unit=""/>
@@ -71,7 +71,7 @@
                 <n-progress
                     :color="getColor(playerData.capa.dribbling)"
                     :percentage="playerData.capa.dribbling"
-                    fill-border-radius="12px 0 12px 12px"
+                    fill-border-radius="12px 0px 0px 12px"
                     height="10"
                     type="line"
                     unit=""/>
@@ -84,7 +84,7 @@
                 <n-progress
                     :color="getColor(playerData.capa.pace)"
                     :percentage="playerData.capa.pace"
-                    fill-border-radius="12px 0 12px 12px"
+                    fill-border-radius="12px 0px 0px 12px"
                     height="10"
                     type="line"
                     unit=""/>
@@ -96,7 +96,7 @@
                 <n-progress
                     :color="getColor(playerData.capa.strength)"
                     :percentage="playerData.capa.strength"
-                    fill-border-radius="12px 0 12px 12px"
+                    fill-border-radius="12px 0px 0px 12px"
                     height="10"
                     type="line"
                     unit=""/>
@@ -109,7 +109,7 @@
                 <n-progress
                     :color="getColor(playerData.capa.interception)"
                     :percentage="playerData.capa.interception"
-                    fill-border-radius="12px 0 12px 12px"
+                    fill-border-radius="12px 0px 0px 12px"
                     height="10"
                     type="line"
                     unit=""/>
@@ -122,7 +122,7 @@
                 <n-progress
                     :color="getColor(playerData.capa.anticipation)"
                     :percentage="playerData.capa.anticipation"
-                    fill-border-radius="12px 0 12px 12px"
+                    fill-border-radius="12px 0px 0px 12px"
                     height="10"
                     type="line"
                     unit=""/>
@@ -135,7 +135,7 @@
                 <n-progress
                     :color="getColor(playerData.capa.stamina)"
                     :percentage="playerData.capa.stamina"
-                    fill-border-radius="12px 0 12px 12px"
+                    fill-border-radius="12px 0px 0px 12px"
                     height="10"
                     type="line"
                     unit=""/>
@@ -148,7 +148,7 @@
                 <n-progress
                     :color="getColor(playerData.capa.goalkeeping)"
                     :percentage="playerData.capa.goalkeeping"
-                    fill-border-radius="12px 0 12px 12px"
+                    fill-border-radius="12px 0px 0px 12px"
                     height="10"
                     type="line"
                     unit=""/>
