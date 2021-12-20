@@ -26,7 +26,6 @@
         </div>
         <n-modal v-model:show="showModal">
             <n-card style="width: 600px;" title="使用条款" :bordered="false" size="huge">
-                <template #header-extra></template>
                 <n-scrollbar x-scrollable style="max-height: 300px;">
                     <div v-html="protocol"></div>
                 </n-scrollbar>

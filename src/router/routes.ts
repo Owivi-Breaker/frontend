@@ -1,5 +1,4 @@
-import {RouteRecordRaw} from 'vue-router'
-
+import { RouteRecordRaw } from 'vue-router';
 const mainRoutes: RouteRecordRaw[] = [
     {
         name: 'home',
@@ -28,7 +27,15 @@ const mainRoutes: RouteRecordRaw[] = [
             requiresAuth: true // 需要登陆才能访问
         }
     },
-
+    {
+        name: 'mail',
+        path: '/mail',
+        component: () => import('../views/Mail.vue'),
+        meta: {
+            title: "收件箱",
+            requiresAuth: true
+        }
+    },
     {
         name: 'about',
         path: '/about',
@@ -85,4 +92,4 @@ const routes: RouteRecordRaw[] = [
     }
 ]
 
-export {routes}
+export { routes }

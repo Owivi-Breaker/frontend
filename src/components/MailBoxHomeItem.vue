@@ -1,14 +1,24 @@
 <template>
-    <div class="mailContainer" v-bind:class="{ mailContainerBlack: mouseOn }" @mouseenter="mouseEnter()" @mouseleave="mouseOut()">
+    <div class="mailContainer" v-bind:class="{ mailContainerBlack: mouseOn }" v-on:click="showDetial()" v-on:mouseenter="mouseEnter()" v-on:mouseleave="mouseOut()">
         <n-space class="mailItem" align="center" justify="space-between">
             <n-icon class="mailIcon" size="30">
-                <mail-outline v-if="read" />
-                <mail-open-outline v-if="!read" />
+                <mail-outline v-if="!read" />
+                <mail-open-outline v-if="read" />
             </n-icon>
-            <n-ellipsis style="max-width: 350px;">{{ title }}</n-ellipsis>
+            <n-ellipsis style="max-width: 500px;">{{ title }}</n-ellipsis>
             <p>{{ time }}</p>
         </n-space>
     </div>
+    <n-modal v-model:show="showModal">
+        <n-card style="width: 900px;" v-bind:title="title" :bordered="false" size="huge">
+            <n-scrollbar x-scrollable style="max-height: 300px;">
+                <div v-html="content"></div>
+            </n-scrollbar>
+            <template #footer>
+                <n-button v-on:click="showModal = false">关闭</n-button>
+            </template>
+        </n-card>
+    </n-modal>
 </template>
 <script lang="ts" setup>
 import { defineComponent, ref, onMounted } from "vue";
@@ -25,11 +35,13 @@ defineComponent({
 let props: any = defineProps({
     mail: Object
 });
+let id: Ref<Number> = ref(0);
 let title: Ref<String> = ref("");
 let time: Ref<String> = ref("");
 let read: Ref<Boolean> = ref(false);
 onMounted(
     () => {
+        id.value = props.mail.id;
         title.value = props.mail.title;
         time.value = props.mail.time;
         read.value = props.mail.read;
@@ -42,10 +54,24 @@ function mouseEnter(): void {
 function mouseOut(): void {
     mouseOn.value = false;
 }
+let showModal: Ref<Boolean> = ref(false);
+let content: Ref<String> = ref("");
+function showDetial(): void {
+    showModal.value = true;
+    // 给后端发getbyID
+    content.value = "你好。<br>听说你最近过得很好。<br>再见。<br>";
+    // 给后端发get告诉他已读
+    read.value = true;
+}
 </script>
 <style>
 .mailContainer {
+    height: 60px;
     background-color: white;
+    margin-bottom: 5px;
+    padding-left: 20px;
+    padding-right: 20px;
+    border-radius: 10px;
 }
 .mailContainerBlack {
     background-color: aliceblue;
