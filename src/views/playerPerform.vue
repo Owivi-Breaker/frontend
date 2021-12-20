@@ -196,7 +196,7 @@ defineComponent({
 
 /* 获取球员数据 */
 let rawPlayerData: Ref<Array<object>> = ref([]);
-getPlayersByClubAPI({club_id: 1})
+getPlayersByClubAPI({club_id: 1, is_player_club: true})
     .then((response) => {
         rawPlayerData.value = response;
         isLoading.value = false;

@@ -1,7 +1,7 @@
 import http from '@/utils/http';
 
 
-const getPlayersByClubAPI = (params: { club_id: number }) => {
+const getPlayersByClubAPI = (params: { club_id: number, is_player_club?: boolean }) => {
     // 获取指定club_id的所有球员
     return http.get(`/club/${params.club_id}/player`, params)
 }

@@ -18,7 +18,7 @@ let isLoading: Ref<boolean> = ref(true);
 let PlayerData: Ref<Array<object>> = ref([{'1': 2}]);
 onMounted(
     () => {
-        getPlayersByClubAPI({club_id: 1})
+        getPlayersByClubAPI({club_id: 1, is_player_club: true})
             .then((response) => {
                 PlayerData.value = response;
                 isLoading.value = false;
