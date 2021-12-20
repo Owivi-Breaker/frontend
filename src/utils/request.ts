@@ -70,6 +70,8 @@ service.interceptors.response.use(
                     //error.message = '错误请求'
                     break;
                 case 401:
+                    storage.remove("token");
+                    storage.remove("save_id");
                     switch (error.response.data.detail) {
                         case 'Incorrect username or password':
                             //message.error("账号或密码错误");
@@ -79,9 +81,8 @@ service.interceptors.response.use(
                             //error.message = '未授权或授权失效，请重新登录'
                             //message.error("未授权或授权失效，请重新登录");// TODO 好像没有用，要搞一个单独的message-provider组件
                             //$vaToast.init({ message: 'Top-right', position: 'top-right' })
-                            storage.remove("token");
                             setTimeout(() => {
-                                router.push({ name: "login" });
+                                router.push({name: "login"});
                             }, 1000);
                             break;
                     }

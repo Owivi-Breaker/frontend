@@ -56,7 +56,9 @@ import {
     NStatistic,
     NDataTable,
     NProgress,
-    NTime
+    NTime,
+    NDescriptionsItem,
+    NDescriptions
 } from 'naive-ui'
 
 export default create({
@@ -115,6 +117,8 @@ export default create({
         NStatistic,
         NDataTable,
         NProgress,
-        NTime
+        NTime,
+        NDescriptionsItem,
+        NDescriptions
     ]
 })

@@ -1,9 +1,21 @@
-const percentColors = [
+const percentColorsForProgress = [
     {pct: 0, color: {r: 0xff, g: 0x00, b: 0}},
     {pct: 50, color: {r: 0xff, g: 0xff, b: 0}},
     {pct: 100, color: {r: 0x00, g: 0x80, b: 0}}];
 
-const getColor = function (pct: number) {
+const percentColorsForText = [
+    {pct: 0, color: {r: 0xff, g: 0x00, b: 0}},
+    {pct: 50, color: {r: 0xea, g: 0xcd, b: 0x76}},
+    {pct: 100, color: {r: 0x05, g: 0x77, b: 0x48}}];
+
+export const getColor = function (pct: number, type: string = 'progress') {
+    let percentColors = []
+    if (type == 'progress') {
+        percentColors = percentColorsForProgress
+    } else {
+        percentColors = percentColorsForText
+    }
+
     let i = 1
     for (; i < percentColors.length - 1; i++) {
         if (pct < percentColors[i].pct) {
@@ -24,4 +36,3 @@ const getColor = function (pct: number) {
     return 'rgb(' + [color.r, color.g, color.b].join(',') + ')';
 };
 
-export default getColor
