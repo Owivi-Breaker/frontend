@@ -81,5 +81,6 @@ function goToMail(): void {
 <style>
 .mailCard {
     height: 500px;
+    min-width: 800px;
 }
 </style>
