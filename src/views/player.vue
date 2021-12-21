@@ -2,11 +2,12 @@
     <n-h2>球员列表</n-h2>
 
     <n-grid cols="2" x-gap="20">
-        <n-gi v-for="item in PlayerData" v-if="!isLoading">
+        <n-gi v-for="item in playerData" v-if="!isLoading">
             <PlayerCard :playerData="item"></PlayerCard>
         </n-gi>
     </n-grid>
 </template>
+
 
 <script lang="ts" setup>
 import PlayerCard from '@/components/PlayerCard.vue';
@@ -14,13 +15,14 @@ import { Ref } from "@vue/reactivity";
 import { onMounted, ref } from "vue";
 import { getPlayersByClubAPI } from "@/apis/player";
 
-let isLoading: Ref<boolean> = ref(true);
-let PlayerData: Ref<Array<object>> = ref([{'1': 2}]);
+let isLoading = ref(true);
+let playerData = ref([]);
+
 onMounted(
     () => {
         getPlayersByClubAPI({club_id: 1, is_player_club: true})
             .then((response) => {
-                PlayerData.value = response;
+                playerData.value = response;
                 isLoading.value = false;
             });
     }

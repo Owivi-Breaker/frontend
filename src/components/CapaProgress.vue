@@ -1,0 +1,33 @@
+<template>
+    <n-grid cols="6">
+        <n-gi span="1">
+            <n-h5>{{ capaName }}</n-h5>
+        </n-gi>
+        <n-gi span="3">
+            <n-progress
+                :color="getColor(capaRating)"
+                :percentage="capaRating"
+                fill-border-radius="12px 0px 0px 12px"
+                height="10"
+                type="line"
+                unit=""/>
+        </n-gi>
+        <n-gi span="2">
+        </n-gi>
+    </n-grid>
+</template>
+
+<script lang="ts" setup>
+import { getColor } from '@/utils/colorMap'
+import { onMounted } from "vue";
+
+onMounted(
+    () => {
+        console.log('12332312')
+    }
+)
+defineProps<{
+    capaName: string;
+    capaRating: number;
+}>()
+</script>

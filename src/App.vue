@@ -1,11 +1,15 @@
 <template>
     <provider>
-        <viewer />
+        <viewer/>
     </provider>
 </template>
+
+
 <script lang="ts" setup>
 import { Provider, Viewer } from './components'
 </script>
+
+
 <style>
 html,
 body,

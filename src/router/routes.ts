@@ -1,4 +1,5 @@
 import { RouteRecordRaw } from 'vue-router';
+
 const mainRoutes: RouteRecordRaw[] = [
     {
         name: 'home',

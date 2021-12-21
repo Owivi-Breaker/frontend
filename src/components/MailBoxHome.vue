@@ -3,7 +3,7 @@
         <template #header-extra>
             <n-button v-on:click="goToMail()">查看更多</n-button>
         </template>
-        <n-scrollbar x-scrollable style="max-height: 400px;">
+        <n-scrollbar style="max-height: 400px;" x-scrollable>
             <p v-for="item in mailList" v-if="!isLoading">
                 <MailBoxHomeItem v-bind:mail="item"></MailBoxHomeItem>
             </p>
@@ -15,6 +15,7 @@ import { ref, onMounted } from "vue";
 import { Ref } from "@vue/reactivity";
 import MailBoxHomeItem from "@/components/MailBoxHomeItem.vue";
 import { Router, useRouter } from "vue-router";
+
 let router: Router = useRouter();
 let mailList: Ref<Array<Object>> = ref([{}]);
 let isLoading: Ref<boolean> = ref(true);
@@ -74,10 +75,13 @@ onMounted(
         isLoading.value = false;
     }
 );
+
 function goToMail(): void {
-    router.push({ name: "mail" });
+    router.push({name: "mail"});
 }
 </script>
+
+
 <style>
 .mailCard {
     height: 500px;
