@@ -10,6 +10,7 @@ import { Provider, Viewer } from './components'
 html,
 body,
 #app {
+    width: 1920px;
     margin: 0;
     padding: 0;
 }
