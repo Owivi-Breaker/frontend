@@ -1,5 +1,5 @@
 <template>
-    <router-view />
+    <router-view/>
 </template>
 
 <script lang="ts" setup>
@@ -9,4 +9,8 @@
 // const loadingBar = useLoadingBar()
 // router.beforeEach(() => loadingBar?.start())
 // router.afterEach(() => loadingBar?.finish())
+import { useMessage } from 'naive-ui'
+
+window.$message = useMessage()
+
 </script>

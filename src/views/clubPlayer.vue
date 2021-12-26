@@ -1,7 +1,7 @@
 <template>
     <n-h2>球员列表</n-h2>
 
-    <n-grid cols="2" x-gap="20">
+    <n-grid cols="2" x-gap="20" y-gap="20">
         <n-gi v-for="item in playerData" v-if="!isLoading">
             <PlayerCard :playerData="item"></PlayerCard>
         </n-gi>
@@ -20,7 +20,7 @@ let playerData = ref([]);
 
 onMounted(
     () => {
-        getPlayersByClubAPI({club_id: 1, is_player_club: true})
+        getPlayersByClubAPI({ club_id: 1, is_player_club: true })
             .then((response) => {
                 playerData.value = response;
                 isLoading.value = false;

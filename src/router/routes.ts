@@ -1,5 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 
+// 框在Sidebar、Header和Footer里的页面
 const mainRoutes: RouteRecordRaw[] = [
     {
         name: 'home',
@@ -12,8 +13,8 @@ const mainRoutes: RouteRecordRaw[] = [
     },
     {
         name: 'player',
-        path: '/player',
-        component: () => import('../views/player.vue'),
+        path: '/club-player',
+        component: () => import('../views/clubPlayer.vue'),
         meta: {
             title: "球员",
             requiresAuth: true // 需要登陆才能访问
@@ -44,6 +45,15 @@ const mainRoutes: RouteRecordRaw[] = [
         meta: {
             title: 'About',
             requiresAuth: false
+        }
+    },
+    {
+        name: 'playerPage',
+        path: '/player-page',
+        component: () => import('../views/playerPage.vue'),
+        meta: {
+            title: '球员页',
+            requiresAuth: true
         }
     },
 

@@ -64,6 +64,7 @@ service.interceptors.response.use(
         if (error && error.response) {
             // 1.公共错误处理
             // 2.根据响应码具体处理
+            console.log("DEBUG: 错误信息👇")
             console.log(error.response)
             switch (error.response.status) {
                 case 400:
@@ -74,12 +75,12 @@ service.interceptors.response.use(
                     storage.remove("save_id");
                     switch (error.response.data.detail) {
                         case 'Incorrect username or password':
-                            //message.error("账号或密码错误");
+                            window.$message.error("账号或密码错误");
                             break;
                         case "Could not validate credentials":
                             // token 过期处理
                             //error.message = '未授权或授权失效，请重新登录'
-                            //message.error("未授权或授权失效，请重新登录");// TODO 好像没有用，要搞一个单独的message-provider组件
+                            window.$message.error("未授权或授权失效，请重新登录");
                             //$vaToast.init({ message: 'Top-right', position: 'top-right' })
                             setTimeout(() => {
                                 router.push({name: "login"});
@@ -109,7 +110,7 @@ service.interceptors.response.use(
                     break;
                 case 502:
                     //error.message = '网络错误'
-                    message.error("网络错误");
+                    window.$message.error("网络错误");
                     break;
                 case 503:
                     //error.message = '服务不可用'
@@ -131,7 +132,6 @@ service.interceptors.response.use(
             }
             //error.message = '连接服务器失败';
         }
-
         /*异常处理结束*/
         return Promise.reject(error)
     }

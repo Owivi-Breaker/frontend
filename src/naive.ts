@@ -59,7 +59,9 @@ import {
     NProgress,
     NTime,
     NDescriptionsItem,
-    NDescriptions
+    NDescriptions,
+    NTag,
+    NRate
 } from 'naive-ui'
 
 export default create({
@@ -121,6 +123,8 @@ export default create({
         NProgress,
         NTime,
         NDescriptionsItem,
-        NDescriptions
+        NDescriptions,
+        NTag,
+        NRate
     ]
 })

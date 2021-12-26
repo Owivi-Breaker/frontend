@@ -31,12 +31,10 @@ import { Ref } from "@vue/reactivity";
 import { Router, useRouter } from "vue-router";
 import { storage } from "@/utils";
 import { MessageApiInjection, MessageOptions } from "naive-ui/lib/message/src/MessageProvider";
-import { useMessage } from "naive-ui";
 import { loginAPI } from "@/apis/login"
 
-
 let formValue: Ref<{ username: string; password: string; }> = ref({username: "", password: ""});
-let message: MessageApiInjection = useMessage();
+let message: MessageApiInjection = window.$message;
 
 
 let rules: object = {
@@ -110,24 +108,18 @@ const PostLogin = (): void => {
                     setTimeout(() => {
                         router.push({name: "selectSave"});
                     }, 1000);
-                }).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
-                switch (error.message) {
-                    case "Request failed with status code 404":
-                    case "Network Error":
-                        message.error("登录失败，网络错误。");
-                        break;
-                    case "Request failed with status code 401":
-                        switch (error.response.data.detail) {
-                            case "Incorrect username or password":
-                                message.error("登录失败，用户名或密码错误。");
-                                break;
-                        }
-                        break;
-                    default:
-                        message.error("登录失败: ", error.message);
-                        break;
-                }
-            });
+                })
+                .catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
+                    switch (error.message) {
+                        case "Request failed with status code 404":
+                        case "Network Error":
+                            message.error("登录失败，网络错误。");
+                            break;
+                        default:
+                            message.error("登录失败: ", error.message);
+                            break;
+                    }
+                });
         } else {
             message.error("由于未知原因，登陆失败");
         }
