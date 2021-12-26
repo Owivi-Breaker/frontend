@@ -1,22 +1,13 @@
 <template>
     <n-h1>球员数据</n-h1>
-    <n-data-table v-if="!isLoading" :columns="columns" :data="playerData" striped/>
-    <n-modal v-model:show="isLoading" :mask-closable="false">
-        <n-card :bordered="true" :title="loadTitle" class="loadModalCard" size="huge">
-            <n-spin v-if="isLoading" size="medium"/>
-            <n-icon v-if="!isLoading" class="completeCreateSaveIcon" color="#18a058" size="80">
-                <Ios-Checkmark/>
-            </n-icon>
-        </n-card>
-    </n-modal>
+    <n-data-table :columns="columns" :data="playerData" striped :loading="isLoading" />
 </template>
 <script lang="ts" setup>
 import { getPlayersByClubAPI } from '@/apis/player';
 import { getColor } from "@/utils/colorMap"
-import { defineComponent, h, ref, computed } from 'vue';
+import { h, ref, computed } from 'vue';
 import { NTag } from 'naive-ui';
 import { Ref } from "@vue/reactivity";
-import { IosCheckmark } from '@vicons/ionicons4';
 // todo get token and return
 
 const columns = [
@@ -187,12 +178,6 @@ const columns = [
 ]
 
 let isLoading: Ref<boolean> = ref(true);
-let loadTitle: Ref<String> = ref("请稍候");
-defineComponent({
-    components: {
-        IosCheckmark
-    }
-});
 
 /* 获取球员数据 */
 let rawPlayerData: Ref<Array<object>> = ref([]);
