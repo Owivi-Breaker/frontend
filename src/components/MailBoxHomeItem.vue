@@ -1,17 +1,29 @@
 <template>
     <div class="mailContainer" v-bind:class="{ mailContainerBlack: mouseOn }" v-on:click="showDetial()" v-on:mouseenter="mouseEnter()" v-on:mouseleave="mouseOut()">
-        <n-space class="mailItem" align="center" justify="space-between">
-            <n-icon class="mailIcon" size="30">
-                <mail-outline v-if="!read" />
-                <mail-open-outline v-if="read" />
-            </n-icon>
-            <n-ellipsis style="max-width: 500px;">{{ title }}</n-ellipsis>
-            <p>{{ time }}</p>
-        </n-space>
+        <n-grid cols="20" x-gap="10">
+            <n-gi span="2">
+                <n-space class="mailItem" align="center">
+                    <n-icon class="mailIcon" size="30">
+                        <mail-outline v-if="!read" />
+                        <mail-open-outline v-if="read" />
+                    </n-icon>
+                </n-space>
+            </n-gi>
+            <n-gi span="15">
+                <n-space class="mailItem" align="center">
+                    <n-ellipsis>{{ title }}</n-ellipsis>
+                </n-space>
+            </n-gi>
+            <n-gi span="3">
+                <n-space class="mailItem" align="center">
+                    <p>{{ time }}</p>
+                </n-space>
+            </n-gi>
+        </n-grid>
     </div>
     <n-modal v-model:show="showModal">
         <n-card style="width: 900px;" v-bind:title="title" :bordered="false" size="huge">
-            <n-scrollbar x-scrollable style="max-height: 300px;">
+            <n-scrollbar style="max-height: 300px;">
                 <div v-html="content"></div>
             </n-scrollbar>
             <template #footer>

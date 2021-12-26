@@ -57,7 +57,6 @@ class columnItem {
     align: string;
     render: Function;
     sorter: string;
-    sortOrder: string | null;
     constructor(title: string) {
         this.title = title;
         this.key = title;
@@ -68,7 +67,6 @@ class columnItem {
             return h('p', { style: { "color": getTitleColor(row) }, }, { default: () => row[this.key] });
         }
         this.sorter = "default";
-        this.sortOrder = title === "积分" ? "descend" : null
     }
 }
 let columns: Array<Object> = [new columnItem("俱乐部"), new columnItem("积分"), new columnItem(" 胜 "), new columnItem(" 平 "), new columnItem(" 负 "),
