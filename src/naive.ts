@@ -61,7 +61,8 @@ import {
     NDescriptionsItem,
     NDescriptions,
     NTag,
-    NRate
+    NRate,
+    NDivider
 } from 'naive-ui'
 
 export default create({
@@ -125,6 +126,7 @@ export default create({
         NDescriptionsItem,
         NDescriptions,
         NTag,
-        NRate
+        NRate,
+        NDivider
     ]
 })
