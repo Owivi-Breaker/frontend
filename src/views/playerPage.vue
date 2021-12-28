@@ -1,11 +1,12 @@
 <template>
-    <n-grid cols="2" x-gap="20">
+
+    <n-grid cols="2" x-gap="20" y-gap="20">
         <n-gi>
             <n-card>
-
                 <n-grid cols="3" x-gap="9">
                     <n-gi span="1">
-                        <n-space>
+                        <n-space justify="start">
+                            <n-rate :default-value="4.5" allow-half readonly size="small"/>
                             <Avataaars
                                 :isCircle="false"
                                 height="80%"
@@ -18,12 +19,9 @@
                         </n-space>
                     </n-gi>
                     <n-gi span="2">
-                        <n-space justify="start">
-                            <n-h2>
-                                {{ playerData.translated_name }}
-                            </n-h2>
-                            <n-rate :default-value="3.5" allow-half readonly size="small"/>
-                        </n-space>
+                        <n-h2>
+                            {{ playerData.translated_name }}
+                        </n-h2>
 
 
                         <n-descriptions :column="3" label-placement="top">
@@ -35,9 +33,9 @@
                                     {{ playerData.age }}
                                 </n-h4>
                             </n-descriptions-item>
-                            <n-descriptions-item label="能力" label-style="color: grey;">
+                            <n-descriptions-item label="号码" label-style="color: grey;">
                                 <n-h4>
-                                    {{ playerData.top_capa }}
+                                    10
                                 </n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="位置" label-style="color: grey;">
@@ -47,18 +45,33 @@
                             </n-descriptions-item>
                             <n-descriptions-item label="身价" label-style="color: grey;">
                                 <n-h4>
-                                    {{ 4300 }} 万
+                                    {{ 9300 }} 万
                                 </n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="周薪" label-style="color: grey;">
                                 <n-h4>
-                                    {{ 12.5 }} 万
+                                    {{ 42.5 }} 万
                                 </n-h4>
                             </n-descriptions-item>
                         </n-descriptions>
                     </n-gi>
                 </n-grid>
-
+                <template #footer>
+                    <n-divider title-placement="left">赛季数据</n-divider>
+                    <n-space justify="space-between">
+                        <n-statistic label="出场">26</n-statistic>
+                        <n-statistic label="进球">13</n-statistic>
+                        <n-statistic label="助攻">6</n-statistic>
+                        <n-statistic label="平均评分">7.9</n-statistic>
+                        <n-statistic label="传球成功率">
+                            83%
+                        </n-statistic>
+                        <n-statistic label="过人成功率">61%
+                        </n-statistic>
+                        <n-statistic label="争顶成功率">48%
+                        </n-statistic>
+                    </n-space>
+                </template>
             </n-card>
         </n-gi>
         <n-gi>
@@ -75,12 +88,44 @@
             </n-card>
         </n-gi>
         <n-gi>
-            <n-card>
-                <div id="myEcharts" style="width: 100%; height: 300%"></div>
+            <n-card title="近五场比赛评分">
+                <div id="ratingChart" style="width: 100%; height: 300%"></div>
             </n-card>
+        </n-gi>
+        <n-gi>
+            <n-card title="各位置出场数">
+                <div id="loNumChart" style="width: 100%; height: 300%"></div>
+            </n-card>
+        </n-gi>
 
+        <n-gi>
+            <n-card title="奖杯陈列室">
+                <n-list>
+                    <n-list-item>
+                        <n-thing title="个人荣誉">
+                            2019 金球奖<br/>
+                            2018 英超年度最佳球员<br/>
+                            2020 西甲最佳射手<br/>
+                            2018 英超最佳射手<br/>
+                            2017 英超最佳射手<br/>
+                            2015 英冠最佳射手<br/>
+                            2013 金童奖<br/>
+                        </n-thing>
+                    </n-list-item>
+                    <n-list-item>
+                        <n-thing title="俱乐部荣誉">
+                            2018 曼彻斯特联 欧冠冠军<br/>
+                            2021 巴塞罗那 西甲冠军<br/>
+                            2017 曼彻斯特联 英超冠军<br/>
+                            2019 巴塞罗那 国王杯冠军<br/>
+                        </n-thing>
+                    </n-list-item>
+                </n-list>
+
+            </n-card>
         </n-gi>
     </n-grid>
+
 
 </template>
 
@@ -90,48 +135,48 @@ import CapaProgress from "@/components/CapaProgress.vue"
 import * as echarts from 'echarts'
 import { onMounted, ref, reactive, computed } from "vue";
 
-
+// 样例数据
 const playerData = reactive({
     "id": 48,
     "club_id": 2,
     "name": "chakra",
     "translated_name": "恰克拉",
     "translated_nationality": "爱沙尼亚",
-    "age": 15,
-    "height": 171,
+    "age": 31,
+    "height": 178,
     "weight": 80,
     "birth_date": "01-04",
     "wages": 0.0,
     "real_stamina": 100.0,
     "location_num": {
-        "ST_num": 1,
-        "CM_num": 23,
-        "LW_num": 6,
+        "ST_num": 254,
+        "CM_num": 43,
+        "LW_num": 66,
         "RW_num": 11,
         "CB_num": 0,
         "LB_num": 0,
-        "RB_num": 0,
+        "RB_num": 28,
         "GK_num": 0,
-        "CAM_num": 3,
+        "CAM_num": 83,
         "LM_num": 0,
         "RM_num": 0,
         "CDM_num": 0
     },
     "capa": {
-        "shooting": 19.2,
-        "passing": 32.0,
-        "dribbling": 19.0,
-        "interception": 13.0,
-        "pace": 25.0,
-        "strength": 23.0,
+        "shooting": 89.2,
+        "passing": 72.0,
+        "dribbling": 85.0,
+        "interception": 43.0,
+        "pace": 65.0,
+        "strength": 43.0,
         "aggression": 11.0,
         "anticipation": 13.0,
-        "free_kick": 12.0,
-        "stamina": 27.6,
-        "goalkeeping": 12.0
+        "free_kick": 72.0,
+        "stamina": 67.6,
+        "goalkeeping": 9.0
     },
-    "top_capa": 29.0,
-    "top_location": "CM",
+    "top_capa": 89.0,
+    "top_location": "ST",
     "location_capa": {
         "CM": 29.0,
         "LM": 26.72,
@@ -147,40 +192,50 @@ const playerData = reactive({
         "GK": 13.0
     }
 })
+const ratings = ref([7.7, 6.9, 7.4, 9.4, 8.5])
+const location = ref(["ST", "CAM", "LW"])
+const totalGameData = reactive({
+    "final_rating": 7.475,
+    "actions": 98,
+    "shots": 15,
+    "goals": 12,
+    "assists": 0,
+    "passes": 0,
+    "pass_success": 0,
+    "dribbles": 20,
+    "dribble_success": 11,
+    "tackles": 0,
+    "tackle_success": 0,
+    "aerials": 63,
+    "aerial_success": 38,
+    "saves": 0,
+    "save_success": 0
+})
 
 const getLocationNum = () => {
+    // 获取用于饼图的出场位置次数对象
     let loNum = []
     for (let i of Object.entries(playerData.location_num)) {
         if (i[1] != 0) {
-            loNum.push({ value: i[1], name: i[0] });
+            loNum.push({value: i[1], name: i[0].split("_num")[0]});
         }
 
     }
     return loNum
 }
 
-const ratings = ref([6.7, 7.9, 6.1, 8.8, 6.2])
-const location = ref(["CAM", "CM", "ST"])
 
-
-// 构建图表
-type EChartsOption = echarts.EChartsOption;
-const pieOption = computed(() => {
+// 出场次数饼图设置
+const loNumOption = computed(() => {
     return {
-        title: {
-            text: '各位置出场数',
-            left: 'center',
-            top: 'center'
-        },
         tooltip: {
             trigger: 'item'
         },
-
         series: [
             {
                 name: 'Access From',
                 type: 'pie',
-                radius: ['50%', '90%'],
+                radius: ['35%', '75%'],
                 stillShowZeroSum: false,
 
                 data: getLocationNum(),
@@ -196,12 +251,66 @@ const pieOption = computed(() => {
     };
 })
 
+// 比赛评分折线图设置
+const ratingOption = computed(() => {
+    return {
+        xAxis: {
+            type: 'category',
+            data: ['5', '4', '3', '2', '1']
+        },
+        yAxis: {
+            type: 'value'
+            //data: ['4', '6', '8', '10']
+        },
+        tooltip: {
+            trigger: 'axis'
+        },
+        series: [
+            {
+                data: ratings.value,
+                type: 'line',
+                markPoint: {
+                    data: [
+                        {type: 'max', name: 'Max'},
+                        {type: 'min', name: 'Min'}
+                    ]
+                },
+                markLine: {
+                    data: [{type: 'average', name: 'Avg'}]
+                }
+            }
+        ]
+    };
+})
+
+const totalGameDataOption = computed(() => {
+    return {
+        xAxis: {
+            type: 'category',
+            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+        },
+        yAxis: {
+            type: 'value'
+        },
+        series: [
+            {
+                data: [120, 200, 150, 80, 70, 110, 130],
+                type: 'bar'
+            }
+        ]
+    };
+})
+
 onMounted(() => {
-    let myChart = echarts.init(document.getElementById("myEcharts"));
-    myChart.setOption(pieOption.value);
+    let loNumChart = echarts.init(document.getElementById("loNumChart"));
+    loNumChart.setOption(loNumOption.value);
+
+    let ratingChart = echarts.init(document.getElementById("ratingChart"));
+    ratingChart.setOption(ratingOption.value);
     window.onresize = function () {
         //自适应大小
-        myChart.resize();
+        loNumChart.resize();
+        ratingChart.resize();
     };
 })
 
