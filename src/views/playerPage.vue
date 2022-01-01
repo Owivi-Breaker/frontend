@@ -1,16 +1,12 @@
 <template>
-
     <n-grid cols="2" x-gap="20" y-gap="20">
         <n-gi>
             <n-card>
                 <n-grid cols="3" x-gap="9">
                     <n-gi span="1">
                         <n-space justify="start">
-                            <n-rate :default-value="4.5" allow-half readonly size="small"/>
-                            <Avataaars
-                                :isCircle="false"
-                                height="80%"
-                                width="80%"/>
+                            <n-rate :default-value="4.5" allow-half readonly size="small" />
+                            <Avataaars :isCircle="false" height="80%" width="80%" />
                             <n-space>
                                 <n-tag type="success">就地反抢</n-tag>
                                 <n-tag type="info">拉边</n-tag>
@@ -19,39 +15,26 @@
                         </n-space>
                     </n-gi>
                     <n-gi span="2">
-                        <n-h2>
-                            {{ playerData.translated_name }}
-                        </n-h2>
-
+                        <n-h2>{{ playerData.translated_name }}</n-h2>
 
                         <n-descriptions :column="3" label-placement="top">
                             <n-descriptions-item label="国籍" label-style="color: grey;">
                                 <n-h4>{{ playerData.translated_nationality }}</n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="年龄" label-style="color: grey;">
-                                <n-h4>
-                                    {{ playerData.age }}
-                                </n-h4>
+                                <n-h4>{{ playerData.age }}</n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="号码" label-style="color: grey;">
-                                <n-h4>
-                                    10
-                                </n-h4>
+                                <n-h4>10</n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="位置" label-style="color: grey;">
-                                <n-h4>
-                                    {{ (location).join(", ") }}
-                                </n-h4>
+                                <n-h4>{{ (location).join(", ") }}</n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="身价" label-style="color: grey;">
-                                <n-h4>
-                                    {{ 9300 }} 万
-                                </n-h4>
+                                <n-h4>{{ 9300 }} 万</n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="周薪" label-style="color: grey;">
-                                <n-h4>
-                                    {{ 42.5 }} 万
-                                </n-h4>
+                                <n-h4>{{ 42.5 }} 万</n-h4>
                             </n-descriptions-item>
                         </n-descriptions>
                     </n-gi>
@@ -63,13 +46,9 @@
                         <n-statistic label="进球">13</n-statistic>
                         <n-statistic label="助攻">6</n-statistic>
                         <n-statistic label="平均评分">7.9</n-statistic>
-                        <n-statistic label="传球成功率">
-                            83%
-                        </n-statistic>
-                        <n-statistic label="过人成功率">61%
-                        </n-statistic>
-                        <n-statistic label="争顶成功率">48%
-                        </n-statistic>
+                        <n-statistic label="传球成功率">83%</n-statistic>
+                        <n-statistic label="过人成功率">61%</n-statistic>
+                        <n-statistic label="争顶成功率">48%</n-statistic>
                     </n-space>
                 </template>
             </n-card>
@@ -103,30 +82,34 @@
                 <n-list>
                     <n-list-item>
                         <n-thing title="个人荣誉">
-                            2019 金球奖<br/>
-                            2018 英超年度最佳球员<br/>
-                            2020 西甲最佳射手<br/>
-                            2018 英超最佳射手<br/>
-                            2017 英超最佳射手<br/>
-                            2015 英冠最佳射手<br/>
-                            2013 金童奖<br/>
+                            2019 金球奖
+                            <br />2018 英超年度最佳球员
+                            <br />2020 西甲最佳射手
+                            <br />2018 英超最佳射手
+                            <br />2017 英超最佳射手
+                            <br />2015 英冠最佳射手
+                            <br />2013 金童奖
+                            <br />
                         </n-thing>
                     </n-list-item>
                     <n-list-item>
                         <n-thing title="俱乐部荣誉">
-                            2018 曼彻斯特联 欧冠冠军<br/>
-                            2021 巴塞罗那 西甲冠军<br/>
-                            2017 曼彻斯特联 英超冠军<br/>
-                            2019 巴塞罗那 国王杯冠军<br/>
+                            2018 曼彻斯特联 欧冠冠军
+                            <br />2021 巴塞罗那 西甲冠军
+                            <br />2017 曼彻斯特联 英超冠军
+                            <br />2019 巴塞罗那 国王杯冠军
+                            <br />
                         </n-thing>
                     </n-list-item>
                 </n-list>
-
+            </n-card>
+        </n-gi>
+        <n-gi>
+            <n-card title="球场">
+                <PlayGround></PlayGround>
             </n-card>
         </n-gi>
     </n-grid>
-
-
 </template>
 
 <script lang="ts" setup>
@@ -134,6 +117,7 @@ import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
 import CapaProgress from "@/components/CapaProgress.vue"
 import * as echarts from 'echarts'
 import { onMounted, ref, reactive, computed } from "vue";
+import PlayGround from "@/components/PlayGround.vue";
 
 // 样例数据
 const playerData = reactive({
@@ -217,7 +201,7 @@ const getLocationNum = () => {
     let loNum = []
     for (let i of Object.entries(playerData.location_num)) {
         if (i[1] != 0) {
-            loNum.push({value: i[1], name: i[0].split("_num")[0]});
+            loNum.push({ value: i[1], name: i[0].split("_num")[0] });
         }
 
     }
@@ -271,12 +255,12 @@ const ratingOption = computed(() => {
                 type: 'line',
                 markPoint: {
                     data: [
-                        {type: 'max', name: 'Max'},
-                        {type: 'min', name: 'Min'}
+                        { type: 'max', name: 'Max' },
+                        { type: 'min', name: 'Min' }
                     ]
                 },
                 markLine: {
-                    data: [{type: 'average', name: 'Avg'}]
+                    data: [{ type: 'average', name: 'Avg' }]
                 }
             }
         ]
@@ -302,16 +286,19 @@ const totalGameDataOption = computed(() => {
 })
 
 onMounted(() => {
-    let loNumChart = echarts.init(document.getElementById("loNumChart"));
-    loNumChart.setOption(loNumOption.value);
-
-    let ratingChart = echarts.init(document.getElementById("ratingChart"));
-    ratingChart.setOption(ratingOption.value);
-    window.onresize = function () {
-        //自适应大小
-        loNumChart.resize();
-        ratingChart.resize();
-    };
+    let temp = document.getElementById("loNumChart");
+    let shit = document.getElementById("ratingChart");
+    if (temp != null && shit != null) {
+        let loNumChart = echarts.init(temp);
+        loNumChart.setOption(loNumOption.value);
+        let ratingChart = echarts.init(shit);
+        ratingChart.setOption(ratingOption.value);
+        window.onresize = function () {
+            // 自适应大小
+            // loNumChart.resize();
+            ratingChart.resize();
+        };
+    }
 })
 
 
@@ -324,5 +311,4 @@ onMounted(() => {
     flex-direction: column;
     align-items: center;
 }
-
 </style>

@@ -1,11 +1,10 @@
 <template>
-    <n-layout-sider :collapsed-width="64" :native-scrollbar="false" :width="240" bordered collapse-mode="width"
-                    show-trigger>
+    <n-layout-sider :collapsed-width="64" :native-scrollbar="false" :width="240" bordered collapse-mode="width" show-trigger>
         <div class="icon">
-            <img alt="logo" class="img" src="https://www.naiveui.com/assets/naivelogo.93278402.svg"/>
+            <img alt="logo" class="img" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" />
         </div>
         <n-divider></n-divider>
-        <n-menu :collapsed-icon-size="22" :collapsed-width="64" :options="menuOptions"/>
+        <n-menu :collapsed-icon-size="22" :collapsed-width="64" :options="menuOptions" />
     </n-layout-sider>
 </template>
 
@@ -23,7 +22,7 @@ import { NIcon } from 'naive-ui';
 const inverted = ref(false)
 
 function renderIcon(icon: any) {
-    return () => h(NIcon, null, {default: () => h(icon)})
+    return () => h(NIcon, null, { default: () => h(icon) })
 }
 
 const menuOptions = [
@@ -38,7 +37,7 @@ const menuOptions = [
                     }
                 }
             },
-            {default: () => '主页'}
+            { default: () => '主页' }
         ),
         key: 'main-page',
         icon: renderIcon(BookIcon)
@@ -54,7 +53,7 @@ const menuOptions = [
                     }
                 }
             },
-            {default: () => '球员'}
+            { default: () => '球员' }
         ),
         key: 'player',
         icon: renderIcon(PersonIcon),
@@ -70,7 +69,7 @@ const menuOptions = [
                     }
                 }
             },
-            {default: () => '数据'}
+            { default: () => '数据' }
         ),
         key: 'playerPerform',
         icon: renderIcon(PersonIcon),
@@ -108,7 +107,7 @@ const menuOptions = [
                     }
                 }
             },
-            {default: () => 'test 球员页'}
+            { default: () => 'test 球员页' }
         ),
         key: 'playerPage',
         icon: renderIcon(PersonIcon),
