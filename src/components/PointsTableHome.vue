@@ -1,7 +1,9 @@
 <template>
     <n-card class="pointsTableCard" title="赛季排行榜">
         <n-scrollbar style="height: 400px;">
-            <n-data-table :columns="columns" :data="pointsData" :loading="isLoading" />
+            <n-data-table :columns="columns" :data="pointsData" :loading="isLoading"
+                          :max-height="250"
+                          size="small"/>
         </n-scrollbar>
     </n-card>
 </template>
@@ -11,6 +13,7 @@ import { getSaveAPI } from "@/apis/save";
 import { ref, h, computed, ComputedRef } from 'vue';
 import { Ref } from "@vue/reactivity";
 import { storage } from '../utils';
+
 let rawPointsData: Ref = ref([]);
 let isLoading: Ref<boolean> = ref(true);
 let clubId: Ref<number> = ref(0);
@@ -46,9 +49,11 @@ let pointsData: ComputedRef<any> = computed(() =>
         return value;
     })
 )
+
 function getTitleColor(item: any): string {
     return clubId.value === item["id"] ? "green" : "black";
 }
+
 class columnItem {
     title: string;
     key: string;
@@ -57,6 +62,7 @@ class columnItem {
     align: string;
     render: Function;
     sorter: string;
+
     constructor(title: string) {
         this.title = title;
         this.key = title;
@@ -69,8 +75,9 @@ class columnItem {
         this.sorter = "default";
     }
 }
+
 let columns: Array<Object> = [new columnItem("俱乐部"), new columnItem("积分"), new columnItem(" 胜 "), new columnItem(" 平 "), new columnItem(" 负 "),
-new columnItem("净胜"), new columnItem("胜球"), new columnItem("输球")];
+    new columnItem("净胜"), new columnItem("胜球"), new columnItem("输球")];
 </script>
 <style>
 .pointsTableCard {
