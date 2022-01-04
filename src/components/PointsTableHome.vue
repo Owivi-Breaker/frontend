@@ -1,10 +1,6 @@
 <template>
     <n-card class="pointsTableCard" title="赛季排行榜">
-        <n-scrollbar style="height: 400px;">
-            <n-data-table :columns="columns" :data="pointsData" :loading="isLoading"
-                          :max-height="250"
-                          size="small"/>
-        </n-scrollbar>
+        <n-data-table :columns="columns" :data="pointsData" size="small" :loading="isLoading" />
     </n-card>
 </template>
 <script lang="ts" setup>
@@ -13,7 +9,9 @@ import { getSaveAPI } from "@/apis/save";
 import { ref, h, computed, ComputedRef } from 'vue';
 import { Ref } from "@vue/reactivity";
 import { storage } from '../utils';
-
+import { MessageApiInjection, MessageOptions } from "naive-ui/lib/message/src/MessageProvider";
+declare const window: Window & { $message: any };
+let message: MessageApiInjection = window.$message;
 let rawPointsData: Ref = ref([]);
 let isLoading: Ref<boolean> = ref(true);
 let clubId: Ref<number> = ref(0);
@@ -26,13 +24,14 @@ getSaveAPI().then(response => {
         getPointsTableByLeagueAPI({ league_id: leagueID, game_season: gameSeason }).then(response => {
             rawPointsData.value = response;
             isLoading.value = false;
-        }).catch(error => {
-            switch (error.message) {
-                default:
-                    console.log("网络错误");
-            }
+        }).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
+            message.error("网络错误。");
         });
+    }).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
+        message.error("网络错误。");
     });
+}).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
+    message.error("网络错误。");
 });
 let pointsData: ComputedRef<any> = computed(() =>
     rawPointsData.value.map((value: any) => {
@@ -67,20 +66,19 @@ class columnItem {
         this.title = title;
         this.key = title;
         this.fixed = title === "俱乐部" ? "left" : null;
-        this.width = title === "俱乐部" ? 200 : null;
+        this.width = title === "俱乐部" ? 100 : null;
         this.align = title === "俱乐部" ? "left" : "center";
         this.render = (row: any) => {
-            return h('p', { style: { "color": getTitleColor(row) }, }, { default: () => row[this.key] });
+            return h('p', { style: { "margin": 0, "color": getTitleColor(row) }, }, { default: () => row[this.key] });
         }
         this.sorter = "default";
     }
 }
-
 let columns: Array<Object> = [new columnItem("俱乐部"), new columnItem("积分"), new columnItem(" 胜 "), new columnItem(" 平 "), new columnItem(" 负 "),
-    new columnItem("净胜"), new columnItem("胜球"), new columnItem("输球")];
+new columnItem("净胜"), new columnItem("胜球"), new columnItem("输球")];
 </script>
 <style>
 .pointsTableCard {
-    height: 500px;
+    height: 925px;
 }
 </style>

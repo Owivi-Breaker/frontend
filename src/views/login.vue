@@ -1,21 +1,19 @@
 <template>
     <div class="loginDiv">
-        <img id="logo" alt="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg"/>
+        <img id="logo" alt="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" />
         <p id="title">登录</p>
         <n-form id="form" ref="formRef" :model="formValue" :rules="rules" :show-label="false">
             <n-form-item label="用户名" path="username">
-                <n-input v-model:value="formValue.username" class="roundInput" placeholder="用户名"/>
+                <n-input v-model:value="formValue.username" class="roundInput" placeholder="用户名" />
             </n-form-item>
             <n-form-item label="密码" path="password">
-                <n-input v-model:value="formValue.password" class="roundInput" placeholder="密码" type="password"
-                         @keyup.enter="PostLogin"/>
+                <n-input v-model:value="formValue.password" class="roundInput" placeholder="密码" type="password" @keyup.enter="PostLogin" />
             </n-form-item>
             <n-form-item>
                 <n-checkbox v-model:checked="needSave">记住我</n-checkbox>
             </n-form-item>
             <n-form-item>
-                <n-button attr-type="button" class="roundButton" type="primary" v-on:click="PostLogin">进入OwiviOsa
-                </n-button>
+                <n-button attr-type="button" class="roundButton" type="primary" v-on:click="PostLogin">进入OwiviOsa</n-button>
             </n-form-item>
         </n-form>
         <div>
@@ -33,7 +31,8 @@ import { storage } from "@/utils";
 import { MessageApiInjection, MessageOptions } from "naive-ui/lib/message/src/MessageProvider";
 import { loginAPI } from "@/apis/login"
 
-let formValue: Ref<{ username: string; password: string; }> = ref({username: "", password: ""});
+let formValue: Ref<{ username: string; password: string; }> = ref({ username: "", password: "" });
+declare const window: Window & { $message: any };
 let message: MessageApiInjection = window.$message;
 
 
@@ -106,7 +105,7 @@ const PostLogin = (): void => {
                         SetCookie(formValue.value.username, formValue.value.password, 7);
                     }
                     setTimeout(() => {
-                        router.push({name: "selectSave"});
+                        router.push({ name: "selectSave" });
                     }, 1000);
                 })
                 .catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {

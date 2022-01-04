@@ -8,4 +8,7 @@ const getClubByIdAPI = (params: { club_id: number }) => {
 const getClubsByLeagueAPI = (params: { league_id: number }) => {
     return http.get(`/league/${params.league_id}/club`, null);
 }
-export { getClubsAPI, getClubByIdAPI, getClubsByLeagueAPI };
+const getIncomingGamesAPI = () => {
+    return http.get(`/test/incoming-games-info`, null);
+}
+export { getClubsAPI, getClubByIdAPI, getClubsByLeagueAPI, getIncomingGamesAPI };
