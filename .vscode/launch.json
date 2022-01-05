@@ -1,0 +1,17 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "pwa-msedge",
+            "request": "launch",
+            "name": "针对 localhost 启动 Edge",
+            "url": "http://localhost:19231",
+            "webRoot": "${workspaceRoot}/src",
+            "sourceMaps": true,
+            "breakOnLoad": true,
+            "sourceMapPathOverrides": {
+                "webpack:///src/*": "${webRoot}/*"
+            }
+        }
+    ]
+}

@@ -39,10 +39,10 @@ getIncomingGamesAPI().then(response => {
     getDateAPI().then(response => {
         let curDate: number = (new Date(response.date)).getTime() / 1000;
         distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
-    }).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
+    }).catch((_error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
         message.error("网络错误。");
     });
-}).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
+}).catch((_error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
     message.error("网络错误。");
 });
 </script>

@@ -1,7 +1,9 @@
-import {defineConfig} from "vite"
+import { defineConfig } from "vite"
 import vue from "@vitejs/plugin-vue"
-import {resolve} from 'path'
-
+import { resolve } from 'path'
+export const configureWebpack = {
+    devtool: 'source-map'
+};
 export default () => {
     return defineConfig({
         plugins: [vue()],
