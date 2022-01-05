@@ -1,7 +1,6 @@
 <template>
-    <router-view/>
+    <router-view />
 </template>
-
 <script lang="ts" setup>
 // import { useLoadingBar } from 'naive-ui'
 // import router from '../router'
@@ -10,7 +9,6 @@
 // router.beforeEach(() => loadingBar?.start())
 // router.afterEach(() => loadingBar?.finish())
 import { useMessage } from 'naive-ui'
-
-window.$message = useMessage()
-
+declare const window: Window & { $message: any };
+window.$message = useMessage();
 </script>

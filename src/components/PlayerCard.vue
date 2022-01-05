@@ -1,11 +1,8 @@
 <template>
     <n-card hoverable size="large">
         <n-grid cols="3" x-gap="9">
-
             <n-gi span="1">
-                <Avataaars
-                    height="75%"
-                    width="75%"/>
+                <Avataaars height="75%" width="75%" />
             </n-gi>
             <n-gi span="2">
                 <n-descriptions :column="2" :title="playerData.translated_name" label-placement="left">
@@ -16,7 +13,6 @@
                 </n-descriptions>
             </n-gi>
         </n-grid>
-
         <n-grid cols="3">
             <n-gi span="2">
                 <CapaProgress :capaRating="playerData.capa.shooting" capaName="射门"></CapaProgress>
@@ -31,41 +27,38 @@
             </n-gi>
             <n-gi span="1"></n-gi>
         </n-grid>
-
     </n-card>
 </template>
-
-
 <script lang="ts" setup>
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
-import { getColor } from '@/utils/colorMap'
-import { ref, onMounted } from "vue";
 import CapaProgress from "@/components/CapaProgress.vue"
-
-const props = defineProps<{
-    playerData: object
-}>()
-
-// const props =
-//     withDefaults(defineProps<Props>(), {
-//         playerData: Object
-//     })
-
-
+let props: any = defineProps<{
+    playerData: {
+        "translated_name": String,
+        "translated_nationality": String,
+        "age": number, "top_capa": number,
+        "top_location": number,
+        "capa": {
+            "shooting": number,
+            "passing": number,
+            "dribbling": number,
+            "pace": number,
+            "strength": number,
+            "interception": number,
+            "anticipation": number,
+            "stamina": number,
+            "goalkeeping": number,
+        }
+    }
+}>();
 </script>
-
-
 <style>
 .avatar {
     width: 80px;
     height: 80px;
     padding: 5px;
 }
-
 .display-flex {
     display: flex;
-
 }
-
-
 </style>

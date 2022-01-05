@@ -46,7 +46,7 @@ service.interceptors.request.use(
     }
 )
 
-
+declare const window: Window & { $message: any };
 // 响应拦截器
 service.interceptors.response.use(
     // 对响应数据做处理
@@ -83,7 +83,7 @@ service.interceptors.response.use(
                             window.$message.error("未授权或授权失效，请重新登录");
                             //$vaToast.init({ message: 'Top-right', position: 'top-right' })
                             setTimeout(() => {
-                                router.push({name: "login"});
+                                router.push({ name: "login" });
                             }, 1000);
                             break;
                     }
