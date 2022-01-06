@@ -5,8 +5,8 @@
                 <n-grid cols="3" x-gap="9">
                     <n-gi span="1">
                         <n-space justify="start">
-                            <n-rate :default-value="4.5" allow-half readonly size="small" />
-                            <Avataaars :isCircle="false" height="80%" width="80%" />
+                            <n-rate :default-value="4.5" allow-half readonly size="small"/>
+                            <Avataaars :isCircle="false" height="80%" width="80%"/>
                             <n-space>
                                 <n-tag type="success">就地反抢</n-tag>
                                 <n-tag type="info">拉边</n-tag>
@@ -68,12 +68,12 @@
         </n-gi>
         <n-gi>
             <n-card title="近五场比赛评分">
-                <div id="ratingChart" style="width: 100%; height: 300%"></div>
+                <div :id="ratingChart" style="width: 100%; height: 300%"></div>
             </n-card>
         </n-gi>
         <n-gi>
             <n-card title="各位置出场数">
-                <div id="loNumChart" style="width: 100%; height: 300%"></div>
+                <div :id="loNumChart" style="width: 100%; height: 300%"></div>
             </n-card>
         </n-gi>
 
@@ -83,22 +83,22 @@
                     <n-list-item>
                         <n-thing title="个人荣誉">
                             2019 金球奖
-                            <br />2018 英超年度最佳球员
-                            <br />2020 西甲最佳射手
-                            <br />2018 英超最佳射手
-                            <br />2017 英超最佳射手
-                            <br />2015 英冠最佳射手
-                            <br />2013 金童奖
-                            <br />
+                            <br/>2018 英超年度最佳球员
+                            <br/>2020 西甲最佳射手
+                            <br/>2018 英超最佳射手
+                            <br/>2017 英超最佳射手
+                            <br/>2015 英冠最佳射手
+                            <br/>2013 金童奖
+                            <br/>
                         </n-thing>
                     </n-list-item>
                     <n-list-item>
                         <n-thing title="俱乐部荣誉">
                             2018 曼彻斯特联 欧冠冠军
-                            <br />2021 巴塞罗那 西甲冠军
-                            <br />2017 曼彻斯特联 英超冠军
-                            <br />2019 巴塞罗那 国王杯冠军
-                            <br />
+                            <br/>2021 巴塞罗那 西甲冠军
+                            <br/>2017 曼彻斯特联 英超冠军
+                            <br/>2019 巴塞罗那 国王杯冠军
+                            <br/>
                         </n-thing>
                     </n-list-item>
                 </n-list>
@@ -116,7 +116,7 @@
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
 import CapaProgress from "@/components/CapaProgress.vue"
 import * as echarts from 'echarts'
-import { onMounted, ref, reactive, computed } from "vue";
+import { onMounted, ref, reactive, computed, Ref } from "vue";
 import PlayGround from "@/components/PlayGround.vue";
 
 // 样例数据
@@ -284,24 +284,24 @@ const totalGameDataOption = computed(() => {
         ]
     };
 })
-
-onMounted(() => {
-    let temp = document.getElementById("loNumChart");
-    let shit = document.getElementById("ratingChart");
-    if (temp != null && shit != null) {
-        let loNumChart = echarts.init(temp);
+let loNumChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
+let ratingChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
+onMounted
+(() => {
+    let loNumDiv: HTMLElement | null = document.getElementById(loNumChart.value);
+    let ratingDiv: HTMLElement | null = document.getElementById(ratingChart.value);
+    if (loNumDiv != null && ratingDiv != null) {
+        let loNumChart = echarts.init(loNumDiv);
         loNumChart.setOption(loNumOption.value);
-        let ratingChart = echarts.init(shit);
+        let ratingChart = echarts.init(ratingDiv);
         ratingChart.setOption(ratingOption.value);
         window.onresize = function () {
             // 自适应大小
-            // loNumChart.resize();
+            loNumChart.resize();
             ratingChart.resize();
         };
     }
 })
-
-
 </script>
 
 
