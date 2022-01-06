@@ -1,6 +1,6 @@
 <template>
     <n-card class="pointsTableCard" title="赛季排行榜">
-        <n-data-table :columns="columns" :data="pointsData" :loading="isLoading" size="small"/>
+        <n-data-table :columns="columns" :data="pointsData" :loading="isLoading" size="small" />
     </n-card>
 </template>
 <script lang="ts" setup>
@@ -9,7 +9,6 @@ import { getSaveMeAPI } from "@/apis/save";
 import { ref, h, computed, ComputedRef } from 'vue';
 import { Ref } from "@vue/reactivity";
 import { MessageApiInjection, MessageOptions } from "naive-ui/lib/message/src/MessageProvider";
-
 declare const window: Window & { $message: any };
 let message: MessageApiInjection = window.$message;
 let rawPointsData: Ref = ref([]);
@@ -47,11 +46,9 @@ let pointsData: ComputedRef<any> = computed(() =>
         return value;
     })
 )
-
 function getTitleColor(item: any): string {
     return clubId.value === item["id"] ? "green" : "black";
 }
-
 class columnItem {
     title: string;
     key: string;
@@ -73,9 +70,8 @@ class columnItem {
         this.sorter = "default";
     }
 }
-
 let columns: Array<Object> = [new columnItem("俱乐部"), new columnItem("积分"), new columnItem(" 胜 "), new columnItem(" 平 "), new columnItem(" 负 "),
-    new columnItem("净胜"), new columnItem("胜球"), new columnItem("输球")];
+new columnItem("净胜"), new columnItem("胜球"), new columnItem("输球")];
 </script>
 <style>
 .pointsTableCard {

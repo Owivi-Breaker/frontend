@@ -1,13 +1,13 @@
 <template>
     <n-layout-header bordered>
         <n-space align="center" justify="space-between">
-            <n-menu :inverted="inverted" :options="menuOptions" mode="horizontal"/>
+            <n-menu :inverted="inverted" :options="menuOptions" mode="horizontal" />
             <n-space align="center" justify="end">
-                <n-button v-on:click="nextDay">明天</n-button>
                 <span class="curDate">今天是&nbsp;{{ curDate }}</span>
+                <n-button v-on:click="nextDay">明天</n-button>
                 <n-button :bordered="false" class="exitButton" v-on:click="showExitModal = true">
                     <n-icon size="30">
-                        <exit-outline/>
+                        <exit-outline />
                     </n-icon>
                 </n-button>
             </n-space>
@@ -32,7 +32,6 @@ import { MessageApiInjection, MessageOptions } from "naive-ui/lib/message/src/Me
 import { storage } from "../utils";
 import { getDateAPI } from "@/apis/user";
 import { nextTurnAPI } from "@/apis/nextTurn";
-
 let inverted: Ref<boolean> = ref(false);
 let showExitModal: Ref<boolean> = ref(false);
 let router: Router = useRouter();
@@ -93,8 +92,9 @@ function RenderIcon(icon: any) {
 }
 
 function nextDay(): void {
-    nextTurnAPI({ turn_num: 1 }).then(
-    ).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
+    nextTurnAPI({ turn_num: 1 }).then(response => {
+        location.reload();
+    }).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
         message.error("网络错误。");
     });
 }

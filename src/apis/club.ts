@@ -1,5 +1,4 @@
 import http from '@/utils/http';
-
 const getClubsAPI = () => {
     return http.get("/club", null);
 }

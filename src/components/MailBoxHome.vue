@@ -77,7 +77,7 @@ onMounted(
 );
 
 function goToMail(): void {
-    router.push({name: "mail"});
+    router.push({ name: "mail" });
 }
 </script>
 
