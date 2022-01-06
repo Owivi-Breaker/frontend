@@ -1,19 +1,20 @@
 <template>
     <n-layout-header bordered>
         <n-space align="center" justify="space-between">
-            <n-menu mode="horizontal" :inverted="inverted" :options="menuOptions" />
+            <n-menu :inverted="inverted" :options="menuOptions" mode="horizontal"/>
             <n-space align="center" justify="end">
+                <n-button v-on:click="nextDay">明天</n-button>
                 <span class="curDate">今天是&nbsp;{{ curDate }}</span>
-                <n-button class="exitButton" :bordered="false" v-on:click="showExitModal = true">
+                <n-button :bordered="false" class="exitButton" v-on:click="showExitModal = true">
                     <n-icon size="30">
-                        <exit-outline />
+                        <exit-outline/>
                     </n-icon>
                 </n-button>
             </n-space>
         </n-space>
     </n-layout-header>
     <n-modal v-model:show="showExitModal">
-        <n-card class="exitModalCard" title="提示" :bordered="false" size="huge">
+        <n-card :bordered="false" class="exitModalCard" size="huge" title="提示">
             <div class="exitModalContent">即将退出登录，是否继续？</div>
             <n-button class="confirmButton" v-on:click="ExitLogin">确认</n-button>
             <n-button class="returnButton" type="primary" v-on:click="showExitModal = false">返回</n-button>
@@ -27,9 +28,11 @@ import { NIcon } from "naive-ui";
 import { BookOutline as BookIcon, ExitOutline, Exit } from "@vicons/ionicons5";
 import { Router, useRouter } from "vue-router";
 import { useMessage } from "naive-ui";
-import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
+import { MessageApiInjection, MessageOptions } from "naive-ui/lib/message/src/MessageProvider";
 import { storage } from "../utils";
 import { getDateAPI } from "@/apis/user";
+import { nextTurnAPI } from "@/apis/nextTurn";
+
 let inverted: Ref<boolean> = ref(false);
 let showExitModal: Ref<boolean> = ref(false);
 let router: Router = useRouter();
@@ -84,24 +87,36 @@ const ExitLogin = (): void => {
     storage.remove("saveID");
     router.push({ name: "login" });
 }
+
 function RenderIcon(icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) });
+}
+
+function nextDay(): void {
+    nextTurnAPI({ turn_num: 1 }).then(
+    ).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
+        message.error("网络错误。");
+    });
 }
 </script>
 <style>
 .curDate {
     font-size: 15px;
 }
+
 .exitModalCard {
     width: 300px;
     text-align: center;
 }
+
 .exitModalContent {
     font-size: medium;
 }
+
 .confirmButton {
     margin-top: 15px;
 }
+
 .returnButton {
     margin-left: 15px;
 }
