@@ -1,5 +1,9 @@
 import http from '@/utils/http';
+
 const getClubsAPI = () => {
+    return http.get("/club", null);
+}
+const getClubMeAPI = () => {
     return http.get("/club", null);
 }
 const getClubByIdAPI = (params: { club_id: number }) => {
@@ -11,4 +15,4 @@ const getClubsByLeagueAPI = (params: { league_id: number }) => {
 const getIncomingGamesAPI = () => {
     return http.get(`/test/incoming-games-info`, null);
 }
-export { getClubsAPI, getClubByIdAPI, getClubsByLeagueAPI, getIncomingGamesAPI };
+export { getClubsAPI, getClubMeAPI, getClubByIdAPI, getClubsByLeagueAPI, getIncomingGamesAPI };

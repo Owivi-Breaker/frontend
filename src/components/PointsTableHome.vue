@@ -1,26 +1,25 @@
 <template>
     <n-card class="pointsTableCard" title="赛季排行榜">
-        <n-data-table :columns="columns" :data="pointsData" size="small" :loading="isLoading" />
+        <n-data-table :columns="columns" :data="pointsData" :loading="isLoading" size="small"/>
     </n-card>
 </template>
 <script lang="ts" setup>
-import { getLeaguesAPI, getPointsTableByLeagueAPI } from "@/apis/league";
-import { getSaveAPI } from "@/apis/save";
+import { getLeagueMeAPI, getPointsTableByLeagueAPI } from "@/apis/league";
+import { getSaveMeAPI } from "@/apis/save";
 import { ref, h, computed, ComputedRef } from 'vue';
 import { Ref } from "@vue/reactivity";
-import { storage } from '../utils';
 import { MessageApiInjection, MessageOptions } from "naive-ui/lib/message/src/MessageProvider";
+
 declare const window: Window & { $message: any };
 let message: MessageApiInjection = window.$message;
 let rawPointsData: Ref = ref([]);
 let isLoading: Ref<boolean> = ref(true);
 let clubId: Ref<number> = ref(0);
-getSaveAPI().then(response => {
-    let saveID: number = (Number)(storage.get('saveID')) - 1;
-    let gameSeason: number = response[saveID].season;
-    clubId.value = response[0].player_club_id;
-    getLeaguesAPI().then(response => {
-        let leagueID: number = response[0].id;
+getSaveMeAPI().then(response => {
+    let gameSeason: number = response.season;
+    clubId.value = response.player_club_id;
+    getLeagueMeAPI().then(response => {
+        let leagueID: number = response.id;
         getPointsTableByLeagueAPI({ league_id: leagueID, game_season: gameSeason }).then(response => {
             rawPointsData.value = response;
             isLoading.value = false;
@@ -74,8 +73,9 @@ class columnItem {
         this.sorter = "default";
     }
 }
+
 let columns: Array<Object> = [new columnItem("俱乐部"), new columnItem("积分"), new columnItem(" 胜 "), new columnItem(" 平 "), new columnItem(" 负 "),
-new columnItem("净胜"), new columnItem("胜球"), new columnItem("输球")];
+    new columnItem("净胜"), new columnItem("胜球"), new columnItem("输球")];
 </script>
 <style>
 .pointsTableCard {

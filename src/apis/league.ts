@@ -4,7 +4,9 @@ import http from '@/utils/http';
 const getLeaguesAPI = () => {
     return http.get("/league", null)
 }
-
+const getLeagueMeAPI = () => {
+    return http.get("/league/me", null)
+}
 const getLeagueByIdAPI = (params: { league_id: number }) => {
     return http.get(`/league/${params.league_id}`, null)
 }
@@ -19,5 +21,5 @@ const getPlayerChartByLeagueAPI = (params: { league_id: number; game_season: num
 }
 export {
     getLeaguesAPI, getLeagueByIdAPI,
-    getPointsTableByLeagueAPI, getPlayerChartByLeagueAPI
+    getPointsTableByLeagueAPI, getPlayerChartByLeagueAPI, getLeagueMeAPI
 }
