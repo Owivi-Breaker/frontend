@@ -2,21 +2,44 @@
     <n-grid cols="2">
         <n-gi>
             <n-card class="field">
+                <!--前锋阵容块-->
                 <div
-                    v-for="elem in positionGrid"
-                    :draggable="!!position[elem.pos]"
-                    :style="elem.style"
-                    class="player"
-                    @dragend="dragend"
-                    @dragstart="positionDragstart($event,elem.pos)"
-                    @drop="positionDrop($event,elem.pos)"
-                    @dragover.prevent
-                >
-                    <div v-if="position[elem.pos]" class="avatar">
-                        <Avataaars :isCircle="false" height="80%" width="80%"/>
-                        {{ position[elem.pos] }}
-                    </div>
+                    v-for="(value,key) in posInfo"
+                    :style="value.fieldStyle">
+                    <n-space justify="center">
+                        <!--阵容槽-->
+                        <div
+                            v-for="pos in activePos(key)"
+                            :draggable="true"
+                            @dragend="dragend"
+                            @dragstart="positionDragstart($event,pos)"
+                            @drop="positionDrop($event,pos)"
+                            @dragover.prevent
+                        >
+                            <div v-if="position[pos]" class="avatar">
+                                <n-popover raw trigger="click">
+                                    <template #trigger>
+                                        <Avataaars :isCircle="false" height="90%" width="90%"/>
+                                    </template>
+                                    <n-card>这里是一些信息</n-card>
+                                </n-popover>
+                                {{ position[pos] }}
+                            </div>
+                        </div>
+                    </n-space>
                 </div>
+
+                <!--遮罩层-->
+                <template v-for="(value,key) in posInfo">
+                    <div
+                        v-show="value.isMasked"
+                        :style="value.maskStyle"
+                        class="mask"
+                        @drop="fieldDrop($event,key)"
+                        @dragover.prevent>
+                        <n-h4>{{ key }}</n-h4>
+                    </div>
+                </template>
             </n-card>
         </n-gi>
 
@@ -58,183 +81,287 @@
 
 <script lang="ts" setup>
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
-import { ref, reactive, onMounted } from "vue";
+import { ref, reactive, onMounted, computed } from "vue";
 import { getPlayersByClubAPI } from "@/apis/player";
 
-const positionGrid = reactive(
-    [
-        {
-            pos: 'LW',
-            style: {
-                position: 'absolute',
-                left: "10%",
-                top: "10%"
+// 将所有未满位置的遮罩层打开
+const openMaskNotEmpty = (oriPos: string | null) => {
+    for (let key in posInfo) {
+        // 大位置
+        for (let pos of posInfo[key].name) {
+            // 小位置
+            if (position[pos] == null) {
+                // 如果有未满的位置，打开遮罩层
+                posInfo[key].isMasked = true
+                console.log(`${key} 的遮罩层已打开`)
+                break
             }
-        },
-        {
-            pos: 'ST1',
-            style: {
-                position: 'absolute',
-                left: "34%",
-                top: "10%"
+        }
+    }
+    // 将拖曳源的遮罩层关闭，确保拖曳正常进行
+    for (let key in posInfo) {
+        for (let pos of posInfo[key].name) {
+            if (pos == oriPos && posInfo[key].isMasked == true) {
+                posInfo[key].isMasked = false
+                console.log(`${key} 由于是拖曳源，因此关闭遮罩层`)
+                break
             }
-        },
-        {
-            pos: 'ST2',
-            style: {
-                position: 'absolute',
-                left: "54%",
-                top: "10%"
-            }
-        },
-        {
-            pos: 'RW',
-            style: {
-                position: 'absolute',
-                left: "78%",
-                top: "10%"
-            }
-        },
-        {
-            pos: 'CAM1',
-            style: {
-                position: 'absolute',
-                left: "28%",
-                top: "25%"
-            }
-        },
-        {
-            pos: 'CAM2',
-            style: {
-                position: 'absolute',
-                left: "44%",
-                top: "25%"
-            }
-        },
-        {
-            pos: 'CAM3',
-            style: {
-                position: 'absolute',
-                left: "60%",
-                top: "25%"
-            }
-        },
-        {
-            pos: 'LM',
-            style: {
-                position: 'absolute',
-                left: "10%",
-                top: "40%"
-            }
-        },
-        {
-            pos: 'CM1',
-            style: {
-                position: 'absolute',
-                left: "28%",
-                top: "40%"
-            }
-        },
-        {
-            pos: 'CM2',
-            style: {
-                position: 'absolute',
-                left: "44%",
-                top: "40%"
-            }
-        },
-        {
-            pos: 'CM3',
-            style: {
-                position: 'absolute',
-                left: "60%",
-                top: "40%"
-            }
-        },
-        {
-            pos: 'RM',
-            style: {
-                position: 'absolute',
-                left: "78%",
-                top: "40%"
-            }
-        },
-        {
-            pos: 'CDM1',
-            style: {
-                position: 'absolute',
-                left: "28%",
-                top: "55%"
-            }
-        },
-        {
-            pos: 'CDM2',
-            style: {
-                position: 'absolute',
-                left: "44%",
-                top: "55%"
-            }
-        },
-        {
-            pos: 'CDM3',
-            style: {
-                position: 'absolute',
-                left: "60%",
-                top: "55%"
-            }
-        },
-        {
-            pos: 'LB',
-            style: {
-                position: 'absolute',
-                left: "10%",
-                top: "70%"
-            }
-        },
-        {
-            pos: 'CB1',
-            style: {
-                position: 'absolute',
-                left: "28%",
-                top: "70%"
-            }
-        },
-        {
-            pos: 'CB2',
-            style: {
-                position: 'absolute',
-                left: "44%",
-                top: "70%"
-            }
-        },
-        {
-            pos: 'CB3',
-            style: {
-                position: 'absolute',
-                left: "60%",
-                top: "70%"
-            }
-        },
-        {
-            pos: 'RB',
-            style: {
-                position: 'absolute',
-                left: "78%",
-                top: "70%"
-            }
-        },
-        {
-            pos: 'GK',
-            style: {
-                position: 'absolute',
-                left: "44%",
-                top: "85%"
-            }
-        },
-    ]
-)
+        }
+    }
+    console.log(posInfo)
+}
 
-//region 拖曳功能
+// 关闭所有遮罩层
+const closeAllMask = () => {
+    for (let key in posInfo) {
+        posInfo[key].isMasked = false
+    }
+}
+
+
+const posInfo = reactive({
+    ST: {
+        name: ['ST1', 'ST2'],
+        isMasked: false,
+        activeNum: 0,
+        maxNum: 2,
+        fieldStyle: {
+            position: 'absolute',
+            left: '30%',
+            top: '5%',
+            height: '15%',
+            width: '40%',
+        },
+        maskStyle: {
+            position: 'absolute',
+            left: '30%',
+            top: '5%',
+            height: '15%',
+            width: '40%'
+        }
+    },
+    LW: {
+        name: ['LW'],
+        isMasked: false,
+        activeNum: 0,
+        maxNum: 1,
+        fieldStyle: {
+            position: 'absolute',
+            left: '0',
+            top: '8%',
+            height: '15%',
+            width: '29%',
+        },
+        maskStyle: {
+            position: 'absolute',
+            left: '0',
+            top: '8%',
+            height: '15%',
+            width: '29%',
+        }
+    },
+    RW: {
+        name: ['RW'],
+        isMasked: false,
+        activeNum: 0,
+        maxNum: 1,
+        fieldStyle: {
+            position: 'absolute',
+            left: '71%',
+            top: '8%',
+            height: '15%',
+            width: '30%',
+        },
+        maskStyle: {
+            position: 'absolute',
+            left: '71%',
+            top: '8%',
+            height: '15%',
+            width: '30%',
+        }
+    },
+    CAM: {
+        name: ['CAM1', 'CAM2'],
+        isMasked: false,
+        activeNum: 0,
+        maxNum: 2,
+        fieldStyle: {
+            position: 'absolute',
+            left: '30%',
+            top: '21%',
+            height: '14%',
+            width: '40%',
+        },
+        maskStyle: {
+            position: 'absolute',
+            left: '30%',
+            top: '21%',
+            height: '14%',
+            width: '40%',
+        }
+    },
+    LM: {
+        name: ['LM'],
+        isMasked: false,
+        activeNum: 0,
+        maxNum: 1,
+        fieldStyle: {
+            position: 'absolute',
+            left: '0',
+            top: '33%',
+            height: '14%',
+            width: '24%',
+        },
+        maskStyle: {
+            position: 'absolute',
+            left: '0',
+            top: '33%',
+            height: '14%',
+            width: '24%',
+        }
+    },
+    RM: {
+        name: ['RM'],
+        isMasked: false,
+        activeNum: 0,
+        maxNum: 1,
+        fieldStyle: {
+            position: 'absolute',
+            left: '76%',
+            top: '33%',
+            height: '14%',
+            width: '24%',
+        },
+        maskStyle: {
+            position: 'absolute',
+            left: '76%',
+            top: '33%',
+            height: '14%',
+            width: '24%',
+        }
+    },
+    CM: {
+        name: ['CM1', 'CM2', 'CM3'],
+        isMasked: false,
+        activeNum: 0,
+        maxNum: 3,
+        fieldStyle: {
+            position: 'absolute',
+            left: '25%',
+            top: '36%',
+            height: '14%',
+            width: '50%',
+        },
+        maskStyle: {
+            position: 'absolute',
+            left: '25%',
+            top: '36%',
+            height: '14%',
+            width: '50%',
+        }
+    },
+    CDM: {
+        name: ['CDM1', 'CDM2'],
+        isMasked: false,
+        activeNum: 0,
+        maxNum: 2,
+        fieldStyle: {
+            position: 'absolute',
+            left: '30%',
+            top: '51%',
+            height: '14%',
+            width: '40%',
+        },
+        maskStyle: {
+            position: 'absolute',
+            left: '30%',
+            top: '51%',
+            height: '14%',
+            width: '40%',
+        }
+    },
+    LB: {
+        name: ['LB'],
+        isMasked: false,
+        activeNum: 0,
+        maxNum: 1,
+        fieldStyle: {
+            position: 'absolute',
+            left: '0',
+            top: '63%',
+            height: '14%',
+            width: '24%',
+        },
+        maskStyle: {
+            position: 'absolute',
+            left: '0',
+            top: '63%',
+            height: '14%',
+            width: '24%',
+        }
+    },
+    RB: {
+        name: ['RB'],
+        isMasked: false,
+        activeNum: 0,
+        maxNum: 1,
+        fieldStyle: {
+            position: 'absolute',
+            left: '76%',
+            top: '63%',
+            height: '14%',
+            width: '24%',
+        },
+        maskStyle: {
+            position: 'absolute',
+            left: '76%',
+            top: '63%',
+            height: '14%',
+            width: '24%',
+        }
+    },
+    CB: {
+        name: ['CB1', 'CB2', 'CB3'],
+        isMasked: false,
+        activeNum: 0,
+        maxNum: 3,
+        fieldStyle: {
+            position: 'absolute',
+            left: '25%',
+            top: '66%',
+            height: '14%',
+            width: '50%',
+        },
+        maskStyle: {
+            position: 'absolute',
+            left: '25%',
+            top: '66%',
+            height: '14%',
+            width: '50%',
+        }
+    },
+    GK: {
+        name: ['GK'],
+        isMasked: false,
+        activeNum: 0,
+        maxNum: 1,
+        fieldStyle: {
+            position: 'absolute',
+            left: '30%',
+            top: '81%',
+            height: '14%',
+            width: '40%',
+        },
+        maskStyle: {
+            position: 'absolute',
+            left: '30%',
+            top: '81%',
+            height: '14%',
+            width: '40%',
+        }
+    }
+}) as any
+
 const position = reactive({
     LW: null,
     ST1: null,
@@ -242,7 +369,6 @@ const position = reactive({
     RW: null,
     CAM1: null,
     CAM2: null,
-    CAM3: null,
     LM: null,
     CM1: null,
     CM2: null,
@@ -250,7 +376,6 @@ const position = reactive({
     RM: null,
     CDM1: null,
     CDM2: null,
-    CDM3: null,
     LB: null,
     CB1: null,
     CB2: null,
@@ -260,6 +385,18 @@ const position = reactive({
 
 }) as any
 
+const isAllMasked = ref(false)
+
+const activePos = (pos: string) => {
+    // 获取指定大位置的非空小位置
+    let posList = posInfo[pos].name
+    return posList.filter((val: string) => {
+            return position[val] != null
+        }
+    )
+}
+
+//region 拖曳功能
 const aList = ref([
     { id: '1', name: "梅西" },
     { id: '2', name: "C罗" },
@@ -269,6 +406,7 @@ const aList = ref([
 
 
 const selectionDragstart = (event: DragEvent, elem: any) => {
+    openMaskNotEmpty()
     if (event.dataTransfer) {
         event.dataTransfer.setData('dragId', elem.id)
         event.dataTransfer.setData('dragCompo', 'selection')
@@ -283,20 +421,32 @@ const selectionDrop = (event: DragEvent, elem: any) => {
             // do nothing
             console.log('禁止从选项栏移到选项栏')
         } else if (dragCompo == 'position') {
+            // 检查大位置区域中是否已有此球员
+            for (let key in position) {
+                if (position[key] == elem.id) {
+                    position[key] = null
+                    break
+                }
+            }
             console.log("阵容槽到选项栏")
             let fromPos = event.dataTransfer.getData('pos')
             console.log(`${fromPos} 上的 ${position[fromPos]} 被替换为 ${elem.id}`)
             position[fromPos] = elem.id
+
         }
     }
 }
 
 const positionDragstart = (event: DragEvent, pos: string) => {
+    // 打开所有未满位置的遮罩层
+    openMaskNotEmpty(pos)
+
     if (event.dataTransfer) {
         event.dataTransfer.setData('dragId', position[pos])
         event.dataTransfer.setData('dragCompo', 'position')
         event.dataTransfer.setData('pos', pos)
     }
+
 }
 
 const positionDrop = (event: DragEvent, pos: string) => {
@@ -334,8 +484,57 @@ const positionDrop = (event: DragEvent, pos: string) => {
     }
 }
 
+const fieldDrop = (event: DragEvent, pos: string) => {
+    if (event.dataTransfer) {
+        let dragCompo = event.dataTransfer.getData('dragCompo')
+        let dragId = event.dataTransfer.getData('dragId')
+        let fromPos = event.dataTransfer.getData('pos')
+        if (dragCompo == 'selection') {
+            // 检查大位置区域中是否已有此球员
+            let existKey: string = ''
+            for (let key in position) {
+                if (position[key] == dragId) {
+                    existKey = key
+                    break
+                }
+            }
+            // 挑选空位 将球员放入
+            for (let i = 0; i < posInfo[pos].name.length; i++) {
+                let nowPos: string = posInfo[pos].name[i] // 取出当前遍历到的小位置
+                if (!position[nowPos]) {
+                    // 填充任意一个没有球员的阵容槽
+                    position[nowPos] = dragId
+                    console.log(`球员 ${dragId} 经过位置块拖曳到位置 ${nowPos}`)
+                    if (existKey) {
+                        position[existKey] = null
+                    }
+                    break
+                }
+            }
+        } else if (dragCompo == 'position') {
+            // 挑选空位 将球员放入
+            let success = false
+            for (let i = 0; i < posInfo[pos].name.length; i++) {
+                let nowPos: string = posInfo[pos].name[i] // 取出当前遍历到的小位置
+                if (!position[nowPos]) {
+                    // 填充任意一个没有球员的阵容槽
+                    position[nowPos] = dragId
+                    console.log(`球员 ${dragId} 从 ${fromPos} 转移到位置 ${nowPos}`)
+                    success = true
+                    break
+                }
+            }
+            if (success) {
+                // 删除原位置上的球员
+                position[fromPos] = null
+            }
+
+        }
+    }
+}
 
 const dragend = (event: DragEvent) => {
+    closeAllMask()
     if (event.dataTransfer) {
         event.dataTransfer.clearData()
     }
@@ -360,23 +559,25 @@ onMounted(
 
 <style>
 .player {
-    height: 9%;
-    width: 12%;
+    height: 40%;
+    width: 30%;
     background-color: rgba(255, 255, 255, 0.2);
-
-
     border-radius: 50%;
 
 }
 
 .field {
-    height: 800px;
+    height: 600px;
     background: rgb(46, 125, 50);
 }
 
-.selection {
-    display: flex;
+
+.mask {
+    background: #878B99;
+    opacity: 0.4;
+
 }
+
 
 .avatar {
     margin: 0 auto;
