@@ -2,7 +2,7 @@
     <n-card hoverable size="large">
         <n-grid cols="3" x-gap="9">
             <n-gi span="1">
-                <Avataaars height="75%" width="75%" />
+                <Avataaars height="75%" width="75%"/>
             </n-gi>
             <n-gi span="2">
                 <n-descriptions :column="2" :title="playerData.translated_name" label-placement="left">
@@ -32,11 +32,13 @@
 <script lang="ts" setup>
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
 import CapaProgress from "@/components/CapaProgress.vue"
+
 let props: any = defineProps<{
     playerData: {
         "translated_name": String,
         "translated_nationality": String,
-        "age": number, "top_capa": number,
+        "age": number,
+        "top_capa": number,
         "top_location": number,
         "capa": {
             "shooting": number,
@@ -52,12 +54,15 @@ let props: any = defineProps<{
     }
 }>();
 </script>
+
+
 <style>
 .avatar {
     width: 80px;
     height: 80px;
     padding: 5px;
 }
+
 .display-flex {
     display: flex;
 }

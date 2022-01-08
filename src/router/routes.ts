@@ -56,6 +56,15 @@ const mainRoutes: RouteRecordRaw[] = [
             requiresAuth: true
         }
     },
+    {
+        name: 'field',
+        path: '/field',
+        component: () => import('../views/field.vue'),
+        meta: {
+            title: '球场',
+            requiresAuth: true
+        }
+    },
 ]
 
 
