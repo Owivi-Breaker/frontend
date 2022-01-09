@@ -57,11 +57,11 @@ const mainRoutes: RouteRecordRaw[] = [
         }
     },
     {
-        name: 'field',
-        path: '/field',
-        component: () => import('../views/field.vue'),
+        name: 'lineup',
+        path: '/lineup',
+        component: () => import('../views/lineup.vue'),
         meta: {
-            title: '球场',
+            title: '阵容',
             requiresAuth: true
         }
     },

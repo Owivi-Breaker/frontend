@@ -2,7 +2,7 @@
     <n-grid cols="2">
         <n-gi>
             <n-card class="field">
-                <!--前锋阵容块-->
+                <!--阵容块-->
                 <div
                     v-for="(value,key) in posInfo"
                     :style="value.fieldStyle">
@@ -21,9 +21,37 @@
                                     <template #trigger>
                                         <Avataaars :isCircle="false" height="90%" width="90%"/>
                                     </template>
-                                    <n-card>这里是一些信息</n-card>
+                                    <n-card :title="getPlayerInfoById(position[pos]).translated_name">
+                                        <template #header-extra>
+                                            <n-progress
+                                                :circle-gap="5"
+                                                :percentage="[20,50]"
+                                                :stroke-width="10"
+                                                status="success"
+                                                style="width: 40px; margin: 0 10px 0 40px;"
+                                                type="multiple-circle"
+                                            ></n-progress>
+                                        </template>
+                                        <n-descriptions :column="3"
+                                                        label-placement="top">
+
+                                            <n-descriptions-item label="能力">{{
+                                                    getPlayerInfoById(position[pos]).location_capa[key]
+                                                }}
+                                            </n-descriptions-item>
+                                            <n-descriptions-item label="位置">
+                                                {{ key }}
+                                            </n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+
+                                        </n-descriptions>
+
+                                    </n-card>
                                 </n-popover>
-                                {{ position[pos] }}
+                                {{ getPlayerInfoById(position[pos]).translated_name }}
                             </div>
                         </div>
                     </n-space>
@@ -47,30 +75,77 @@
             <!--选项栏-->
             <n-card>
                 <n-scrollbar style="max-height: 800px;" x-scrollable>
-                    <n-card v-for="elem in playerData" size="small">
-                        <n-grid cols="3" x-gap="9">
-                            <n-gi
-                                :draggable="true"
-                                span="1"
-                                @dragend="dragend"
-                                @dragstart="selectionDragstart($event, elem)"
-                                @drop="selectionDrop($event, elem)"
-                                @dragover.prevent>
-                                <Avataaars height="75%" width="75%"/>
-                            </n-gi>
-                            <n-gi span="2">
-                                <n-descriptions :column="2" :title="elem.translated_name" label-placement="left">
-                                    <n-descriptions-item label="国籍">{{
-                                            elem.translated_nationality
-                                        }}
-                                    </n-descriptions-item>
-                                    <n-descriptions-item label="年龄">{{ elem.age }}</n-descriptions-item>
-                                    <n-descriptions-item label="能力">{{ elem.top_capa }}</n-descriptions-item>
-                                    <n-descriptions-item label="位置">{{ elem.top_location }}</n-descriptions-item>
-                                </n-descriptions>
-                            </n-gi>
-                        </n-grid>
-                    </n-card>
+                    <n-space>
+                        <n-popover v-for="elem in playerData" raw trigger="click">
+                            <template #trigger>
+                                <n-card
+
+                                    :bordered="false"
+                                    :draggable="true"
+                                    :embedded="isChosen(elem.id)"
+                                    size="small"
+                                    @dragend="dragend"
+                                    @dragstart="selectionDragstart($event, elem)"
+                                    @drop="selectionDrop($event, elem)"
+                                    @dragover.prevent
+                                >
+                                    <n-space>
+                                        <n-h3>{{ elem.translated_name }}</n-h3>
+                                    </n-space>
+                                </n-card>
+                            </template>
+                            <n-card>
+                                <template #header>
+                                    <n-h2 style="margin: 0 0 0 0;">
+                                        {{ elem.translated_name }}
+                                    </n-h2>
+                                </template>
+                                <template #header-extra>
+                                    <n-progress
+                                        :circle-gap="5"
+                                        :percentage="[20,50]"
+                                        :stroke-width="10"
+                                        status="success"
+                                        style="width: 40px; margin: 0 0 0 0;"
+                                        type="multiple-circle"
+                                    ></n-progress>
+                                </template>
+                                <n-grid cols="3">
+                                    <n-gi span="1">
+                                        <div style="display:flex; height:120px;width:120px;margin:0 30px 30px 0">
+                                            <Avataaars
+                                                :isCircle="false"
+                                            ></Avataaars>
+                                        </div>
+
+                                    </n-gi>
+                                    <n-gi span="2">
+                                        <n-descriptions
+                                            :column="3"
+                                            label-placement="top">
+
+                                            <n-descriptions-item label="能力">{{
+                                                    elem.top_capa
+                                                }}
+                                            </n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+
+                                        </n-descriptions>
+
+                                    </n-gi>
+                                </n-grid>
+
+
+                            </n-card>
+                        </n-popover>
+
+
+                    </n-space>
+
                 </n-scrollbar>
             </n-card>
         </n-gi>
@@ -84,41 +159,7 @@ import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
 import { ref, reactive, onMounted, computed } from "vue";
 import { getPlayersByClubAPI } from "@/apis/player";
 
-// 将所有未满位置的遮罩层打开
-const openMaskNotEmpty = (oriPos: string | null) => {
-    for (let key in posInfo) {
-        // 大位置
-        for (let pos of posInfo[key].name) {
-            // 小位置
-            if (position[pos] == null) {
-                // 如果有未满的位置，打开遮罩层
-                posInfo[key].isMasked = true
-                console.log(`${key} 的遮罩层已打开`)
-                break
-            }
-        }
-    }
-    // 将拖曳源的遮罩层关闭，确保拖曳正常进行
-    for (let key in posInfo) {
-        for (let pos of posInfo[key].name) {
-            if (pos == oriPos && posInfo[key].isMasked == true) {
-                posInfo[key].isMasked = false
-                console.log(`${key} 由于是拖曳源，因此关闭遮罩层`)
-                break
-            }
-        }
-    }
-    console.log(posInfo)
-}
-
-// 关闭所有遮罩层
-const closeAllMask = () => {
-    for (let key in posInfo) {
-        posInfo[key].isMasked = false
-    }
-}
-
-
+//region 拖曳功能
 const posInfo = reactive({
     ST: {
         name: ['ST1', 'ST2'],
@@ -385,7 +426,65 @@ const position = reactive({
 
 }) as any
 
-const isAllMasked = ref(false)
+
+// 被编入阵容的球员数量
+const activePlayerNum = computed(
+    () => {
+        let count = 0
+        for (let i in position) {
+            if (position[i] != null) {
+                count++
+            }
+        }
+        return count
+    }
+)
+
+// 判断该id球员是否被选中
+const isChosen = (id: number) => {
+    for (let key in position) {
+        if (position[key] == id) {
+            return true
+        }
+    }
+    return false
+}
+// 将所有未满位置的遮罩层打开
+const openMaskNotEmpty = (oriPos: string | null) => {
+    for (let key in posInfo) {
+        // 大位置
+        for (let pos of posInfo[key].name) {
+            // 小位置
+            if (position[pos] == null) {
+                // 如果有未满的位置，打开遮罩层
+                posInfo[key].isMasked = true
+                console.log(`${key} 的遮罩层已打开`)
+                break
+            }
+        }
+    }
+    if (oriPos) {
+        // 将拖曳源的遮罩层关闭，确保拖曳正常进行
+        for (let key in posInfo) {
+            for (let pos of posInfo[key].name) {
+                if (pos == oriPos && posInfo[key].isMasked == true) {
+                    posInfo[key].isMasked = false
+                    console.log(`${key} 由于是拖曳源，因此关闭遮罩层`)
+                    break
+                }
+            }
+        }
+    }
+
+}
+
+// 关闭所有遮罩层
+const closeAllMask = () => {
+    for (let key in posInfo) {
+        posInfo[key].isMasked = false
+    }
+}
+
 
 const activePos = (pos: string) => {
     // 获取指定大位置的非空小位置
@@ -396,18 +495,9 @@ const activePos = (pos: string) => {
     )
 }
 
-//region 拖曳功能
-const aList = ref([
-    { id: '1', name: "梅西" },
-    { id: '2', name: "C罗" },
-    { id: '3', name: "莱万" },
-    { id: '4', name: "本泽马" },
-]);
-
-
 const selectionDragstart = (event: DragEvent, elem: any) => {
-    openMaskNotEmpty()
-    if (event.dataTransfer) {
+    openMaskNotEmpty(null)
+    if (event.dataTransfer && event.target) {
         event.dataTransfer.setData('dragId', elem.id)
         event.dataTransfer.setData('dragCompo', 'selection')
     }
@@ -454,6 +544,9 @@ const positionDrop = (event: DragEvent, pos: string) => {
         let dragCompo = event.dataTransfer.getData('dragCompo')
         let dragId = event.dataTransfer.getData('dragId')
         if (dragCompo == 'selection') {
+            if (activePlayerNum.value >= 11) {
+                return
+            }
             console.log("选项位到阵容槽")
             for (let key in position) {
                 if (position[key] == dragId) {
@@ -490,6 +583,9 @@ const fieldDrop = (event: DragEvent, pos: string) => {
         let dragId = event.dataTransfer.getData('dragId')
         let fromPos = event.dataTransfer.getData('pos')
         if (dragCompo == 'selection') {
+            if (activePlayerNum.value >= 11) {
+                return
+            }
             // 检查大位置区域中是否已有此球员
             let existKey: string = ''
             for (let key in position) {
@@ -553,7 +649,31 @@ onMounted(
             });
     }
 )
+
+const getPlayerInfoById = (id: number) => {
+    for (let p of playerData.value) {
+        if (p['id'] == id) {
+            return p
+        }
+    }
+    return null
+}
 // endregion
+
+// 获取最终阵容
+const getUltimateTactic = () => {
+    let re = {} as any
+    for (let key in posInfo) {
+        re[key] = []
+        for (let pos of posInfo[key].name) {
+            if (position[pos] != null) {
+                re[key].push(position[pos])
+            }
+        }
+    }
+    return re
+}
+
 </script>
 
 
@@ -568,7 +688,7 @@ onMounted(
 
 .field {
     height: 600px;
-    background: rgb(46, 125, 50);
+    background: rgb(56, 125, 50);
 }
 
 
@@ -581,5 +701,10 @@ onMounted(
 
 .avatar {
     margin: 0 auto;
+}
+
+.selection {
+
+    height: 10%;
 }
 </style>

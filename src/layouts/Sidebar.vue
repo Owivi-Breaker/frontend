@@ -76,20 +76,19 @@ const menuOptions = [
         icon: renderIcon(PersonIcon),
     },
     {
-        label: '阵容',
-        // () => h(
-        //     RouterLink,
-        //     {
-        //         to: {
-        //             name: 'player',
-        //             params: {
-        //                 lang: 'zh-CN'
-        //             }
-        //         }
-        //     },
-        //     { default: () => '阵容' }
-        // ),
-        key: 'tactics',
+        label: () => h(
+            RouterLink,
+            {
+                to: {
+                    name: 'lineup',
+                    params: {
+                        lang: 'zh-CN'
+                    }
+                }
+            },
+            { default: () => '阵容' }
+        ),
+        key: 'lineup',
         icon: renderIcon(BookIcon)
     },
     {
@@ -109,22 +108,6 @@ const menuOptions = [
                 }
             },
             { default: () => 'test 球员页' }
-        ),
-        key: 'playerPage',
-        icon: renderIcon(PersonIcon),
-    },
-    {
-        label: () => h(
-            RouterLink,
-            {
-                to: {
-                    name: 'field',
-                    params: {
-                        lang: 'zh-CN'
-                    }
-                }
-            },
-            { default: () => 'test 球场' }
         ),
         key: 'playerPage',
         icon: renderIcon(PersonIcon),
