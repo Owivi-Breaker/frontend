@@ -22,14 +22,8 @@ getSaveMeAPI().then(response => {
         getPointsTableByLeagueAPI({ league_id: leagueID, game_season: gameSeason }).then(response => {
             rawPointsData.value = response;
             isLoading.value = false;
-        }).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
-            message.error("网络错误。");
         });
-    }).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
-        message.error("网络错误。");
     });
-}).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
-    message.error("网络错误。");
 });
 let pointsData: ComputedRef<any> = computed(() =>
     rawPointsData.value.map((value: any) => {

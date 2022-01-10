@@ -27,8 +27,6 @@ import { Ref } from "@vue/reactivity";
 import { NIcon } from "naive-ui";
 import { BookOutline as BookIcon, ExitOutline, Exit } from "@vicons/ionicons5";
 import { Router, useRouter } from "vue-router";
-import { useMessage } from "naive-ui";
-import { MessageApiInjection, MessageOptions } from "naive-ui/lib/message/src/MessageProvider";
 import { storage } from "../utils";
 import { getDateAPI } from "@/apis/user";
 import { nextTurnAPI } from "@/apis/nextTurn";
@@ -67,56 +65,41 @@ let menuOptions: Array<object> = [
     },
 ];
 let curDate: Ref<string> = ref("");
-let message: MessageApiInjection = useMessage();
 onMounted(
     () => {
         getDateAPI().then(response => {
             curDate.value = response.date;
-        }).catch(error => {
-            switch (error.message) {
-                default:
-                    message.error("网络错误");
-                    break;
-            }
-        });
+        })
     }
-)
+);
 const ExitLogin = (): void => {
     storage.remove("token");
     storage.remove("saveID");
     router.push({ name: "login" });
 }
-
 function RenderIcon(icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) });
 }
-
 function nextDay(): void {
     nextTurnAPI({ turn_num: 1 }).then(response => {
         location.reload();
-    }).catch((error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
-        message.error("网络错误。");
-    });
+    })
 }
 </script>
 <style>
 .curDate {
     font-size: 15px;
 }
-
 .exitModalCard {
     width: 300px;
     text-align: center;
 }
-
 .exitModalContent {
     font-size: medium;
 }
-
 .confirmButton {
     margin-top: 15px;
 }
-
 .returnButton {
     margin-left: 15px;
 }

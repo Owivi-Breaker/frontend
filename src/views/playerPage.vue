@@ -5,18 +5,15 @@
                 <n-grid cols="3" x-gap="9">
                     <n-gi span="1">
                         <n-space justify="start">
-                            <n-rate :default-value="4.5" allow-half readonly size="small" />
+                            <n-rate :value="Math.round(playerData.top_capa / 10) / 2" allow-half readonly size="small" />
                             <Avataaars :isCircle="false" height="80%" width="80%" />
                             <n-space>
-                                <n-tag type="success">{{ playerData.style_tag[0] }}</n-tag>
-                                <n-tag type="info">{{ playerData.style_tag[1] }}</n-tag>
-                                <n-tag type="warning">{{ playerData.style_tag[2] }}</n-tag>
+                                <n-tag v-bind:type="getTagColor(playerData.style_tag.indexOf(item))" v-for="item in playerData.style_tag">{{ item }}</n-tag>
                             </n-space>
                         </n-space>
                     </n-gi>
                     <n-gi span="2">
                         <n-h2>{{ playerData.translated_name }}</n-h2>
-
                         <n-descriptions :column="3" label-placement="top">
                             <n-descriptions-item label="国籍" label-style="color: grey;">
                                 <n-h4>{{ playerData.translated_nationality }}</n-h4>
@@ -25,16 +22,16 @@
                                 <n-h4>{{ playerData.age }}</n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="号码" label-style="color: grey;">
-                                <n-h4>10</n-h4>
+                                <n-h4>{{ playerData.number }}</n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="位置" label-style="color: grey;">
-                                <n-h4>{{ (location).join(", ") }}</n-h4>
+                                <n-h4>{{ playerData.top_location }}</n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="身价" label-style="color: grey;">
-                                <n-h4>{{ 9300 }} 万</n-h4>
+                                <n-h4>{{ playerData.values }}万</n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="周薪" label-style="color: grey;">
-                                <n-h4>{{ 42.5 }} 万</n-h4>
+                                <n-h4>{{ playerData.wages }}万</n-h4>
                             </n-descriptions-item>
                         </n-descriptions>
                     </n-gi>
@@ -43,12 +40,13 @@
                     <n-divider title-placement="left">赛季数据</n-divider>
                     <n-space justify="space-between">
                         <n-statistic label="出场">26</n-statistic>
-                        <n-statistic label="进球">13</n-statistic>
-                        <n-statistic label="助攻">6</n-statistic>
-                        <n-statistic label="平均评分">7.9</n-statistic>
-                        <n-statistic label="传球成功率">83%</n-statistic>
-                        <n-statistic label="过人成功率">61%</n-statistic>
-                        <n-statistic label="争顶成功率">48%</n-statistic>
+                        <n-statistic label="进球">{{ gameData.goals }}</n-statistic>
+                        <n-statistic label="助攻">{{ gameData.assists }}</n-statistic>
+                        <n-statistic label="平均评分">{{ gameData.final_rating }}</n-statistic>
+                        <n-statistic label="传球成功率">{{ computePassRate }}</n-statistic>
+                        <n-statistic label="抢断成功率">{{ computeTackleRate }}</n-statistic>
+                        <n-statistic label="过人成功率">{{ computeDribbleRate }}</n-statistic>
+                        <n-statistic label="争顶成功率">{{ computeAerialRate }}</n-statistic>
                     </n-space>
                 </template>
             </n-card>
@@ -115,41 +113,43 @@
 import Avataaars from "vuejs-avataaars/src/Avataaars.vue"
 import CapaProgress from "@/components/CapaProgress.vue"
 import * as echarts from "echarts"
-import { onMounted, ref, reactive, computed, Ref } from "vue";
+import { onMounted, ref, computed, Ref, ComputedRef } from "vue";
 import PlayGround from "@/components/PlayGround.vue";
 import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
-import { getPlayerByIdAPI, getPlayerGameDataAPI } from "@/apis/player";
+import { getPlayerByIdAPI, getPlayerTotalGameDataAPI } from "@/apis/player";
 import { getSaveMeAPI } from "@/apis/save";
 let route: RouteLocationNormalizedLoaded = useRoute();
 let playerId: number = (Number)(route.query.id);
 // 样例数据
 let playerData = ref({
-    "id": playerId,
-    "club_id": 2,
-    "name": "chakra",
-    "translated_name": "恰克拉",
-    "translated_nationality": "爱沙尼亚",
-    "age": 31,
-    "height": 178,
-    "weight": 80,
-    "birth_date": "01-04",
-    "wages": 0.0,
-    "real_stamina": 100.0,
+    "id": 0,
+    "club_id": 0,
+    "name": "",
+    "translated_name": "",
+    "translated_nationality": "",
+    "age": 0,
+    "number": 0,
+    "height": 0,
+    "weight": 0,
+    "birth_date": " ",
+    "wages": 0,
+    "values": 0,
+    "real_stamina": 0,
     "location_num": {},
     "capa": {
-        "shooting": 89.2,
-        "passing": 72.0,
-        "dribbling": 85.0,
-        "interception": 43.0,
-        "pace": 65.0,
-        "strength": 43.0,
-        "aggression": 11.0,
-        "anticipation": 13.0,
-        "free_kick": 72.0,
-        "stamina": 67.6,
-        "goalkeeping": 9.0
+        "shooting": 0,
+        "passing": 0,
+        "dribbling": 0,
+        "interception": 0,
+        "pace": 0,
+        "strength": 0,
+        "aggression": 0,
+        "anticipation": 0,
+        "free_kick": 0,
+        "stamina": 0,
+        "goalkeeping": 0
     },
-    "top_capa": 89.0,
+    "top_capa": 0,
     "top_location": "ST",
     "location_capa": {
         "CM": 29.0,
@@ -167,26 +167,41 @@ let playerData = ref({
     },
     "style_tag": []
 })
+let gameData = ref({
+    action: 0,
+    aerial_success: 0,
+    aerials: 0,
+    assists: 0,
+    dribble_success: 0,
+    dribbles: 0,
+    final_rating: 0,
+    goals: 0,
+    pass_success: 0,
+    passes: 0,
+    save_success: 0,
+    saves: 0,
+    shots: 0,
+    tackle_success: 0,
+    tackles: 0
+});
 const ratings = ref([7.7, 6.9, 7.4, 9.4, 8.5])
-const location = ref(["ST", "CAM", "LW"])
-const totalGameData = reactive({
-    "final_rating": 7.475,
-    "actions": 98,
-    "shots": 15,
-    "goals": 12,
-    "assists": 0,
-    "passes": 0,
-    "pass_success": 0,
-    "dribbles": 20,
-    "dribble_success": 11,
-    "tackles": 0,
-    "tackle_success": 0,
-    "aerials": 63,
-    "aerial_success": 38,
-    "saves": 0,
-    "save_success": 0
-})
-
+function getTagColor(index: number): string {
+    let type: Array<string> = ["", "success", "warning", "info", "error"];
+    index %= 5;
+    return type[index];
+}
+let computePassRate: ComputedRef<string> = computed(() => {
+    return gameData.value.passes === 0 ? "NULL" : Math.round((gameData.value.pass_success / gameData.value.passes * 100)) + "%";
+});
+let computeTackleRate: ComputedRef<string> = computed(() => {
+    return gameData.value.tackles === 0 ? "NULL" : Math.round((gameData.value.tackle_success / gameData.value.tackles * 100)) + "%";
+});
+let computeDribbleRate: ComputedRef<string> = computed(() => {
+    return gameData.value.dribbles === 0 ? "NULL" : Math.round((gameData.value.dribble_success / gameData.value.dribbles * 100)) + "%";
+});
+let computeAerialRate: ComputedRef<string> = computed(() => {
+    return gameData.value.aerials === 0 ? "NULL" : Math.round((gameData.value.aerial_success / gameData.value.aerials * 100)) + "%";
+});
 const getLocationNum = () => {
     // 获取用于饼图的出场位置次数对象
     let loNum = []
@@ -279,28 +294,27 @@ let loNumChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
 let ratingChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
 onMounted
     (() => {
+        getSaveMeAPI().then(response => {
+            let gameSeason: number = response.season;
+            getPlayerTotalGameDataAPI({ player_id: playerId, start_season: gameSeason, end_season: gameSeason }).then(response => {
+                gameData.value = response;
+            });
+        });
         getPlayerByIdAPI({ player_id: playerId }).then(response => {
             playerData.value = response;
-            getSaveMeAPI().then(response => {
-                let gameSeason: number = response.season;
-                getPlayerGameDataAPI({ player_id: playerId, start_season: gameSeason, end_season: gameSeason }).then(response => {
-                    console.log(response);
-                })
-            })
             let loNumDiv: HTMLElement | null = document.getElementById(loNumChart.value);
             let ratingDiv: HTMLElement | null = document.getElementById(ratingChart.value);
-            if (loNumDiv != null && ratingDiv != null) {
-                let loNumChart = echarts.init(loNumDiv);
-                loNumChart.setOption(loNumOption.value);
+            if (ratingDiv != null && loNumDiv != null) {
                 let ratingChart = echarts.init(ratingDiv);
                 ratingChart.setOption(ratingOption.value);
+                let loNumChart = echarts.init(loNumDiv);
+                loNumChart.setOption(loNumOption.value);
                 window.onresize = function () {
-                    loNumChart.resize();
                     ratingChart.resize();
+                    loNumChart.resize();
                 };
             }
         })
-
     })
 </script>
 <style scoped>
