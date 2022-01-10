@@ -84,6 +84,7 @@ function showDetial(): void {
     padding-left: 20px;
     padding-right: 20px;
     border-radius: 10px;
+    cursor: pointer;
 }
 .mailContainerBlack {
     background-color: aliceblue;

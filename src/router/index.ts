@@ -21,9 +21,11 @@ router.beforeEach(to => {
         return to.query.redirect?.toString() ?? '/'
     }
     // need authorize & token is invalid
-    if (to.meta.requiresAuth === true && (token == null || saveID == null)) {
-        console.log("ddddddd")
+    if (to.meta.requiresAuth === true && token == null) {
         return { name: 'login', query: { redirect: to.fullPath } } // 保存我们所在的位置，以便以后再来
+    }
+    if (to.meta.requiresAuth === true && saveID == null) {
+        return { name: 'selectSave', query: { redirect: to.fullPath } } // 保存我们所在的位置，以便以后再来
     }
 })
 router.afterEach(() => {
