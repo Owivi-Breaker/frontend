@@ -1,13 +1,18 @@
 <template>
     <n-layout-header bordered>
-        <n-space align="center" justify="end">
-            <span class="curDate">今天是&nbsp;{{ curDate }}</span>
-            <n-button v-on:click="nextDay">明天</n-button>
-            <n-button :bordered="false" class="exitButton" v-on:click="showExitModal = true">
-                <n-icon size="30">
-                    <exit-outline />
-                </n-icon>
-            </n-button>
+        <n-space class="bigSpace" align="center" justify="space-between">
+            <n-space align="center" justify="start">
+                <n-button v-on:click="goPre" class="returnButton">返回</n-button>
+            </n-space>
+            <n-space align="center" justify="end">
+                <span class="curDate">今天是&nbsp;{{ curDate }}</span>
+                <n-button v-on:click="nextDay">明天</n-button>
+                <n-button :bordered="false" class="exitButton" v-on:click="showExitModal = true">
+                    <n-icon size="30">
+                        <exit-outline />
+                    </n-icon>
+                </n-button>
+            </n-space>
         </n-space>
     </n-layout-header>
     <n-modal v-model:show="showExitModal">
@@ -22,7 +27,7 @@
 import { defineComponent, ref, onMounted } from "vue";
 import { Ref } from "@vue/reactivity";
 import { NIcon } from "naive-ui";
-import { BookOutline as ExitOutline, Exit } from "@vicons/ionicons5";
+import { ExitOutline, Exit } from "@vicons/ionicons5";
 import { Router, useRouter } from "vue-router";
 import { storage } from "../utils";
 import { getDateAPI } from "@/apis/user";
@@ -43,6 +48,9 @@ onMounted(
         })
     }
 );
+function goPre(): void {
+    router.go(-1);
+}
 function ExitLogin(): void {
     storage.remove("token");
     storage.remove("saveID");
@@ -55,6 +63,12 @@ function nextDay(): void {
 }
 </script>
 <style>
+.bigSpace {
+    height: 60px;
+}
+.returnButton {
+    margin-left: 10px;
+}
 .curDate {
     font-size: 15px;
 }
