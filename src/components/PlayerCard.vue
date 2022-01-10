@@ -35,8 +35,7 @@
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
 import CapaProgress from "@/components/CapaProgress.vue"
 import { Router, useRouter } from 'vue-router';
-import { useLoadingBar, LoadingBarApi } from 'naive-ui';
-let loadingBar: LoadingBarApi = useLoadingBar();
+import { LoadingBarApi } from 'naive-ui';
 let props: any = defineProps<{
     playerData: {
         "translated_name": String,
@@ -58,8 +57,9 @@ let props: any = defineProps<{
     }
 }>();
 let router: Router = useRouter();
+declare const window: Window & { $loadingBar: LoadingBarApi };
 function goDetail(): void {
-    loadingBar.start();
+    window.$loadingBar.start();
     router.push({ path: "/player-page", query: { id: props.playerData.id } });
 }
 </script>

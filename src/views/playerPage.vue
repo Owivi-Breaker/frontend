@@ -152,7 +152,7 @@ let playerData = ref({
         "goalkeeping": 0
     },
     "top_capa": 0,
-    "top_location": "ST",
+    "top_location": "",
     "location_capa": {
         "CM": 29.0,
         "LM": 26.72,
@@ -294,6 +294,7 @@ const totalGameDataOption = computed(() => {
 })
 let loNumChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
 let ratingChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
+declare const window: Window & { $loadingBar: LoadingBarApi };
 onMounted
     (() => {
         getSaveMeAPI().then(response => {
@@ -314,7 +315,7 @@ onMounted
                             loNumChart.resize();
                         };
                     }
-                    loadingBar.finish();
+                    window.$loadingBar.finish();
                 }).catch((_error: {}) => { });
             }).catch((_error: {}) => { });
         }).catch((_error: {}) => { });
