@@ -5,12 +5,12 @@
                 <n-grid cols="3" x-gap="9">
                     <n-gi span="1">
                         <n-space justify="start">
-                            <n-rate :default-value="4.5" allow-half readonly size="small"/>
-                            <Avataaars :isCircle="false" height="80%" width="80%"/>
+                            <n-rate :default-value="4.5" allow-half readonly size="small" />
+                            <Avataaars :isCircle="false" height="80%" width="80%" />
                             <n-space>
-                                <n-tag type="success">就地反抢</n-tag>
-                                <n-tag type="info">拉边</n-tag>
-                                <n-tag type="warning">背身拿球</n-tag>
+                                <n-tag type="success">{{ playerData.style_tag[0] }}</n-tag>
+                                <n-tag type="info">{{ playerData.style_tag[1] }}</n-tag>
+                                <n-tag type="warning">{{ playerData.style_tag[2] }}</n-tag>
                             </n-space>
                         </n-space>
                     </n-gi>
@@ -83,22 +83,22 @@
                     <n-list-item>
                         <n-thing title="个人荣誉">
                             2019 金球奖
-                            <br/>2018 英超年度最佳球员
-                            <br/>2020 西甲最佳射手
-                            <br/>2018 英超最佳射手
-                            <br/>2017 英超最佳射手
-                            <br/>2015 英冠最佳射手
-                            <br/>2013 金童奖
-                            <br/>
+                            <br />2018 英超年度最佳球员
+                            <br />2020 西甲最佳射手
+                            <br />2018 英超最佳射手
+                            <br />2017 英超最佳射手
+                            <br />2015 英冠最佳射手
+                            <br />2013 金童奖
+                            <br />
                         </n-thing>
                     </n-list-item>
                     <n-list-item>
                         <n-thing title="俱乐部荣誉">
                             2018 曼彻斯特联 欧冠冠军
-                            <br/>2021 巴塞罗那 西甲冠军
-                            <br/>2017 曼彻斯特联 英超冠军
-                            <br/>2019 巴塞罗那 国王杯冠军
-                            <br/>
+                            <br />2021 巴塞罗那 西甲冠军
+                            <br />2017 曼彻斯特联 英超冠军
+                            <br />2019 巴塞罗那 国王杯冠军
+                            <br />
                         </n-thing>
                     </n-list-item>
                 </n-list>
@@ -111,17 +111,20 @@
         </n-gi>
     </n-grid>
 </template>
-
 <script lang="ts" setup>
-import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
+import Avataaars from "vuejs-avataaars/src/Avataaars.vue"
 import CapaProgress from "@/components/CapaProgress.vue"
-import * as echarts from 'echarts'
+import * as echarts from "echarts"
 import { onMounted, ref, reactive, computed, Ref } from "vue";
 import PlayGround from "@/components/PlayGround.vue";
-
+import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
+import { getPlayerByIdAPI, getPlayerGameDataAPI } from "@/apis/player";
+import { getSaveMeAPI } from "@/apis/save";
+let route: RouteLocationNormalizedLoaded = useRoute();
+let playerId: number = (Number)(route.query.id);
 // 样例数据
-const playerData = reactive({
-    "id": 48,
+let playerData = ref({
+    "id": playerId,
     "club_id": 2,
     "name": "chakra",
     "translated_name": "恰克拉",
@@ -132,20 +135,7 @@ const playerData = reactive({
     "birth_date": "01-04",
     "wages": 0.0,
     "real_stamina": 100.0,
-    "location_num": {
-        "ST_num": 254,
-        "CM_num": 43,
-        "LW_num": 66,
-        "RW_num": 11,
-        "CB_num": 0,
-        "LB_num": 0,
-        "RB_num": 28,
-        "GK_num": 0,
-        "CAM_num": 83,
-        "LM_num": 0,
-        "RM_num": 0,
-        "CDM_num": 0
-    },
+    "location_num": {},
     "capa": {
         "shooting": 89.2,
         "passing": 72.0,
@@ -174,7 +164,8 @@ const playerData = reactive({
         "ST": 20.38,
         "CB": 15.5,
         "GK": 13.0
-    }
+    },
+    "style_tag": []
 })
 const ratings = ref([7.7, 6.9, 7.4, 9.4, 8.5])
 const location = ref(["ST", "CAM", "LW"])
@@ -199,7 +190,7 @@ const totalGameData = reactive({
 const getLocationNum = () => {
     // 获取用于饼图的出场位置次数对象
     let loNum = []
-    for (let i of Object.entries(playerData.location_num)) {
+    for (let i of Object.entries(playerData.value.location_num)) {
         if (i[1] != 0) {
             loNum.push({ value: i[1], name: i[0].split("_num")[0] });
         }
@@ -213,13 +204,13 @@ const getLocationNum = () => {
 const loNumOption = computed(() => {
     return {
         tooltip: {
-            trigger: 'item'
+            trigger: "item"
         },
         series: [
             {
-                name: 'Access From',
-                type: 'pie',
-                radius: ['35%', '75%'],
+                name: "Access From",
+                type: "pie",
+                radius: ["35%", "75%"],
                 stillShowZeroSum: false,
 
                 data: getLocationNum(),
@@ -227,7 +218,7 @@ const loNumOption = computed(() => {
                     itemStyle: {
                         shadowBlur: 10,
                         shadowOffsetX: 0,
-                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        shadowColor: "rgba(0, 0, 0, 0.5)"
                     }
                 }
             }
@@ -239,28 +230,28 @@ const loNumOption = computed(() => {
 const ratingOption = computed(() => {
     return {
         xAxis: {
-            type: 'category',
-            data: ['5', '4', '3', '2', '1']
+            type: "category",
+            data: ["5", "4", "3", "2", "1"]
         },
         yAxis: {
-            type: 'value'
-            //data: ['4', '6', '8', '10']
+            type: "value"
+            //data: ["4", "6", "8", "10"]
         },
         tooltip: {
-            trigger: 'axis'
+            trigger: "axis"
         },
         series: [
             {
                 data: ratings.value,
-                type: 'line',
+                type: "line",
                 markPoint: {
                     data: [
-                        { type: 'max', name: 'Max' },
-                        { type: 'min', name: 'Min' }
+                        { type: "max", name: "Max" },
+                        { type: "min", name: "Min" }
                     ]
                 },
                 markLine: {
-                    data: [{ type: 'average', name: 'Avg' }]
+                    data: [{ type: "average", name: "Avg" }]
                 }
             }
         ]
@@ -270,16 +261,16 @@ const ratingOption = computed(() => {
 const totalGameDataOption = computed(() => {
     return {
         xAxis: {
-            type: 'category',
-            data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+            type: "category",
+            data: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
         },
         yAxis: {
-            type: 'value'
+            type: "value"
         },
         series: [
             {
                 data: [120, 200, 150, 80, 70, 110, 130],
-                type: 'bar'
+                type: "bar"
             }
         ]
     };
@@ -287,24 +278,31 @@ const totalGameDataOption = computed(() => {
 let loNumChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
 let ratingChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
 onMounted
-(() => {
-    let loNumDiv: HTMLElement | null = document.getElementById(loNumChart.value);
-    let ratingDiv: HTMLElement | null = document.getElementById(ratingChart.value);
-    if (loNumDiv != null && ratingDiv != null) {
-        let loNumChart = echarts.init(loNumDiv);
-        loNumChart.setOption(loNumOption.value);
-        let ratingChart = echarts.init(ratingDiv);
-        ratingChart.setOption(ratingOption.value);
-        window.onresize = function () {
-            // 自适应大小
-            loNumChart.resize();
-            ratingChart.resize();
-        };
-    }
-})
+    (() => {
+        getPlayerByIdAPI({ player_id: playerId }).then(response => {
+            playerData.value = response;
+            getSaveMeAPI().then(response => {
+                let gameSeason: number = response.season;
+                getPlayerGameDataAPI({ player_id: playerId, start_season: gameSeason, end_season: gameSeason }).then(response => {
+                    console.log(response);
+                })
+            })
+            let loNumDiv: HTMLElement | null = document.getElementById(loNumChart.value);
+            let ratingDiv: HTMLElement | null = document.getElementById(ratingChart.value);
+            if (loNumDiv != null && ratingDiv != null) {
+                let loNumChart = echarts.init(loNumDiv);
+                loNumChart.setOption(loNumOption.value);
+                let ratingChart = echarts.init(ratingDiv);
+                ratingChart.setOption(ratingOption.value);
+                window.onresize = function () {
+                    loNumChart.resize();
+                    ratingChart.resize();
+                };
+            }
+        })
+
+    })
 </script>
-
-
 <style scoped>
 .flex {
     display: flex;

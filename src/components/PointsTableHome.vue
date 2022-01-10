@@ -57,7 +57,6 @@ class columnItem {
     align: string;
     render: Function;
     sorter: string;
-
     constructor(title: string) {
         this.title = title;
         this.key = title;

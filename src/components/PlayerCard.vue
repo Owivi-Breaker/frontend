@@ -57,8 +57,8 @@ let props: any = defineProps<{
 }>();
 let router: Router = useRouter();
 function goDetail(): void {
-    console.log(props.playerData)
-    router.push({ name: "player-page" });
+    console.log(props.playerData.id)
+    router.push({ path: "/player-page", query: { id: props.playerData.id } });
 }
 </script>
 <style>
