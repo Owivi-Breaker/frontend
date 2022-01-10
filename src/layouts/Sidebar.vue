@@ -1,11 +1,10 @@
 <template>
-    <n-layout-sider :collapsed-width="64" :native-scrollbar="false" :width="240" bordered collapse-mode="width"
-                    show-trigger>
+    <n-layout-sider :collapsed-width="64" :native-scrollbar="false" :width="240" bordered collapse-mode="width" show-trigger>
         <div class="icon">
-            <img alt="logo" class="img" src="https://www.naiveui.com/assets/naivelogo.93278402.svg"/>
+            <img alt="logo" class="img" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" />
         </div>
         <n-divider></n-divider>
-        <n-menu :collapsed-icon-size="22" :collapsed-width="64" :options="menuOptions"/>
+        <n-menu :collapsed-icon-size="22" :collapsed-width="64" :options="menuOptions" />
     </n-layout-sider>
 </template>
 
@@ -95,22 +94,6 @@ const menuOptions = [
         label: '赛程',
         key: 'games',
         icon: renderIcon(BookIcon)
-    },
-    {
-        label: () => h(
-            RouterLink,
-            {
-                to: {
-                    name: 'playerPage',
-                    params: {
-                        lang: 'zh-CN'
-                    }
-                }
-            },
-            { default: () => 'test 球员页' }
-        ),
-        key: 'playerPage',
-        icon: renderIcon(PersonIcon),
     },
     {
         label: '设置',

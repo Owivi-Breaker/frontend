@@ -42,7 +42,7 @@
                         <n-statistic label="出场">26</n-statistic>
                         <n-statistic label="进球">{{ gameData.goals }}</n-statistic>
                         <n-statistic label="助攻">{{ gameData.assists }}</n-statistic>
-                        <n-statistic label="平均评分">{{ gameData.final_rating }}</n-statistic>
+                        <n-statistic label="平均评分">{{ Math.round(gameData.final_rating * 100) / 100 }}</n-statistic>
                         <n-statistic label="传球成功率">{{ computePassRate }}</n-statistic>
                         <n-statistic label="抢断成功率">{{ computeTackleRate }}</n-statistic>
                         <n-statistic label="过人成功率">{{ computeDribbleRate }}</n-statistic>
@@ -53,15 +53,15 @@
         </n-gi>
         <n-gi>
             <n-card title="能力">
-                <CapaProgress :capaRating="playerData.capa.shooting" capaName="射门"></CapaProgress>
-                <CapaProgress :capaRating="playerData.capa.passing" capaName="传球"></CapaProgress>
-                <CapaProgress :capaRating="playerData.capa.dribbling" capaName="过人"></CapaProgress>
-                <CapaProgress :capaRating="playerData.capa.pace" capaName="速度"></CapaProgress>
-                <CapaProgress :capaRating="playerData.capa.strength" capaName="力量"></CapaProgress>
-                <CapaProgress :capaRating="playerData.capa.interception" capaName="拦截"></CapaProgress>
-                <CapaProgress :capaRating="playerData.capa.anticipation" capaName="预判"></CapaProgress>
-                <CapaProgress :capaRating="playerData.capa.stamina" capaName="体力"></CapaProgress>
-                <CapaProgress :capaRating="playerData.capa.goalkeeping" capaName="守门"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.shooting * 100) / 100" capaName="射门"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.passing * 100) / 100" capaName="传球"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.dribbling * 100) / 100" capaName="过人"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.pace * 100) / 100" capaName="速度"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.strength * 100) / 100" capaName="力量"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.interception * 100) / 100" capaName="拦截"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.anticipation * 100) / 100" capaName="预判"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.stamina * 100) / 100" capaName="体力"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.goalkeeping * 100) / 100" capaName="守门"></CapaProgress>
             </n-card>
         </n-gi>
         <n-gi>
@@ -191,16 +191,16 @@ function getTagColor(index: number): string {
     return type[index];
 }
 let computePassRate: ComputedRef<string> = computed(() => {
-    return gameData.value.passes === 0 ? "NULL" : Math.round((gameData.value.pass_success / gameData.value.passes * 100)) + "%";
+    return (gameData.value.passes === 0 ? 0 : Math.round(gameData.value.pass_success / gameData.value.passes * 100)) + "%";
 });
 let computeTackleRate: ComputedRef<string> = computed(() => {
-    return gameData.value.tackles === 0 ? "NULL" : Math.round((gameData.value.tackle_success / gameData.value.tackles * 100)) + "%";
+    return (gameData.value.tackles === 0 ? 0 : Math.round(gameData.value.tackle_success / gameData.value.tackles * 100)) + "%";
 });
 let computeDribbleRate: ComputedRef<string> = computed(() => {
-    return gameData.value.dribbles === 0 ? "NULL" : Math.round((gameData.value.dribble_success / gameData.value.dribbles * 100)) + "%";
+    return (gameData.value.dribbles === 0 ? 0 : Math.round(gameData.value.dribble_success / gameData.value.dribbles * 100)) + "%";
 });
 let computeAerialRate: ComputedRef<string> = computed(() => {
-    return gameData.value.aerials === 0 ? "NULL" : Math.round((gameData.value.aerial_success / gameData.value.aerials * 100)) + "%";
+    return (gameData.value.aerials === 0 ? 0 : Math.round(gameData.value.aerial_success / gameData.value.aerials * 100)) + "%";
 });
 const getLocationNum = () => {
     // 获取用于饼图的出场位置次数对象
