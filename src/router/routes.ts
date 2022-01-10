@@ -46,10 +46,26 @@ const mainRoutes: RouteRecordRaw[] = [
             title: 'About',
             requiresAuth: false
         }
+    },
+    {
+        name: 'playerPage',
+        path: '/player-page',
+        component: () => import('../views/playerPage.vue'),
+        meta: {
+            title: '球员页',
+            requiresAuth: true
+        }
+    },
+    {
+        name: 'lineup',
+        path: '/lineup',
+        component: () => import('../views/lineup.vue'),
+        meta: {
+            title: '阵容',
+            requiresAuth: true
+        }
     }
 ]
-
-
 const routes: RouteRecordRaw[] = [
     {
         name: 'login',
@@ -101,5 +117,4 @@ const routes: RouteRecordRaw[] = [
         }
     }
 ]
-
-export { routes }
+export { routes };
