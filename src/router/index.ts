@@ -13,7 +13,7 @@ router.beforeEach(to => {
     }
     const token = storage.get('token')
     // allreay authorized
-    if (to.name === 'login' && token != null) {
+    if ((to.name === 'login' || to.name === 'selectSave') && token != null) {
         return to.query.redirect?.toString() ?? '/'
     }
     // need authorize & token is invalid
