@@ -1,16 +1,13 @@
 <template>
     <n-layout-header bordered>
-        <n-space align="center" justify="space-between">
-            <n-menu :inverted="inverted" :options="menuOptions" mode="horizontal" />
-            <n-space align="center" justify="end">
-                <span class="curDate">今天是&nbsp;{{ curDate }}</span>
-                <n-button v-on:click="nextDay">明天</n-button>
-                <n-button :bordered="false" class="exitButton" v-on:click="showExitModal = true">
-                    <n-icon size="30">
-                        <exit-outline />
-                    </n-icon>
-                </n-button>
-            </n-space>
+        <n-space align="center" justify="end">
+            <span class="curDate">今天是&nbsp;{{ curDate }}</span>
+            <n-button v-on:click="nextDay">明天</n-button>
+            <n-button :bordered="false" class="exitButton" v-on:click="showExitModal = true">
+                <n-icon size="30">
+                    <exit-outline />
+                </n-icon>
+            </n-button>
         </n-space>
     </n-layout-header>
     <n-modal v-model:show="showExitModal">
@@ -22,15 +19,14 @@
     </n-modal>
 </template>
 <script lang="ts" setup>
-import { defineComponent, h, ref, onMounted } from "vue";
+import { defineComponent, ref, onMounted } from "vue";
 import { Ref } from "@vue/reactivity";
 import { NIcon } from "naive-ui";
-import { BookOutline as BookIcon, ExitOutline, Exit } from "@vicons/ionicons5";
+import { BookOutline as ExitOutline, Exit } from "@vicons/ionicons5";
 import { Router, useRouter } from "vue-router";
 import { storage } from "../utils";
 import { getDateAPI } from "@/apis/user";
 import { nextTurnAPI } from "@/apis/nextTurn";
-let inverted: Ref<boolean> = ref(false);
 let showExitModal: Ref<boolean> = ref(false);
 let router: Router = useRouter();
 defineComponent({
@@ -39,31 +35,6 @@ defineComponent({
         Exit
     }
 });
-let menuOptions: Array<object> = [
-    {
-        label: "且听风吟",
-        key: "hear-the-wind-sing",
-        icon: RenderIcon(BookIcon)
-    },
-    {
-        label: "1973年的弹珠玩具",
-        key: "pinball-1973",
-        icon: RenderIcon(BookIcon),
-        disabled: true,
-        children: [
-            {
-                label: "鼠",
-                key: "rat"
-            }
-        ]
-    },
-    {
-        label: "寻羊冒险记",
-        key: "a-wild-sheep-chase",
-        disabled: true,
-        icon: RenderIcon(BookIcon)
-    },
-];
 let curDate: Ref<string> = ref("");
 onMounted(
     () => {
@@ -72,18 +43,15 @@ onMounted(
         })
     }
 );
-const ExitLogin = (): void => {
+function ExitLogin(): void {
     storage.remove("token");
     storage.remove("saveID");
     router.push({ name: "login" });
 }
-function RenderIcon(icon: any) {
-    return () => h(NIcon, null, { default: () => h(icon) });
-}
 function nextDay(): void {
-    nextTurnAPI({ turn_num: 1 }).then(response => {
+    nextTurnAPI({ turn_num: 1 }).then(_response => {
         location.reload();
-    })
+    }).catch((_error: {}) => { });
 }
 </script>
 <style>
