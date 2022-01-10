@@ -1,12 +1,15 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import { LoadingBarApi } from 'naive-ui'
+import { createRouter, createWebHistory, Router } from 'vue-router'
 import { storage } from '../utils'
 import { routes } from './routes'
 const history = createWebHistory()
 // 创建路由实例并传递 `routes` 配置
 const router = createRouter({ history, routes })
+declare const window: Window & { $loadingBar: LoadingBarApi };
 
 // Authorize (Make sure that is the first hook.)
 router.beforeEach(to => {
+    window.$loadingBar.start();
     if (to.meta.title) {
         let title: any = to.meta.title;
         document.title = title;
@@ -20,6 +23,9 @@ router.beforeEach(to => {
     if (to.meta.requiresAuth === true && token == null) {
         return { name: 'login', query: { redirect: to.fullPath } } // 保存我们所在的位置，以便以后再来
     }
+})
+router.afterEach(() => {
+    window.$loadingBar.finish();
 })
 
 // router.afterEach(to => {

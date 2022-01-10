@@ -118,8 +118,6 @@ import PlayGround from "@/components/PlayGround.vue";
 import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
 import { getPlayerByIdAPI, getPlayerTotalGameDataAPI } from "@/apis/player";
 import { getSaveMeAPI } from "@/apis/save";
-import { useLoadingBar, LoadingBarApi } from "naive-ui";
-let loadingBar: LoadingBarApi = useLoadingBar();
 let route: RouteLocationNormalizedLoaded = useRoute();
 let playerId: number = (Number)(route.query.id);
 // 样例数据
@@ -294,7 +292,6 @@ const totalGameDataOption = computed(() => {
 })
 let loNumChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
 let ratingChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
-declare const window: Window & { $loadingBar: LoadingBarApi };
 onMounted
     (() => {
         getSaveMeAPI().then(response => {
@@ -315,7 +312,6 @@ onMounted
                             loNumChart.resize();
                         };
                     }
-                    window.$loadingBar.finish();
                 }).catch((_error: {}) => { });
             }).catch((_error: {}) => { });
         }).catch((_error: {}) => { });

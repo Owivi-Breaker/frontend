@@ -28,12 +28,11 @@ import { defineComponent, ref, onMounted } from "vue";
 import { Ref } from "@vue/reactivity";
 import { NIcon } from "naive-ui";
 import { ExitOutline, Exit } from "@vicons/ionicons5";
-import { Router, useRouter } from "vue-router";
+import { Router } from "vue-router";
 import { storage } from "../utils";
 import { getDateAPI } from "@/apis/user";
 import { nextTurnAPI } from "@/apis/nextTurn";
 let showExitModal: Ref<boolean> = ref(false);
-let router: Router = useRouter();
 defineComponent({
     components: {
         ExitOutline,
@@ -48,13 +47,14 @@ onMounted(
         })
     }
 );
+declare const window: Window & { $router: Router };
 function goPre(): void {
-    router.go(-1);
+    window.$router.go(-1);
 }
 function ExitLogin(): void {
     storage.remove("token");
     storage.remove("saveID");
-    router.push({ name: "login" });
+    window.$router.push({ name: "login" });
 }
 function nextDay(): void {
     nextTurnAPI({ turn_num: 1 }).then(_response => {

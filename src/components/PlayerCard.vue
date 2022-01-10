@@ -1,5 +1,5 @@
 <template>
-    <n-card hoverable size="large" v-on:click="goDetail">
+    <n-card class="bigCard" hoverable size="large" v-on:click="goDetail">
         <n-space vertical>
             <n-grid cols="3" x-gap="9">
                 <n-gi span="1">
@@ -9,22 +9,22 @@
                     <n-descriptions :column="2" :title="playerData.translated_name" label-placement="left">
                         <n-descriptions-item label="国籍">{{ playerData.translated_nationality }}</n-descriptions-item>
                         <n-descriptions-item label="年龄">{{ playerData.age }}</n-descriptions-item>
-                        <n-descriptions-item label="能力">{{ playerData.top_capa }}</n-descriptions-item>
+                        <n-descriptions-item label="能力">{{ Math.round(playerData.top_capa * 100) / 100 }}</n-descriptions-item>
                         <n-descriptions-item label="位置">{{ playerData.top_location }}</n-descriptions-item>
                     </n-descriptions>
                 </n-gi>
             </n-grid>
             <n-grid cols="3">
                 <n-gi span="3">
-                    <CapaProgress :capaRating="playerData.capa.shooting" capaName="射门"></CapaProgress>
-                    <CapaProgress :capaRating="playerData.capa.passing" capaName="传球"></CapaProgress>
-                    <CapaProgress :capaRating="playerData.capa.dribbling" capaName="过人"></CapaProgress>
-                    <CapaProgress :capaRating="playerData.capa.pace" capaName="速度"></CapaProgress>
-                    <CapaProgress :capaRating="playerData.capa.strength" capaName="力量"></CapaProgress>
-                    <CapaProgress :capaRating="playerData.capa.interception" capaName="拦截"></CapaProgress>
-                    <CapaProgress :capaRating="playerData.capa.anticipation" capaName="预判"></CapaProgress>
-                    <CapaProgress :capaRating="playerData.capa.stamina" capaName="体力"></CapaProgress>
-                    <CapaProgress :capaRating="playerData.capa.goalkeeping" capaName="守门"></CapaProgress>
+                    <CapaProgress :capaRating="Math.round(playerData.capa.shooting * 100) / 100" capaName="射门"></CapaProgress>
+                    <CapaProgress :capaRating="Math.round(playerData.capa.passing * 100) / 100" capaName="传球"></CapaProgress>
+                    <CapaProgress :capaRating="Math.round(playerData.capa.dribbling * 100) / 100" capaName="过人"></CapaProgress>
+                    <CapaProgress :capaRating="Math.round(playerData.capa.pace * 100) / 100" capaName="速度"></CapaProgress>
+                    <CapaProgress :capaRating="Math.round(playerData.capa.strength * 100) / 100" capaName="力量"></CapaProgress>
+                    <CapaProgress :capaRating="Math.round(playerData.capa.interception * 100) / 100" capaName="拦截"></CapaProgress>
+                    <CapaProgress :capaRating="Math.round(playerData.capa.anticipation * 100) / 100" capaName="预判"></CapaProgress>
+                    <CapaProgress :capaRating="Math.round(playerData.capa.stamina * 100) / 100" capaName="体力"></CapaProgress>
+                    <CapaProgress :capaRating="Math.round(playerData.capa.goalkeeping * 100) / 100" capaName="守门"></CapaProgress>
                 </n-gi>
                 <!--<n-gi span="1"></n-gi>-->
             </n-grid>
@@ -34,8 +34,7 @@
 <script lang="ts" setup>
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
 import CapaProgress from "@/components/CapaProgress.vue"
-import { Router, useRouter } from 'vue-router';
-import { LoadingBarApi } from 'naive-ui';
+import { Router } from 'vue-router';
 let props: any = defineProps<{
     playerData: {
         "translated_name": String,
@@ -56,20 +55,20 @@ let props: any = defineProps<{
         }
     }
 }>();
-let router: Router = useRouter();
-declare const window: Window & { $loadingBar: LoadingBarApi };
+declare const window: Window & { $router: Router };
 function goDetail(): void {
-    window.$loadingBar.start();
-    router.push({ path: "/player-page", query: { id: props.playerData.id } });
+    window.$router.push({ path: "/player-page", query: { id: props.playerData.id } });
 }
 </script>
 <style>
+.bigCard {
+    cursor: pointer;
+}
 .avatar {
     width: 80px;
     height: 80px;
     padding: 5px;
 }
-
 .display-flex {
     display: flex;
 }

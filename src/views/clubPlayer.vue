@@ -18,7 +18,7 @@ onMounted(
             .then((response) => {
                 playerData.value = response;
                 isLoading.value = false;
-            });
+            }).catch((_error: {}) => { });
     }
 )
 </script>
