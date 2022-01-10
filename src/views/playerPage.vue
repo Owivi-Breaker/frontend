@@ -65,7 +65,7 @@
             </n-card>
         </n-gi>
         <n-gi>
-            <n-card title="近五场比赛评分">
+            <n-card v-bind:title="'近' + ratings.length + '场比赛评分'">
                 <div :id="ratingChart" style="width: 100%; height: 300%"></div>
             </n-card>
         </n-gi>
@@ -184,7 +184,6 @@ let gameData = ref({
     tackle_success: 0,
     tackles: 0
 });
-const ratings = ref([7.7, 6.9, 7.4, 9.4, 8.5])
 function getTagColor(index: number): string {
     let type: Array<string> = ["", "success", "warning", "info", "error"];
     index %= 5;
@@ -240,6 +239,7 @@ const loNumOption = computed(() => {
         ]
     };
 })
+let ratings: Ref<Array<Number>> = ref([])
 
 // 比赛评分折线图设置
 const ratingOption = computed(() => {
@@ -300,6 +300,12 @@ onMounted
                 gameData.value = response;
                 getPlayerByIdAPI({ player_id: playerId }).then(response => {
                     playerData.value = response;
+                    ratings.value = response.recent_ratings;
+                    let number: number = ratings.value.length;
+                    ratingOption.value.xAxis.data = [];
+                    for (let i: number = number; i > 0; i--) {
+                        ratingOption.value.xAxis.data.push(i.toString());
+                    }
                     let loNumDiv: HTMLElement | null = document.getElementById(loNumChart.value);
                     let ratingDiv: HTMLElement | null = document.getElementById(ratingChart.value);
                     if (ratingDiv != null && loNumDiv != null) {
