@@ -70,7 +70,7 @@ service.interceptors.response.use(
                     break;
                 case 401:
                     storage.remove("token");
-                    storage.remove("save_id");
+                    storage.remove("saveID");
                     switch (error.response.data.detail) {
                         case 'Incorrect username or password':
                             window.$message.error("账号或密码错误");
