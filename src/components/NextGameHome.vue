@@ -24,13 +24,10 @@ import { ref } from "vue";
 import { Ref } from "@vue/reactivity";
 import { getIncomingGamesAPI } from "@/apis/club";
 import { getDateAPI } from '@/apis/user';
-import { MessageApiInjection, MessageOptions } from "naive-ui/lib/message/src/MessageProvider";
 let teams: Ref<Array<string>> = ref(["", ""]);
 let nextGameName: Ref<string> = ref("");
 let nextGameDate: Ref<string> = ref("");
 let distance: Ref<Number> = ref(0);
-declare const window: Window & { $message: any };
-let message: MessageApiInjection = window.$message;
 getIncomingGamesAPI().then(response => {
     nextGameName.value = response[0].game_name;
     nextGameDate.value = response[0].date;
@@ -39,12 +36,8 @@ getIncomingGamesAPI().then(response => {
     getDateAPI().then(response => {
         let curDate: number = (new Date(response.date)).getTime() / 1000;
         distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
-    }).catch((_error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
-        message.error("网络错误。");
-    });
-}).catch((_error: { message: MessageOptions; response: { data: { detail: any; }; }; }) => {
-    message.error("网络错误。");
-});
+    }).catch((_error: {}) => { });
+}).catch((_error: {}) => { });
 </script>
 <style>
 .nextGameCard {

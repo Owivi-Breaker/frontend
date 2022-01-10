@@ -1,10 +1,8 @@
-import axios from 'axios'
-import { storage } from '../utils'
-import { useMessage } from "naive-ui";
-import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
-import router from '@/router'
+import axios from "axios";
+import { storage } from "../utils";
+import router from "@/router";
+import { LoadingBarApi } from "naive-ui";
 
-const message: MessageApiInjection = useMessage();// 报错消息组件，好像不能这么写
 // 新建一个axios实例service
 const service = axios.create(
     {
@@ -46,7 +44,7 @@ service.interceptors.request.use(
     }
 )
 
-declare const window: Window & { $message: any };
+declare const window: Window & { $message: any, $loadingBar: LoadingBarApi };
 // 响应拦截器
 service.interceptors.response.use(
     // 对响应数据做处理
@@ -93,8 +91,7 @@ service.interceptors.response.use(
                     //error.message = '拒绝访问'
                     break;
                 case 404:
-                    //error.message = '请求错误,未找到该资源'
-                    // window.location.href = "/NotFound"
+                    window.$message.error("请求错误");
                     break;
                 case 405:
                     //error.message = '请求方法未允许'
@@ -133,6 +130,7 @@ service.interceptors.response.use(
             //error.message = '连接服务器失败';
         }
         /*异常处理结束*/
+        window.$loadingBar.error();
         return Promise.reject(error)
     }
 )

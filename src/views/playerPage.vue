@@ -315,9 +315,9 @@ onMounted
                         };
                     }
                     loadingBar.finish();
-                });
-            });
-        });
+                }).catch((_error: {}) => { });
+            }).catch((_error: {}) => { });
+        }).catch((_error: {}) => { });
     })
 </script>
 <style scoped>

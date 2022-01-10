@@ -8,7 +8,8 @@
 // const loadingBar = useLoadingBar()
 // router.beforeEach(() => loadingBar?.start())
 // router.afterEach(() => loadingBar?.finish())
-import { useMessage } from 'naive-ui'
-declare const window: Window & { $message: any };
+import { useMessage, useLoadingBar, LoadingBarApi } from "naive-ui";
+declare const window: Window & { $message: any, $loadingBar: LoadingBarApi };
 window.$message = useMessage();
+window.$loadingBar = useLoadingBar();
 </script>

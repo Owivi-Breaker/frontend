@@ -1,16 +1,14 @@
 <template>
     <div class="selectSaveDiv">
-        <img id="logo" alt="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg"/>
+        <img id="logo" alt="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" />
         <p class="title">选择存档</p>
-        <n-select v-model:value="choseSave" :options="saveList" class="selectSave" placeholder="请选择"
-                  v-bind:loading="isSelectLoading" v-on:click="GetSave">
+        <n-select v-model:value="choseSave" :options="saveList" class="selectSave" placeholder="请选择" v-bind:loading="isSelectLoading" v-on:click="GetSave">
             <template #empty>
                 <div class="emptySelectSaveDiv">Oops!什么都没有</div>
             </template>
         </n-select>
         <div class="saveButtonDiv">
-            <n-button attr-type="button" class="newSaveButton" type="primary" v-on:click="leagueShowModal = true">新建存档
-            </n-button>
+            <n-button attr-type="button" class="newSaveButton" type="primary" v-on:click="leagueShowModal = true">新建存档</n-button>
             <n-button attr-type="button" class="beginGameButton" type="primary" v-on:click="Enter">开始游戏</n-button>
         </div>
     </div>
@@ -19,7 +17,7 @@
             <template #header-extra></template>
             <n-form>
                 <n-form-item label="我要玩的联赛：">
-                    <n-select v-model:value="leagueValue" :options="leagueOptions" class="leagueSelect"/>
+                    <n-select v-model:value="leagueValue" :options="leagueOptions" class="leagueSelect" />
                 </n-form-item>
                 <n-button type="primary" v-on:click="SelectLeagues">下一步</n-button>&nbsp;
                 <n-button v-on:click="leagueShowModal = false">关闭</n-button>
@@ -33,8 +31,7 @@
             <n-layout has-sider>
                 <n-layout-sider content-style>
                     <n-scrollbar class="competetionMenuBar">
-                        <n-menu :collapsed-width="64" :default-value="competitionList[0].label"
-                                :options="competitionList" @update:value="ChangeCompetition"/>
+                        <n-menu :collapsed-width="64" :default-value="competitionList[0].label" :options="competitionList" @update:value="ChangeCompetition" />
                     </n-scrollbar>
                 </n-layout-sider>
                 <n-layout>
@@ -48,30 +45,26 @@
                         >
                             <div class="teamInformationDiv">
                                 资金：{{ teamList[index].finance }}
-                                <br/>
+                                <br />
                                 声望：{{ teamList[index].reputation }}
-                                <br/>
+                                <br />
                             </div>
-                            <n-button v-show="showGoButton == index" class="goButton" type="primary"
-                                      v-on:click="NewSave(index)">就选他！
-                            </n-button>
+                            <n-button v-show="showGoButton == index" class="goButton" type="primary" v-on:click="NewSave(index)">就选他！</n-button>
                         </n-card>
                     </n-scrollbar>
                 </n-layout>
             </n-layout>
             <template #footer>
-                <n-button class="bottomButton" style="right: 120px;"
-                          v-on:click="clubShowModal = false; leagueShowModal = true;">返回
-                </n-button>
+                <n-button class="bottomButton" style="right: 120px;" v-on:click="clubShowModal = false; leagueShowModal = true;">返回</n-button>
                 <n-button class="bottomButton" style="right: 50px;" v-on:click="clubShowModal = false;">关闭</n-button>
             </template>
         </n-card>
     </n-modal>
     <n-modal v-model:show="loadShowModal" :mask-closable="false">
         <n-card :bordered="true" :title="loadTitle" class="loadModalCard" size="huge">
-            <n-spin v-if="!loadComplete" size="medium"/>
+            <n-spin v-if="!loadComplete" size="medium" />
             <n-icon v-if="loadComplete" class="completeCreateSaveIcon" color="#18a058" size="80">
-                <Ios-Checkmark/>
+                <Ios-Checkmark />
             </n-icon>
         </n-card>
     </n-modal>
@@ -92,8 +85,8 @@ import { getSaveAPI, createSaveAPI } from '@/apis/save'
 
 
 let leagueOptions: Ref<Array<{ label: string, value: string }>> = ref([
-    {label: "五大联赛", value: "五大联赛"},
-    {label: "超级联赛", value: "超级联赛"}
+    { label: "五大联赛", value: "五大联赛" },
+    { label: "超级联赛", value: "超级联赛" }
 ]);
 let clubShowModal: Ref<boolean> = ref(false);
 let showGoButton: Ref<number> = ref(-1);
@@ -119,14 +112,7 @@ const GetSave = (): void => {
                 element.value = element.id;
                 element.label = "时间" + element.time + "，赛季" + element.season;
             });
-        })
-        .catch(error => {
-            switch (error.message) {
-                default:
-                    message.error("网络错误");
-                    break;
-            }
-        });
+        }).catch((_error: {}) => { });
     isSelectLoading.value = false;
 }
 onMounted(
@@ -141,7 +127,7 @@ let choseSave: Ref<any> = ref(null);
 const Enter = (): void => {
     if (choseSave.value) {
         storage.set("saveID", choseSave.value);
-        router.push({name: "home"});
+        router.push({ name: "home" });
     }
 }
 
@@ -170,7 +156,7 @@ const SelectLeagues = (): void => {
 }
 const ChangeCompetition = (key: any, item: any): void => {
     item.clubs.forEach(function (element: any, index: number) {
-        teamList.value[index] = {name: element.name, finance: element.finance, reputation: element.reputation};
+        teamList.value[index] = { name: element.name, finance: element.finance, reputation: element.reputation };
     })
 }
 
@@ -189,19 +175,19 @@ const NewSave = (index: number): void => {
             loadComplete.value = true;
             loadTitle.value = "创建成功";
             setTimeout(() => {
-                router.push({name: "home"});
+                router.push({ name: "home" });
             }, 2000);
         }).catch(error => {
-        switch (error.message) {
-            case "Request failed with status code 404":
-            case "Network Error":
-                message.error("创建失败，网络错误。");
-                break;
-            default:
-                message.error("创建失败。");
-                break;
-        }
-    });
+            switch (error.message) {
+                case "Request failed with status code 404":
+                case "Network Error":
+                    message.error("创建失败，网络错误。");
+                    break;
+                default:
+                    message.error("创建失败。");
+                    break;
+            }
+        });
 }
 </script>
 
