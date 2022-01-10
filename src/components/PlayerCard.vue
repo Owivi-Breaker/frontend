@@ -1,5 +1,5 @@
 <template>
-    <n-card hoverable size="large">
+    <n-card hoverable size="large" v-on:click="goDetail">
         <n-grid cols="3" x-gap="9">
             <n-gi span="1">
                 <Avataaars height="75%" width="75%" />
@@ -32,6 +32,7 @@
 <script lang="ts" setup>
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
 import CapaProgress from "@/components/CapaProgress.vue"
+import { Router, useRouter } from 'vue-router';
 let props: any = defineProps<{
     playerData: {
         "translated_name": String,
@@ -51,6 +52,11 @@ let props: any = defineProps<{
         }
     }
 }>();
+let router: Router = useRouter();
+function goDetail(): void {
+    console.log(props.playerData)
+    router.push({ name: "player-page" });
+}
 </script>
 <style>
 .avatar {

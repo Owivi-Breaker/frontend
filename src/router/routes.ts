@@ -46,16 +46,7 @@ const mainRoutes: RouteRecordRaw[] = [
             title: 'About',
             requiresAuth: false
         }
-    },
-    {
-        name: 'playerPage',
-        path: '/player-page',
-        component: () => import('../views/playerPage.vue'),
-        meta: {
-            title: '球员页',
-            requiresAuth: true
-        }
-    },
+    }
 ]
 
 
@@ -98,6 +89,15 @@ const routes: RouteRecordRaw[] = [
         component: () => import('../views/error.vue'),
         meta: {
             title: 'Oh no!'
+        }
+    },
+    {
+        name: "playerPage",
+        path: "/player-page/:id",
+        component: () => import('../views/playerPage.vue'),
+        props: { id: true },
+        meta: {
+            title: "球员页"
         }
     }
 ]
