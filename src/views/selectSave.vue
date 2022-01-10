@@ -110,7 +110,7 @@ const GetSave = (): void => {
             saveList.value = response;
             saveList.value.forEach(function (element: any) {
                 element.value = element.id;
-                element.label = "时间" + element.time + "，赛季" + element.season;
+                element.label = "时间" + element.date + "，赛季" + element.season;
             });
         }).catch((_error: {}) => { });
     isSelectLoading.value = false;

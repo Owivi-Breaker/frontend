@@ -1,5 +1,5 @@
 import { LoadingBarApi } from 'naive-ui'
-import { createRouter, createWebHistory, Router } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { storage } from '../utils'
 import { routes } from './routes'
 const history = createWebHistory()
