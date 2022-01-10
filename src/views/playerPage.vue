@@ -110,14 +110,16 @@
     </n-grid>
 </template>
 <script lang="ts" setup>
-import Avataaars from "vuejs-avataaars/src/Avataaars.vue"
-import CapaProgress from "@/components/CapaProgress.vue"
-import * as echarts from "echarts"
+import Avataaars from "vuejs-avataaars/src/Avataaars.vue";
+import CapaProgress from "@/components/CapaProgress.vue";
+import * as echarts from "echarts";
 import { onMounted, ref, computed, Ref, ComputedRef } from "vue";
 import PlayGround from "@/components/PlayGround.vue";
 import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
 import { getPlayerByIdAPI, getPlayerTotalGameDataAPI } from "@/apis/player";
 import { getSaveMeAPI } from "@/apis/save";
+import { useLoadingBar, LoadingBarApi } from "naive-ui";
+let loadingBar: LoadingBarApi = useLoadingBar();
 let route: RouteLocationNormalizedLoaded = useRoute();
 let playerId: number = (Number)(route.query.id);
 // 样例数据
@@ -166,7 +168,7 @@ let playerData = ref({
         "GK": 13.0
     },
     "style_tag": []
-})
+});
 let gameData = ref({
     action: 0,
     aerial_success: 0,
@@ -298,23 +300,24 @@ onMounted
             let gameSeason: number = response.season;
             getPlayerTotalGameDataAPI({ player_id: playerId, start_season: gameSeason, end_season: gameSeason }).then(response => {
                 gameData.value = response;
+                getPlayerByIdAPI({ player_id: playerId }).then(response => {
+                    playerData.value = response;
+                    let loNumDiv: HTMLElement | null = document.getElementById(loNumChart.value);
+                    let ratingDiv: HTMLElement | null = document.getElementById(ratingChart.value);
+                    if (ratingDiv != null && loNumDiv != null) {
+                        let ratingChart = echarts.init(ratingDiv);
+                        ratingChart.setOption(ratingOption.value);
+                        let loNumChart = echarts.init(loNumDiv);
+                        loNumChart.setOption(loNumOption.value);
+                        window.onresize = function () {
+                            ratingChart.resize();
+                            loNumChart.resize();
+                        };
+                    }
+                    loadingBar.finish();
+                });
             });
         });
-        getPlayerByIdAPI({ player_id: playerId }).then(response => {
-            playerData.value = response;
-            let loNumDiv: HTMLElement | null = document.getElementById(loNumChart.value);
-            let ratingDiv: HTMLElement | null = document.getElementById(ratingChart.value);
-            if (ratingDiv != null && loNumDiv != null) {
-                let ratingChart = echarts.init(ratingDiv);
-                ratingChart.setOption(ratingOption.value);
-                let loNumChart = echarts.init(loNumDiv);
-                loNumChart.setOption(loNumOption.value);
-                window.onresize = function () {
-                    ratingChart.resize();
-                    loNumChart.resize();
-                };
-            }
-        })
     })
 </script>
 <style scoped>

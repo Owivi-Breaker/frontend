@@ -10,11 +10,9 @@
         </n-loading-bar-provider>
     </n-config-provider>
 </template>
-
 <script lang="ts" setup>
-import { computed } from 'vue'
-import { useOsTheme, darkTheme } from 'naive-ui'
-const osTheme = useOsTheme()
-const theme = computed(() => (osTheme.value === 'dark' ? darkTheme : null))
+import { computed } from "vue";
+import { useOsTheme, darkTheme } from "naive-ui";
+const osTheme = useOsTheme();
+const theme = computed(() => (osTheme.value === "dark" ? darkTheme : null));
 </script>
-
