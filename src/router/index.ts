@@ -14,13 +14,15 @@ router.beforeEach(to => {
         let title: any = to.meta.title;
         document.title = title;
     }
-    const token = storage.get('token')
+    const token = storage.get('token');
+    const saveID = storage.get("saveID");
     // allreay authorized
-    if (to.name === 'login' && token != null) {
+    if (to.name === 'login' && token != null || to.name === 'selectSave' && token != null && saveID != null) {
         return to.query.redirect?.toString() ?? '/'
     }
     // need authorize & token is invalid
-    if (to.meta.requiresAuth === true && token == null) {
+    if (to.meta.requiresAuth === true && (token == null || saveID == null)) {
+        console.log("ddddddd")
         return { name: 'login', query: { redirect: to.fullPath } } // 保存我们所在的位置，以便以后再来
     }
 })

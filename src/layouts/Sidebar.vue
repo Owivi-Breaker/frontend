@@ -3,7 +3,6 @@
         <div class="icon">
             <img alt="logo" class="img" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" />
         </div>
-        <n-divider></n-divider>
         <n-menu :collapsed-icon-size="22" :collapsed-width="64" :options="menuOptions" />
     </n-layout-sider>
 </template>
