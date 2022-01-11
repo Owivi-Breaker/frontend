@@ -194,7 +194,7 @@ const NewSave = (index: number): void => {
 
 <style>
 body {
-    background-image: url("../assets/background.png");
+    background-image: url("http://s1.s100.vip:13127/Public/background.png");
 }
 
 .selectSaveDiv {

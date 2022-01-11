@@ -39,7 +39,7 @@
                 <template #footer>
                     <n-divider title-placement="left">赛季数据</n-divider>
                     <n-space justify="space-between">
-                        <n-statistic label="出场">26</n-statistic>
+                        <n-statistic label="出场">{{ gameData.appearance }}</n-statistic>
                         <n-statistic label="进球">{{ gameData.goals }}</n-statistic>
                         <n-statistic label="助攻">{{ gameData.assists }}</n-statistic>
                         <n-statistic label="平均评分">{{ Math.round(gameData.final_rating * 100) / 100 }}</n-statistic>
@@ -168,6 +168,7 @@ let playerData = ref({
     "style_tag": []
 });
 let gameData = ref({
+    appearance: 0,
     action: 0,
     aerial_success: 0,
     aerials: 0,
