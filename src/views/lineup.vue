@@ -3,54 +3,45 @@
         <n-gi>
             <n-card class="field">
                 <!--阵容块-->
-                <div
-                    v-for="(value,key) in posInfo"
-                    :style="value.fieldStyle">
+                <div v-for="(value,key) in posInfo" :style="value.fieldStyle">
                     <n-space justify="center">
                         <!--阵容槽-->
                         <div
                             v-for="pos in activePos(key)"
                             :draggable="true"
                             @dragend="dragend"
-                            @dragstart="positionDragstart($event,pos)"
-                            @drop="positionDrop($event,pos)"
+                            @dragstart="positionDragstart($event, pos)"
+                            @drop="positionDrop($event, pos)"
                             @dragover.prevent
                         >
                             <div v-if="position[pos]" class="avatar">
                                 <n-popover raw trigger="click">
                                     <template #trigger>
-                                        <Avataaars
-                                            :isCircle="false"
-                                            height="90%" v-bind="getAvatar(position[pos])" width="90%"/>
+                                        <Avataaars :isCircle="false" height="90%" v-bind="getAvatar(position[pos])" width="90%" />
                                     </template>
                                     <n-card :title="getPlayerDataById(position[pos]).translated_name">
                                         <template #header-extra>
                                             <n-progress
                                                 :circle-gap="5"
-                                                :percentage="[20,50]"
+                                                :percentage="[20, 50]"
                                                 :stroke-width="10"
                                                 status="success"
                                                 style="width: 40px; margin: 0 10px 0 40px;"
                                                 type="multiple-circle"
                                             ></n-progress>
                                         </template>
-                                        <n-descriptions :column="3"
-                                                        label-placement="top">
-
-                                            <n-descriptions-item label="能力">{{
+                                        <n-descriptions :column="3" label-placement="top">
+                                            <n-descriptions-item label="能力">
+                                                {{
                                                     getPlayerDataById(position[pos]).location_capa[key]
                                                 }}
                                             </n-descriptions-item>
-                                            <n-descriptions-item label="位置">
-                                                {{ key }}
-                                            </n-descriptions-item>
+                                            <n-descriptions-item label="位置">{{ key }}</n-descriptions-item>
                                             <n-descriptions-item label="占位">bar</n-descriptions-item>
                                             <n-descriptions-item label="占位">bar</n-descriptions-item>
                                             <n-descriptions-item label="占位">bar</n-descriptions-item>
                                             <n-descriptions-item label="占位">bar</n-descriptions-item>
-
                                         </n-descriptions>
-
                                     </n-card>
                                 </n-popover>
                                 {{ getPlayerDataById(position[pos]).translated_name }}
@@ -61,12 +52,7 @@
 
                 <!--遮罩层-->
                 <template v-for="(value,key) in posInfo">
-                    <div
-                        v-show="value.isMasked"
-                        :style="value.maskStyle"
-                        class="mask"
-                        @drop="fieldDrop($event,key)"
-                        @dragover.prevent>
+                    <div v-show="value.isMasked" :style="value.maskStyle" class="mask" @drop="fieldDrop($event, key)" @dragover.prevent>
                         <n-h4>{{ key }}</n-h4>
                     </div>
                 </template>
@@ -81,7 +67,6 @@
                         <n-popover v-for="elem in playerData" raw trigger="click">
                             <template #trigger>
                                 <n-card
-
                                     :bordered="false"
                                     :draggable="true"
                                     :embedded="isChosen(elem.id)"
@@ -98,14 +83,12 @@
                             </template>
                             <n-card>
                                 <template #header>
-                                    <n-h2 style="margin: 0 0 0 0;">
-                                        {{ elem.translated_name }}
-                                    </n-h2>
+                                    <n-h2 style="margin: 0 0 0 0;">{{ elem.translated_name }}</n-h2>
                                 </template>
                                 <template #header-extra>
                                     <n-progress
                                         :circle-gap="5"
-                                        :percentage="[20,50]"
+                                        :percentage="[20, 50]"
                                         :stroke-width="10"
                                         status="success"
                                         style="width: 40px; margin: 0 0 0 0;"
@@ -115,19 +98,13 @@
                                 <n-grid cols="3">
                                     <n-gi span="1">
                                         <div style="display:flex; height:120px;width:120px;margin:0 30px 30px 0">
-                                            <Avataaars
-                                                :isCircle="false"
-                                                v-bind="elem.avatar"
-                                            ></Avataaars>
+                                            <Avataaars :isCircle="false" v-bind="elem.avatar"></Avataaars>
                                         </div>
-
                                     </n-gi>
                                     <n-gi span="2">
-                                        <n-descriptions
-                                            :column="3"
-                                            label-placement="top">
-
-                                            <n-descriptions-item label="能力">{{
+                                        <n-descriptions :column="3" label-placement="top">
+                                            <n-descriptions-item label="能力">
+                                                {{
                                                     elem.top_capa
                                                 }}
                                             </n-descriptions-item>
@@ -136,25 +113,16 @@
                                             <n-descriptions-item label="占位">bar</n-descriptions-item>
                                             <n-descriptions-item label="占位">bar</n-descriptions-item>
                                             <n-descriptions-item label="占位">bar</n-descriptions-item>
-
                                         </n-descriptions>
-
                                     </n-gi>
                                 </n-grid>
-
-
                             </n-card>
                         </n-popover>
-
-
                     </n-space>
-
                 </n-scrollbar>
             </n-card>
         </n-gi>
     </n-grid>
-
-
 </template>
 
 <script lang="ts" setup>
@@ -493,8 +461,8 @@ const activePos = (pos: string) => {
     // 获取指定大位置的非空小位置
     let posList = posInfo[pos].name
     return posList.filter((val: string) => {
-            return position[val] != null
-        }
+        return position[val] != null
+    }
     )
 }
 
@@ -697,7 +665,6 @@ const getUltimateTactic = () => {
     width: 30%;
     background-color: rgba(255, 255, 255, 0.2);
     border-radius: 50%;
-
 }
 
 .field {
@@ -705,20 +672,16 @@ const getUltimateTactic = () => {
     background: rgb(56, 125, 50);
 }
 
-
 .mask {
-    background: #878B99;
+    background: #878b99;
     opacity: 0.4;
-
 }
-
 
 .avatar {
     margin: 0 auto;
 }
 
 .selection {
-
     height: 10%;
 }
 </style>
