@@ -3,7 +3,7 @@ const getClubsAPI = () => {
     return http.get("/club", null);
 }
 const getClubMeAPI = () => {
-    return http.get("/club", null);
+    return http.get("/club/me", null);
 }
 const getClubByIdAPI = (params: { club_id: number }) => {
     return http.get(`/club/${params.club_id}`, null);

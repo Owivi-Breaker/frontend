@@ -25,7 +25,7 @@
                                 <n-h4>{{ playerData.number }}</n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="位置" label-style="color: grey;">
-                                <n-h4>{{ playerData.top_location }}</n-h4>
+                                <n-h4>{{ playerData.superior_location.join("、") }}</n-h4>
                             </n-descriptions-item>
                             <n-descriptions-item label="身价" label-style="color: grey;">
                                 <n-h4>{{ playerData.values }}万</n-h4>
@@ -150,7 +150,7 @@ let playerData = ref({
         "goalkeeping": 0
     },
     "top_capa": 0,
-    "top_location": "",
+    "superior_location": [],
     "location_capa": {
         "CM": 29.0,
         "LM": 26.72,

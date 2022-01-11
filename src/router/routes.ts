@@ -23,7 +23,7 @@ const mainRoutes: RouteRecordRaw[] = [
     {
         name: 'playerPerform',
         path: '/playerPerform',
-        component: () => import('../views/playerPerform.vue'),
+        component: () => import('../views/playerDataTable.vue'),
         meta: {
             title: "数据",
             requiresAuth: true // 需要登陆才能访问

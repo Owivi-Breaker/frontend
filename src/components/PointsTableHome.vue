@@ -8,23 +8,20 @@ import { getLeagueMeAPI, getPointsTableByLeagueAPI } from "@/apis/league";
 import { getSaveMeAPI } from "@/apis/save";
 import { ref, h, computed, ComputedRef } from 'vue';
 import { Ref } from "@vue/reactivity";
-import { MessageApiInjection, MessageOptions } from "naive-ui/lib/message/src/MessageProvider";
-declare const window: Window & { $message: any };
-let message: MessageApiInjection = window.$message;
-let rawPointsData: Ref = ref([]);
+let rawPointsData: Ref<Array<object>> = ref([]);
 let isLoading: Ref<boolean> = ref(true);
-let clubId: Ref<number> = ref(0);
+let clubId: number = 0;
 getSaveMeAPI().then(response => {
     let gameSeason: number = response.season;
-    clubId.value = response.player_club_id;
+    clubId = response.player_club_id;
     getLeagueMeAPI().then(response => {
         let leagueID: number = response.id;
         getPointsTableByLeagueAPI({ league_id: leagueID, game_season: gameSeason }).then(response => {
             rawPointsData.value = response;
             isLoading.value = false;
-        });
-    });
-});
+        }).catch((_error: {}) => { });
+    }).catch((_error: {}) => { });
+}).catch((_error: {}) => { });
 let pointsData: ComputedRef<any> = computed(() =>
     rawPointsData.value.map((value: any) => {
         value["俱乐部"] = value["名称"];
@@ -39,9 +36,9 @@ let pointsData: ComputedRef<any> = computed(() =>
         delete value["净胜球"];
         return value;
     })
-)
+);
 function getTitleColor(item: any): string {
-    return clubId.value === item["id"] ? "green" : "black";
+    return clubId === item["id"] ? "green" : "black";
 }
 class columnItem {
     title: string;
