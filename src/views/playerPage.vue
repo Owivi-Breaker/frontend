@@ -5,10 +5,14 @@
                 <n-grid cols="3" x-gap="9">
                     <n-gi span="1">
                         <n-space justify="start">
-                            <n-rate :value="Math.round(playerData.top_capa / 10) / 2" allow-half readonly size="small" />
-                            <Avataaars :isCircle="false" height="80%" width="80%" />
+                            <n-rate :value="Math.round(playerData.top_capa / 10) / 2" allow-half readonly size="small"/>
+                            <Avataaars
+                                :isCircle="false"
+                                height="80%" v-bind="playerData.avatar" width="80%"/>
                             <n-space>
-                                <n-tag v-bind:type="getTagColor(playerData.style_tag.indexOf(item))" v-for="item in playerData.style_tag">{{ item }}</n-tag>
+                                <n-tag v-for="item in playerData.style_tag"
+                                       v-bind:type="getTagColor(playerData.style_tag.indexOf(item))">{{ item }}
+                                </n-tag>
                             </n-space>
                         </n-space>
                     </n-gi>
@@ -53,15 +57,23 @@
         </n-gi>
         <n-gi>
             <n-card title="能力">
-                <CapaProgress :capaRating="Math.round(playerData.capa.shooting * 100) / 100" capaName="射门"></CapaProgress>
-                <CapaProgress :capaRating="Math.round(playerData.capa.passing * 100) / 100" capaName="传球"></CapaProgress>
-                <CapaProgress :capaRating="Math.round(playerData.capa.dribbling * 100) / 100" capaName="过人"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.shooting * 100) / 100"
+                              capaName="射门"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.passing * 100) / 100"
+                              capaName="传球"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.dribbling * 100) / 100"
+                              capaName="过人"></CapaProgress>
                 <CapaProgress :capaRating="Math.round(playerData.capa.pace * 100) / 100" capaName="速度"></CapaProgress>
-                <CapaProgress :capaRating="Math.round(playerData.capa.strength * 100) / 100" capaName="力量"></CapaProgress>
-                <CapaProgress :capaRating="Math.round(playerData.capa.interception * 100) / 100" capaName="拦截"></CapaProgress>
-                <CapaProgress :capaRating="Math.round(playerData.capa.anticipation * 100) / 100" capaName="预判"></CapaProgress>
-                <CapaProgress :capaRating="Math.round(playerData.capa.stamina * 100) / 100" capaName="体力"></CapaProgress>
-                <CapaProgress :capaRating="Math.round(playerData.capa.goalkeeping * 100) / 100" capaName="守门"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.strength * 100) / 100"
+                              capaName="力量"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.interception * 100) / 100"
+                              capaName="拦截"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.anticipation * 100) / 100"
+                              capaName="预判"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.stamina * 100) / 100"
+                              capaName="体力"></CapaProgress>
+                <CapaProgress :capaRating="Math.round(playerData.capa.goalkeeping * 100) / 100"
+                              capaName="守门"></CapaProgress>
             </n-card>
         </n-gi>
         <n-gi>
@@ -81,22 +93,22 @@
                     <n-list-item>
                         <n-thing title="个人荣誉">
                             2019 金球奖
-                            <br />2018 英超年度最佳球员
-                            <br />2020 西甲最佳射手
-                            <br />2018 英超最佳射手
-                            <br />2017 英超最佳射手
-                            <br />2015 英冠最佳射手
-                            <br />2013 金童奖
-                            <br />
+                            <br/>2018 英超年度最佳球员
+                            <br/>2020 西甲最佳射手
+                            <br/>2018 英超最佳射手
+                            <br/>2017 英超最佳射手
+                            <br/>2015 英冠最佳射手
+                            <br/>2013 金童奖
+                            <br/>
                         </n-thing>
                     </n-list-item>
                     <n-list-item>
                         <n-thing title="俱乐部荣誉">
                             2018 曼彻斯特联 欧冠冠军
-                            <br />2021 巴塞罗那 西甲冠军
-                            <br />2017 曼彻斯特联 英超冠军
-                            <br />2019 巴塞罗那 国王杯冠军
-                            <br />
+                            <br/>2021 巴塞罗那 西甲冠军
+                            <br/>2017 曼彻斯特联 英超冠军
+                            <br/>2019 巴塞罗那 国王杯冠军
+                            <br/>
                         </n-thing>
                     </n-list-item>
                 </n-list>
@@ -118,6 +130,7 @@ import PlayGround from "@/components/PlayGround.vue";
 import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
 import { getPlayerByIdAPI, getPlayerTotalGameDataAPI } from "@/apis/player";
 import { getSaveMeAPI } from "@/apis/save";
+
 let route: RouteLocationNormalizedLoaded = useRoute();
 let playerId: number = (Number)(route.query.id);
 // 样例数据
@@ -185,11 +198,13 @@ let gameData = ref({
     tackle_success: 0,
     tackles: 0
 });
+
 function getTagColor(index: number): string {
     let type: Array<string> = ["", "success", "warning", "info", "error"];
     index %= 5;
     return type[index];
 }
+
 let computePassRate: ComputedRef<string> = computed(() => {
     return (gameData.value.passes === 0 ? 0 : Math.round(gameData.value.pass_success / gameData.value.passes * 100)) + "%";
 });
@@ -291,38 +306,47 @@ const totalGameDataOption = computed(() => {
         ]
     };
 })
+
 let loNumChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
 let ratingChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
+
 onMounted
-    (() => {
-        getSaveMeAPI().then(response => {
-            let gameSeason: number = response.season;
-            getPlayerTotalGameDataAPI({ player_id: playerId, start_season: gameSeason, end_season: gameSeason }).then(response => {
-                gameData.value = response;
-                getPlayerByIdAPI({ player_id: playerId }).then(response => {
-                    playerData.value = response;
-                    ratings.value = response.recent_ratings;
-                    let number: number = ratings.value.length;
-                    ratingOption.value.xAxis.data = [];
-                    for (let i: number = number; i > 0; i--) {
-                        ratingOption.value.xAxis.data.push(i.toString());
-                    }
-                    let loNumDiv: HTMLElement | null = document.getElementById(loNumChart.value);
-                    let ratingDiv: HTMLElement | null = document.getElementById(ratingChart.value);
-                    if (ratingDiv != null && loNumDiv != null) {
-                        let ratingChart = echarts.init(ratingDiv);
-                        ratingChart.setOption(ratingOption.value);
-                        let loNumChart = echarts.init(loNumDiv);
-                        loNumChart.setOption(loNumOption.value);
-                        window.onresize = function () {
-                            ratingChart.resize();
-                            loNumChart.resize();
-                        };
-                    }
-                }).catch((_error: {}) => { });
-            }).catch((_error: {}) => { });
-        }).catch((_error: {}) => { });
-    })
+(() => {
+    getSaveMeAPI().then(response => {
+        let gameSeason: number = response.season; // TODO 以后写到全局变量里去
+        getPlayerTotalGameDataAPI({
+            player_id: playerId,
+            start_season: gameSeason,
+            end_season: gameSeason
+        }).then(response => {
+            gameData.value = response;
+            getPlayerByIdAPI({ player_id: playerId }).then(response => {
+                playerData.value = response;
+                ratings.value = response.recent_ratings;
+                let number: number = ratings.value.length;
+                ratingOption.value.xAxis.data = [];
+                for (let i: number = number; i > 0; i--) {
+                    ratingOption.value.xAxis.data.push(i.toString());
+                }
+                let loNumDiv: HTMLElement | null = document.getElementById(loNumChart.value);
+                let ratingDiv: HTMLElement | null = document.getElementById(ratingChart.value);
+                if (ratingDiv != null && loNumDiv != null) {
+                    let ratingChart = echarts.init(ratingDiv);
+                    ratingChart.setOption(ratingOption.value);
+                    let loNumChart = echarts.init(loNumDiv);
+                    loNumChart.setOption(loNumOption.value);
+                    window.onresize = function () {
+                        ratingChart.resize();
+                        loNumChart.resize();
+                    };
+                }
+            }).catch((_error: {}) => {
+            });
+        }).catch((_error: {}) => {
+        });
+    }).catch((_error: {}) => {
+    });
+})
 </script>
 <style scoped>
 .flex {

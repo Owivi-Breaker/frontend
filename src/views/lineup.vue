@@ -19,9 +19,11 @@
                             <div v-if="position[pos]" class="avatar">
                                 <n-popover raw trigger="click">
                                     <template #trigger>
-                                        <Avataaars :isCircle="false" height="90%" width="90%"/>
+                                        <Avataaars
+                                            :isCircle="false"
+                                            height="90%" v-bind="getAvatar(position[pos])" width="90%"/>
                                     </template>
-                                    <n-card :title="getPlayerInfoById(position[pos]).translated_name">
+                                    <n-card :title="getPlayerDataById(position[pos]).translated_name">
                                         <template #header-extra>
                                             <n-progress
                                                 :circle-gap="5"
@@ -36,7 +38,7 @@
                                                         label-placement="top">
 
                                             <n-descriptions-item label="能力">{{
-                                                    getPlayerInfoById(position[pos]).location_capa[key]
+                                                    getPlayerDataById(position[pos]).location_capa[key]
                                                 }}
                                             </n-descriptions-item>
                                             <n-descriptions-item label="位置">
@@ -51,7 +53,7 @@
 
                                     </n-card>
                                 </n-popover>
-                                {{ getPlayerInfoById(position[pos]).translated_name }}
+                                {{ getPlayerDataById(position[pos]).translated_name }}
                             </div>
                         </div>
                     </n-space>
@@ -115,6 +117,7 @@
                                         <div style="display:flex; height:120px;width:120px;margin:0 30px 30px 0">
                                             <Avataaars
                                                 :isCircle="false"
+                                                v-bind="elem.avatar"
                                             ></Avataaars>
                                         </div>
 
@@ -650,13 +653,24 @@ onMounted(
     }
 )
 
-const getPlayerInfoById = (id: number) => {
+const getPlayerDataById = (id: number) => {
     for (let p of playerData.value) {
         if (p['id'] == id) {
             return p
         }
     }
     return null
+}
+
+const getAvatar = (playerId: number | null) => {
+    if (playerId == null) {
+        return {}
+    }
+    let playerData: any = getPlayerDataById(playerId)
+    if (playerData == null) {
+        return {}
+    }
+    return playerData.avatar
 }
 // endregion
 
