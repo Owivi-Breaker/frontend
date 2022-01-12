@@ -15,7 +15,6 @@ import { getSaveMeAPI } from "@/apis/save";
 import { getColor } from "@/utils/colorMap"
 import { h, ref, computed, Ref, ComputedRef } from "vue";
 import { NTag } from "naive-ui";
-
 let rawCapaData: Ref = ref([]);
 let rawPerfData: Ref = ref([]);
 let capaLoading: Ref<boolean> = ref(true);
@@ -120,7 +119,6 @@ let perfData: ComputedRef<any> = computed(() =>
         return value;
     })
 );
-
 class capaItem {
     title: string;
     key: string;
@@ -155,8 +153,7 @@ class perfItem {
     width: number | null;
     align: string;
     render: Function | null;
-    sorter: string;
-
+    sorter: string | Function;
     constructor(title: string) {
         this.title = title;
         this.key = title;
@@ -172,6 +169,7 @@ class perfItem {
                     },
                 }, { default: () => row[this.key] });
             }
+            this.sorter = "default";
         }
         else {
             let sumKey: string = this.key.slice(0, 2);
@@ -199,11 +197,10 @@ class perfItem {
                     ]
                 });
             }
+            this.sorter = (a: { [x: string]: number; }, b: { [x: string]: number; }) => a[sumKey + "成功"] - b[sumKey + "成功"];
         }
-        this.sorter = "default";
     }
 }
-
 let capaColumns: Array<Object> = [new capaItem("姓名"), new capaItem("年龄"), new capaItem("国籍"), new capaItem("射门"), new capaItem("过人"),
 new capaItem("防守"), new capaItem("体力"), new capaItem("速度"), new capaItem("守门"), new capaItem("侵略"), new capaItem("任意球")];
 let perfColumns: Array<Object> = [new perfItem("姓名"), new perfItem("出场"), new perfItem("进球"), new perfItem("助攻"), new perfItem("平均评分"),

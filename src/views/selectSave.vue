@@ -154,7 +154,7 @@ const SelectLeagues = (): void => {
     leagueShowModal.value = false;
     clubShowModal.value = true;
 }
-const ChangeCompetition = (key: any, item: any): void => {
+const ChangeCompetition = (_key: any, item: any): void => {
     item.clubs.forEach(function (element: any, index: number) {
         teamList.value[index] = { name: element.name, finance: element.finance, reputation: element.reputation };
     })
