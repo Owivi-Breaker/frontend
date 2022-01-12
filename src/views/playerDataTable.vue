@@ -2,10 +2,10 @@
     <n-h1>球员数据总览</n-h1>
     <n-tabs default-value="capa" size="large" type="card">
         <n-tab-pane name="capa" tab="能力">
-            <n-data-table :columns="capaColumns" :data="capaData" :loading="isLoading" striped/>
+            <n-data-table :columns="capaColumns" :data="capaData" :loading="capaLoading" striped />
         </n-tab-pane>
         <n-tab-pane name="perf" tab="表现">
-            <n-data-table :columns="perfColumns" :data="perfData" :loading="isLoading" striped/>
+            <n-data-table :columns="perfColumns" :data="perfLoading ? [] : perfData" :loading="perfLoading" striped />
         </n-tab-pane>
     </n-tabs>
 </template>
@@ -18,30 +18,38 @@ import { NTag } from "naive-ui";
 
 let rawCapaData: Ref = ref([]);
 let rawPerfData: Ref = ref([]);
-let isLoading: Ref<boolean> = ref(true);
+let capaLoading: Ref<boolean> = ref(true);
+let perfLoading: Ref<boolean> = ref(true);
 let clubId: number;
-getSaveMeAPI().then(response => {
-    let gameSeason: number = response.season;
-    clubId = response.player_club_id;
-    getPlayersByClubAPI({ club_id: clubId, is_player_club: true }).then(response => {
-        rawCapaData.value = response;
-        for (let i: number = 0; i < rawCapaData.value.length; i++) {
-            let id: number = rawCapaData.value[i].id;
-            getPlayerTotalGameDataAPI({
-                player_id: id,
-                start_season: gameSeason,
-                end_season: gameSeason
-            }).then(response => {
-                response["姓名"] = rawCapaData.value[i]["姓名"];
-                rawPerfData.value.push(response);
-            }).catch((_error: {}) => {
-            });
-        }
-        isLoading.value = false;
-    }).catch((_error: {}) => {
-    });
-}).catch((_error: {}) => {
-});
+getSaveMeAPI()
+    .then(response => {
+        let gameSeason: number = response.season;
+        clubId = response.player_club_id;
+        getPlayersByClubAPI({ club_id: clubId, is_player_club: true })
+            .then(response => {
+                rawCapaData.value = response;
+                capaLoading.value = false;
+                let count = 0;
+                for (let i: number = 0; i < rawCapaData.value.length; i++) {
+                    let id: number = rawCapaData.value[i].id;
+                    getPlayerTotalGameDataAPI({
+                        player_id: id,
+                        start_season: gameSeason,
+                        end_season: gameSeason
+                    })
+                        .then(response => {
+                            response["姓名"] = rawCapaData.value[i]["姓名"] ? rawCapaData.value[i]["姓名"] : rawCapaData.value[i]["translated_name"];
+                            rawPerfData.value.push(response);
+                            count++;
+                            if (count === 24) {
+                                perfLoading.value = false;
+                            }
+                        })
+                        .catch((_error: {}) => { });
+                }
+            }).catch((_error: {}) => { });
+    })
+    .catch((_error: {}) => { });
 let capaData: ComputedRef<any> = computed(() =>
     rawCapaData.value.map((value: any) => {
         value["姓名"] = value["translated_name"];
@@ -158,9 +166,9 @@ class perfItem {
 }
 
 let capaColumns: Array<Object> = [new capaItem("姓名"), new capaItem("年龄"), new capaItem("国籍"), new capaItem("射门"), new capaItem("过人"),
-    new capaItem("防守"), new capaItem("体力"), new capaItem("速度"), new capaItem("守门"), new capaItem("侵略"), new capaItem("任意球")];
+new capaItem("防守"), new capaItem("体力"), new capaItem("速度"), new capaItem("守门"), new capaItem("侵略"), new capaItem("任意球")];
 let perfColumns: Array<Object> = [new perfItem("姓名"), new perfItem("出场"), new perfItem("进球"), new perfItem("助攻"), new perfItem("平均评分"),
-    new perfItem("传球（总/成功）"), new perfItem("抢断（总/成功）"), new perfItem("过人（总/成功）"), new perfItem("争顶（总/成功）")];
+new perfItem("传球（总/成功）"), new perfItem("抢断（总/成功）"), new perfItem("过人（总/成功）"), new perfItem("争顶（总/成功）")];
 </script>
 <style>
 </style>
