@@ -79,28 +79,41 @@ let capaData: ComputedRef<any> = computed(() =>
         return value;
     })
 );
+let perfMax: any = {
+    "出场": 0,
+    "进球": 0,
+    "助攻": 0,
+    "平均评分": 0,
+    "传球总": 0,
+    "传球成功": 0,
+    "抢断总": 0,
+    "抢断成功": 0,
+    "过人总": 0,
+    "过人成功": 0,
+    "争顶总": 0,
+    "争顶成功": 0,
+};
 let perfData: ComputedRef<any> = computed(() =>
     rawPerfData.value.map((value: any) => {
-        value["出场"] = value["appearance"];
-        delete value["appearance"];
-        value["进球"] = value["goals"];
-        delete value["goals"];
-        value["助攻"] = value["assists"];
-        delete value["assists"];
-        value["平均评分"] = Math.round(value["final_rating"] * 10) / 10;
-        delete value["final_rating"];
-        value["传球（总/成功）"] = value["passes"] + "/" + value["pass_success"];
-        delete value["passes"];
-        delete value["pass_success"];
-        value["抢断（总/成功）"] = value["tackles"] + "/" + value["tackle_success"];
-        delete value["tackles"];
-        delete value["tackle_success"];
-        value["过人（总/成功）"] = value["dribbles"] + "/" + value["dribble_success"];
-        delete value["dribbles"];
-        delete value["dribble_success"];
-        value["争顶（总/成功）"] = value["aerials"] + "/" + value["aerial_success"];
-        delete value["aerials"];
-        delete value["aerial_success"];
+        function deal(key: string, rawKey: string): void {
+            value[key] = value[rawKey];
+            delete value[rawKey];
+            if (value[key] > perfMax[key]) {
+                perfMax[key] = value[key];
+            }
+        }
+        deal("出场", "appearance");
+        deal("进球", "goals");
+        deal("助攻", "assists");
+        deal("平均评分", "final_rating");
+        deal("传球总", "passes");
+        deal("传球成功", "pass_success");
+        deal("抢断总", "tackles");
+        deal("抢断成功", "tackle_success");
+        deal("过人总", "dribbles");
+        deal("过人成功", "dribble_success");
+        deal("争顶总", "aerials");
+        deal("争顶成功", "aerial_success");
         return value;
     })
 );
@@ -119,25 +132,19 @@ class capaItem {
         this.key = title;
         this.fixed = title === "姓名" ? "left" : null;
         this.width = title === "姓名" ? 150 : null;
-        this.align = title === "姓名" || title === "国籍" ? "left" : "center";
+        this.align = "left";
         if (title === "年龄") {
             this.render = (row: any) => {
                 return h(NTag, { style: { marginRight: "6px" }, type: "info" }, { default: () => row["年龄"] });
             }
         } else {
             this.render = (row: any) => {
-                return h("p", {
-                    style: {
-                        "margin": 0,
-                        "color": getColor(row[this.key], "text")
-                    },
-                }, { default: () => row[this.key] });
+                return h("p", { style: { "margin": 0, "color": getColor(row[this.key], "text") } }, { default: () => row[this.key] });
             }
         }
         this.sorter = "default";
     }
 }
-
 class perfItem {
     title: string;
     key: string;
@@ -152,14 +159,43 @@ class perfItem {
         this.key = title;
         this.fixed = title === "姓名" ? "left" : null;
         this.width = title === "姓名" ? 150 : null;
-        this.align = title === "姓名" ? "left" : "center";
-        this.render = (row: any) => {
-            return h("p", {
-                style: {
-                    "margin": 0,
-                    "color": getColor(row[this.key], "text")
-                },
-            }, { default: () => row[this.key] });
+        this.align = "left";
+        if (title === "姓名" || title === "出场" || title === "进球" || title === "助攻" || title === "平均评分") {
+            this.render = (row: any) => {
+                return h("p", {
+                    style: {
+                        "margin": 0,
+                        "color": getColor(row[this.key], "text", 0, perfMax[title])
+                    },
+                }, { default: () => row[this.key] });
+            }
+        }
+        else {
+            let sumKey: string = this.key.slice(0, 2);
+            this.render = (row: any) => {
+                return h("p", {
+                    style: {
+                        "margin": 0,
+                        "color": getColor(row[this.key], "text", 0, perfMax[title])
+                    },
+                }, {
+                    default: () => [
+                        h("span", {
+                            style: {
+                                "margin": 0,
+                                "color": getColor(row[sumKey + "总"], "text", 0, perfMax[sumKey + "总"])
+                            },
+                        }, { default: () => row[sumKey + "总"] }),
+                        " / ",
+                        h("span", {
+                            style: {
+                                "margin": 0,
+                                "color": getColor(row[sumKey + "成功"], "text", 0, perfMax[sumKey + "成功"])
+                            },
+                        }, { default: () => row[sumKey + "成功"] })
+                    ]
+                });
+            }
         }
         this.sorter = "default";
     }
