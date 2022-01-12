@@ -75,11 +75,9 @@
 import { ref, defineComponent, onMounted } from "vue";
 import { Ref } from "@vue/reactivity";
 import { storage } from '../utils';
-import { useMessage } from "naive-ui";
-import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
 import fiveLeagues from "@/assets/json/five-leagues-list.json";
 import superLeagues from "@/assets/json/super-leagues-list.json";
-import { Router, useRouter } from "vue-router";
+import { Router } from "vue-router";
 import { IosCheckmark } from '@vicons/ionicons4';
 import { getSaveAPI, createSaveAPI } from '@/apis/save'
 
@@ -91,8 +89,6 @@ let leagueOptions: Ref<Array<{ label: string, value: string }>> = ref([
 let clubShowModal: Ref<boolean> = ref(false);
 let showGoButton: Ref<number> = ref(-1);
 let loadShowModal: Ref<boolean> = ref(false);
-let message: MessageApiInjection = useMessage();
-let router: Router = useRouter();
 let isSelectLoading: Ref<boolean> = ref(false);
 defineComponent({
     components: {
@@ -121,13 +117,13 @@ onMounted(
     }
 )
 
-
+declare const window: Window & { $router: Router };
 // 存储存档id
 let choseSave: Ref<any> = ref(null);
 const Enter = (): void => {
     if (choseSave.value) {
         storage.set("saveId", choseSave.value);
-        router.push({ name: "home" });
+        window.$router.push({ name: "home" });
     }
 }
 
@@ -174,7 +170,7 @@ const NewSave = (index: number): void => {
         loadComplete.value = true;
         loadTitle.value = "创建成功";
         //setTimeout(() => {
-        router.push({ name: "home" });
+        window.$router.push({ name: "home" });
         //}, 2000);
     }).catch((_error: {}) => { });
 }

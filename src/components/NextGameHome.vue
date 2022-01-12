@@ -34,8 +34,7 @@
 </template>
 <script lang="ts" setup>
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
-import { ref } from "vue";
-import { Ref } from "@vue/reactivity";
+import { ref, Ref } from "vue";
 import { getIncomingGamesAPI } from "@/apis/club";
 import { getDateAPI } from '@/apis/user';
 let teams: Ref<Array<string>> = ref(["", ""]);

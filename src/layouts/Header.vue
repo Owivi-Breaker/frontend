@@ -24,9 +24,7 @@
     </n-modal>
 </template>
 <script lang="ts" setup>
-import { defineComponent, ref, onMounted } from "vue";
-import { Ref } from "@vue/reactivity";
-import { NIcon } from "naive-ui";
+import { defineComponent, ref, onMounted, Ref } from "vue";
 import { ExitOutline, Exit } from "@vicons/ionicons5";
 import { Router } from "vue-router";
 import { storage } from "../utils";
@@ -44,7 +42,7 @@ onMounted(
     () => {
         getDateAPI().then(response => {
             curDate.value = response.date;
-        })
+        }).catch((_error: {}) => { });
     }
 );
 declare const window: Window & { $router: Router };

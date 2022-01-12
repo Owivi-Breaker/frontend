@@ -20,35 +20,26 @@ let rawPerfData: Ref = ref([]);
 let capaLoading: Ref<boolean> = ref(true);
 let perfLoading: Ref<boolean> = ref(true);
 let clubId: number;
-getSaveMeAPI()
-    .then(response => {
-        let gameSeason: number = response.season;
-        clubId = response.player_club_id;
-        getPlayersByClubAPI({ club_id: clubId, is_player_club: true })
-            .then(response => {
-                rawCapaData.value = response;
-                capaLoading.value = false;
-                let count = 0;
-                for (let i: number = 0; i < rawCapaData.value.length; i++) {
-                    let id: number = rawCapaData.value[i].id;
-                    getPlayerTotalGameDataAPI({
-                        player_id: id,
-                        start_season: gameSeason,
-                        end_season: gameSeason
-                    })
-                        .then(response => {
-                            response["姓名"] = rawCapaData.value[i]["姓名"] ? rawCapaData.value[i]["姓名"] : rawCapaData.value[i]["translated_name"];
-                            rawPerfData.value.push(response);
-                            count++;
-                            if (count === 24) {
-                                perfLoading.value = false;
-                            }
-                        })
-                        .catch((_error: {}) => { });
+getSaveMeAPI().then(response => {
+    let gameSeason: number = response.season;
+    clubId = response.player_club_id;
+    getPlayersByClubAPI({ club_id: clubId, is_player_club: true }).then(response => {
+        rawCapaData.value = response;
+        capaLoading.value = false;
+        let count = 0;
+        for (let i: number = 0; i < rawCapaData.value.length; i++) {
+            let id: number = rawCapaData.value[i].id;
+            getPlayerTotalGameDataAPI({ player_id: id, start_season: gameSeason, end_season: gameSeason }).then(response => {
+                response["姓名"] = rawCapaData.value[i]["姓名"] ? rawCapaData.value[i]["姓名"] : rawCapaData.value[i]["translated_name"];
+                rawPerfData.value.push(response);
+                count++;
+                if (count === 24) {
+                    perfLoading.value = false;
                 }
             }).catch((_error: {}) => { });
-    })
-    .catch((_error: {}) => { });
+        }
+    }).catch((_error: {}) => { });
+}).catch((_error: {}) => { });
 let capaData: ComputedRef<any> = computed(() =>
     rawCapaData.value.map((value: any) => {
         value["姓名"] = value["translated_name"];

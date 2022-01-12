@@ -1,24 +1,19 @@
 <template>
     <n-layout-sider :collapsed-width="64" :native-scrollbar="false" :width="240" bordered collapse-mode="width" show-trigger>
         <div class="icon">
-            <img alt="logo" class="img" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" />
+            <img alt="logo" class="img" src="http://s1.s100.vip:13127/Public/logo.png" />
         </div>
         <n-menu :collapsed-icon-size="22" :collapsed-width="64" :options="menuOptions" />
     </n-layout-sider>
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, h, ref } from 'vue';
+import { h } from 'vue';
 import { RouterLink } from 'vue-router';
-import {
-    BookOutline as BookIcon,
-    PersonOutline as PersonIcon,
-    WineOutline as WineIcon,
-} from '@vicons/ionicons5';
+import { BookOutline as BookIcon, PersonOutline as PersonIcon, WineOutline as WineIcon, } from '@vicons/ionicons5';
 import { NIcon } from 'naive-ui';
 
 
-const inverted = ref(false)
 
 function renderIcon(icon: any) {
     return () => h(NIcon, null, { default: () => h(icon) })
