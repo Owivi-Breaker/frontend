@@ -15,16 +15,16 @@ router.beforeEach(to => {
         document.title = title;
     }
     const token = storage.get('token');
-    const saveID = storage.get("saveID");
+    const saveId = storage.get("saveId");
     // allreay authorized
-    if (to.name === 'login' && token != null || to.name === 'selectSave' && token != null && saveID != null) {
+    if (to.name === 'login' && token != null || to.name === 'selectSave' && token != null && saveId != null) {
         return to.query.redirect?.toString() ?? '/'
     }
     // need authorize & token is invalid
     if (to.meta.requiresAuth === true && token == null) {
         return { name: 'login', query: { redirect: to.fullPath } } // 保存我们所在的位置，以便以后再来
     }
-    if (to.meta.requiresAuth === true && saveID == null) {
+    if (to.meta.requiresAuth === true && saveId == null) {
         return { name: 'selectSave', query: { redirect: to.fullPath } } // 保存我们所在的位置，以便以后再来
     }
 })

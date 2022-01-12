@@ -1,18 +1,32 @@
 <template>
     <n-card class="nextGameCard" title="下一场比赛-未开始">
-        <div class="teams">
-            <svg class="avatar">
-                <Avataaars />
-            </svg>
-            <span class="name">{{ teams[0] }}</span>
-            <span style="width: 100px;"></span>
-            <span class="point">0&nbsp;&nbsp;:&nbsp;&nbsp;0</span>
-            <span style="width: 100px;"></span>
-            <span class="name">{{ teams[1] }}</span>
-            <svg class="avatar">
-                <Avataaars />
-            </svg>
-        </div>
+        <n-grid x-gap="12" :cols="21">
+            <n-gi span="10">
+                <div class="firstTeam">
+                    <svg class="avatar">
+                        <Avataaars />
+                    </svg>
+                    <span class="tenSpan"></span>
+                    <span class="name">{{ teams[0] }}</span>
+                    <span class="fiveSpan"></span>
+                    <span class="point">0</span>
+                </div>
+            </n-gi>
+            <n-gi span="1">
+                <div class="colon">:</div>
+            </n-gi>
+            <n-gi span="10">
+                <div class="secondTeam">
+                    <span class="point">0</span>
+                    <span class="tenSpan"></span>
+                    <span class="name">{{ teams[1] }}</span>
+                    <span class="fiveSpan"></span>
+                    <svg class="avatar">
+                        <Avataaars />
+                    </svg>
+                </div>
+            </n-gi>
+        </n-grid>
         <div class="gameName">{{ nextGameName }}</div>
         <div class="date">比赛时间&nbsp;{{ nextGameDate }}</div>
         <div class="fromNow">距今还有&nbsp;{{ distance }}&nbsp;天</div>
@@ -43,9 +57,14 @@ getIncomingGamesAPI().then(response => {
 .nextGameCard {
     margin-bottom: 16px;
 }
-.teams {
+.firstTeam {
     display: flex;
-    justify-content: center;
+    justify-content: end;
+    align-items: Center;
+}
+.secondTeam {
+    display: flex;
+    justify-content: start;
     align-items: Center;
 }
 .name {
@@ -59,5 +78,20 @@ getIncomingGamesAPI().then(response => {
 .fromNow {
     text-align: center;
     font-size: large;
+}
+.colon {
+    font-size: 50px;
+    text-align: center;
+}
+.tenSpan {
+    width: 10%;
+}
+.fiveSpan {
+    width: 5%;
+}
+.avatar {
+    width: 80px;
+    height: 80px;
+    padding: 5px;
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
     <div class="registerDiv">
-        <img id="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" alt="logo" />
+        <img id="logo" name="logo" src="http://s1.s100.vip:13127/Public/logo.png" alt="logo" />
         <p id="title">注册</p>
         <n-form id="form" :show-label="false" :model="formValue" :rules="rules" ref="formRef">
             <n-form-item label="用户名" path="username">
@@ -37,15 +37,10 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ref } from "vue";
-import { Ref } from "@vue/reactivity";
-import { Router, useRouter } from "vue-router";
-import { MessageApiInjection } from "naive-ui/lib/message/src/MessageProvider";
-import { useMessage } from "naive-ui";
+import { ref, Ref } from "vue";
+import { Router } from "vue-router";
 import { createUserAPI } from '@/apis/user';
 import { getProtocolAPI } from '@/apis/login';
-
-
 interface Form {
     username: string;
     password: string;
@@ -55,19 +50,17 @@ let formRef: Ref<any> = ref(null);
 let formValue: Ref<Form> = ref({ username: "", password: "", passwordAgain: "" });
 let readProtocol: Ref<boolean> = ref(true);
 let showModal: Ref<boolean> = ref(false);
-let message: MessageApiInjection = useMessage();
-let router: Router = useRouter();
 let protocol: Ref<string> = ref("");
 /* 用户注册 */
 // 表单规则
 let rules: object = {
     username: {
         required: true,
-        validator(rule: any, value: string) {
+        validator(_rule: any, value: string) {
             if (!value) {
                 return new Error("请输入邮箱或手机号。");
             }
-            else if (!/^(\w+@(\w+\.)+\w+)|([0-9]{11})|(\w+)$/.test(value)) {
+            else if (!/^(\w+@(\w+\.)+\w+)|([0-9]{11})$/.test(value)) {
                 return new Error("请输入正确的邮箱或手机号。");
             }
             return true;
@@ -81,7 +74,7 @@ let rules: object = {
     },
     passwordAgain: {
         required: true,
-        validator(rule: any, value: string) {
+        validator(_rule: any, value: string) {
             if (!value) {
                 return new Error("请输入重复密码。");
             }
@@ -93,6 +86,7 @@ let rules: object = {
         trigger: ["input", "blur"]
     }
 };
+declare const window: Window & { $message: any, $router: Router };
 function postRegister(): void {
     formRef.value.validate((errors: boolean) => {
         if (!errors) {
@@ -100,30 +94,15 @@ function postRegister(): void {
                 email: formValue.value.username,
                 is_active: true,
                 password: formValue.value.password
-            })
-                .then(response => {
-                    message.success("注册成功。");
-                    setTimeout(() => { router.push({ name: "login" }); }, 800);
-                }).catch(error => {
-                    switch (error.message) {
-                        case "Request failed with status code 404":
-                        case "Network Error":
-                            message.error("注册失败，网络错误。");
-                            break;
-                        case "Request failed with status code 400":
-                            switch (error.response.data.detail) {
-                                case "Email already registered":
-                                    message.error("注册失败，用户名已存在。");
-                                    break;
-                            }
-                            break;
-                        default:
-                            message.error("注册失败。");
-                            break;
-                    }
-                });
-        } else {
-            message.error("注册失败。");
+            }).then(_response => {
+                window.$message.success("注册成功");
+                // setTimeout(() => {
+                window.$router.push({ name: "login" });
+                // }, 800);
+            }).catch((_error: {}) => { });
+        }
+        else {
+            window.$message.error("请正确输入信息");
         }
     })
 }

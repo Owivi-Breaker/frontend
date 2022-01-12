@@ -126,7 +126,7 @@ onMounted(
 let choseSave: Ref<any> = ref(null);
 const Enter = (): void => {
     if (choseSave.value) {
-        storage.set("saveID", choseSave.value);
+        storage.set("saveId", choseSave.value);
         router.push({ name: "home" });
     }
 }
@@ -169,34 +169,20 @@ const NewSave = (index: number): void => {
     createSaveAPI({
         type: leagueValue.value === "五大联赛" ? "five_leagues" : "super_leagues",
         player_club_name: teamList.value[index].name
-    })
-        .then(response => {
-            storage.set("saveID", response.id);
-            loadComplete.value = true;
-            loadTitle.value = "创建成功";
-            setTimeout(() => {
-                router.push({ name: "home" });
-            }, 2000);
-        }).catch(error => {
-            switch (error.message) {
-                case "Request failed with status code 404":
-                case "Network Error":
-                    message.error("创建失败，网络错误。");
-                    break;
-                default:
-                    message.error("创建失败。");
-                    break;
-            }
-        });
+    }).then(response => {
+        storage.set("saveId", response.id);
+        loadComplete.value = true;
+        loadTitle.value = "创建成功";
+        //setTimeout(() => {
+        router.push({ name: "home" });
+        //}, 2000);
+    }).catch((_error: {}) => { });
 }
 </script>
-
-
 <style>
 body {
     background-image: url("http://s1.s100.vip:13127/Public/background.png");
 }
-
 .selectSaveDiv {
     text-align: center;
     width: 300px;
@@ -208,85 +194,68 @@ body {
     right: 0;
     bottom: 0;
 }
-
 #logo {
     width: 100px;
 }
-
 .title {
     color: white;
     font-size: 20px;
 }
-
 .saveButtonDiv {
     margin-top: 20px;
     text-align: left;
 }
-
 .beginGameButton {
     margin-left: 131px;
 }
-
 .selectSave {
     margin-top: 20px;
     text-align: left;
 }
-
 .leagueModalCard {
     width: 400px;
 }
-
 .leagueSelect {
     display: inline-block;
     width: 200px;
 }
-
 .clubModalCard {
     width: 1372px;
     height: 768px;
 }
-
 .competetionMenuBar {
     max-height: 600px;
 }
-
 .teamBar {
     max-height: 600px;
 }
-
 .emptySelectSaveDiv {
     width: 300px;
     margin-left: -19px;
 }
-
 .teamCard {
     display: inline-block;
     margin: 10px;
     width: 320px;
     height: 180px;
 }
-
 .teamInformationDiv {
     display: inline-block;
     vertical-align: middle;
 }
-
 .goButton {
     margin-left: 100px;
     vertical-align: middle;
 }
-
 .bottomButton {
     position: absolute;
     bottom: 15px;
 }
-
 .loadModalCard {
     width: 320px;
     height: 180px;
     text-align: center;
 }
-
 .completeCreateSaveIcon {
     margin-top: -30px;
 }

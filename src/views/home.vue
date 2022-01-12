@@ -14,3 +14,8 @@ import NextGameHome from "@/components/NextGameHome.vue";
 import MailBoxHome from "@/components/MailBoxHome.vue";
 import PointsTableHome from "@/components/PointsTableHome.vue";
 </script>
+<style>
+body {
+    background-image: none;
+}
+</style>

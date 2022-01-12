@@ -53,7 +53,7 @@ function goPre(): void {
 }
 function ExitLogin(): void {
     storage.remove("token");
-    storage.remove("saveID");
+    storage.remove("saveId");
     window.$router.push({ name: "login" });
 }
 function nextDay(): void {

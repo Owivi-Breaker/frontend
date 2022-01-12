@@ -21,17 +21,17 @@ service.interceptors.request.use(
             config.headers['authorization'] = 'Bearer ' + token;
         }
 
-        // 在此统一添加saveID
-        const saveID = storage.get('saveID');
-        if (saveID) {
+        // 在此统一添加saveId
+        const saveId = storage.get('saveId');
+        if (saveId) {
             if (config.method === 'post') {
                 config.data = {
-                    saveID: saveID,
+                    saveId: saveId,
                     ...config.data
                 };
             } else if (config.method === 'get') {
                 config.params = {
-                    save_id: saveID,
+                    save_id: saveId,
                     ...config.params
                 };
             }
@@ -66,11 +66,15 @@ service.interceptors.response.use(
             console.log(error.response)
             switch (error.response.status) {
                 case 400:
-                    //error.message = '错误请求'
+                    switch (error.response.data.detail) {
+                        case "Email already registered":
+                            window.$message.error("注册失败，用户名已存在。");
+                            break;
+                    }
                     break;
                 case 401:
                     storage.remove("token");
-                    storage.remove("saveID");
+                    storage.remove("saveId");
                     switch (error.response.data.detail) {
                         case 'Incorrect username or password':
                             window.$message.error("账号或密码错误");
