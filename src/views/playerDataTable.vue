@@ -59,21 +59,21 @@ let capaData: ComputedRef<any> = computed(() =>
         value["国籍"] = value["translated_nationality"];
         delete value["translated_nationality"];
         if (value["capa"]) {
-            value["射门"] = Math.round(value["capa"]["shooting"]);
+            value["射门"] = Math.round(value["capa"]["shooting"] * 100) / 100;
             delete value["capa"]["shooting"];
-            value["过人"] = Math.round(value["capa"]["dribbling"]);
+            value["过人"] = Math.round(value["capa"]["dribbling"] * 100) / 100;
             delete value["capa"]["dribbling"];
-            value["防守"] = Math.round(value["capa"]["interception"]);
+            value["防守"] = Math.round(value["capa"]["interception"] * 100) / 100;
             delete value["capa"]["interception"];
-            value["体力"] = Math.round(value["capa"]["stamina"]);
+            value["体力"] = Math.round(value["capa"]["stamina"] * 100) / 100;
             delete value["capa"]["stamina"];
-            value["速度"] = Math.round(value["capa"]["pace"]);
+            value["速度"] = Math.round(value["capa"]["pace"] * 100) / 100;
             delete value["capa"]["pace"];
-            value["守门"] = Math.round(value["capa"]["goalkeeping"]);
+            value["守门"] = Math.round(value["capa"]["goalkeeping"] * 100) / 100;
             delete value["capa"]["goalkeeping"];
-            value["侵略"] = Math.round(value["capa"]["aggression"]);
+            value["侵略"] = Math.round(value["capa"]["aggression"] * 100) / 100;
             delete value["capa"]["aggression"];
-            value["任意球"] = Math.round(value["capa"]["free_kick"]);
+            value["任意球"] = Math.round(value["capa"]["free_kick"] * 100) / 100;
             delete value["capa"]["free_kick"];
         }
         return value;
@@ -98,6 +98,9 @@ let perfData: ComputedRef<any> = computed(() =>
         function deal(key: string, rawKey: string): void {
             value[key] = value[rawKey];
             delete value[rawKey];
+            if (key === "平均评分") {
+                value[key] = Math.round(value[key] * 100) / 100;
+            }
             if (value[key] > perfMax[key]) {
                 perfMax[key] = value[key];
             }
