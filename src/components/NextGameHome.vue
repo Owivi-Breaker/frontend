@@ -1,5 +1,6 @@
 <template>
     <n-card class="nextGameCard" title="下一场比赛-未开始">
+        <n-spin style="margin-left: 49%;" size="medium" v-if="isLoading" />
         <div v-if="!isLoading">
             <n-grid :cols="21" x-gap="12">
                 <n-gi span="10">
