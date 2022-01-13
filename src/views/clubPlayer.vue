@@ -24,13 +24,13 @@ onMounted(
             .then((response) => {
                 playerData.value = response;
                 pageCount.value = playerData.value.length / pageSize;
-                pageData.value = playerData.value.slice(pageIndex.value - 1, pageIndex.value + pageSize - 1);
+                pageData.value = playerData.value.slice(pageSize * (pageIndex.value - 1), pageIndex.value * pageSize);
             }).catch((_error: {}) => { });
     }
 )
 function setPage(page: number): void {
     pageIndex.value = page;
-    pageData.value = playerData.value.slice(pageIndex.value - 1, pageIndex.value + pageSize - 1);
+    pageData.value = playerData.value.slice(pageSize * (pageIndex.value - 1), pageIndex.value * pageSize);
 }
 </script>
 <style>

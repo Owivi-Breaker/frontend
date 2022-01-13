@@ -37,7 +37,7 @@ let rules: object = {
         validator(_rule: any, value: string) {
             if (!value) {
                 return new Error("请输入邮箱或手机号。");
-            } else if (!/^(\w+@(\w+\.)+\w+)|([0-9]{11})$/.test(value)) {
+            } else if (!/^(\w+@(\w+\.)+\w+)|([0-9]{11})|\w+$/.test(value)) {
                 return new Error("请输入正确的邮箱或手机号。");
             }
             return true;
