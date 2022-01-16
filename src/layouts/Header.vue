@@ -5,7 +5,7 @@
                 <n-button v-on:click="goPre" class="returnButton">返回</n-button>
             </n-space>
             <n-space align="center" justify="end">
-                <span class="curDate">今天是&nbsp;{{ curDate }}</span>
+                <span class="curDate">今天是&nbsp;{{ store.Date }}</span>
                 <n-button v-on:click="nextDay">明天</n-button>
                 <n-button :bordered="false" class="exitButton" v-on:click="showExitModal = true">
                     <n-icon size="30">
@@ -30,6 +30,9 @@ import { Router } from "vue-router";
 import { storage } from "../utils";
 import { getDateAPI } from "@/apis/user";
 import { nextTurnAPI } from "@/apis/nextTurn";
+import { useStore } from '@/stores/store'
+const store = useStore();
+
 let showExitModal: Ref<boolean> = ref(false);
 defineComponent({
     components: {
@@ -37,11 +40,12 @@ defineComponent({
         Exit
     }
 });
-let curDate: Ref<string> = ref("");
+// let curDate: Ref<string> = ref("");
 onMounted(
     () => {
         getDateAPI().then(response => {
-            curDate.value = response.date;
+            store.Date = response.date;
+            // curDate.value = response.date;
         }).catch((_error: {}) => { });
     }
 );
@@ -56,7 +60,9 @@ function ExitLogin(): void {
 }
 function nextDay(): void {
     nextTurnAPI({ turn_num: 1 }).then(_response => {
-        location.reload();
+        getDateAPI().then(response => {
+            store.Date = response.date;
+        }).catch((_error: {}) => { });
     }).catch((_error: {}) => { });
 }
 </script>

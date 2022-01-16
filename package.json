@@ -10,6 +10,7 @@
   "dependencies": {
     "@vicons/ionicons-v5": "0.0.4",
     "echarts": "^5.2.2",
+    "pinia": "^2.0.9",
     "qs": "^6.10.1",
     "vue": "^3.2.6",
     "vue-tsc": "^0.3.0",

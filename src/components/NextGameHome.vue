@@ -32,24 +32,38 @@
     </n-card>
 </template>
 <script lang="ts" setup>
-import { ref, Ref } from "vue";
+import { ref, Ref, watch } from "vue";
 import { getIncomingGamesAPI } from "@/apis/club";
-import { getDateAPI } from '@/apis/user';
+import { useStore } from '@/stores/store'
+const store = useStore();
 let isLoading: Ref<boolean> = ref(true);
 let teams: Ref<Array<string>> = ref(["", ""]);
 let nextGameName: Ref<string> = ref("");
 let nextGameDate: Ref<string> = ref("");
 let distance: Ref<Number> = ref(0);
+let curDate: Ref<Number> = ref(0);
+watch(() => store.Date, (newValue, oldValue) => {
+    // console.log(newValue, oldValue, '改变')
+    curDate = (new Date(store.Date)).getTime() / 1000;
+    distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
+    if(distance.value == 0){
+        getIncomingGamesAPI().then(response => {
+            nextGameName.value = response[0].game_name;
+            nextGameDate.value = response[0].date;
+            teams.value[0] = response[0].club1_name;
+            teams.value[1] = response[0].club2_name;
+            distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
+        }).catch((_error: {}) => { });
+    }
+})
 getIncomingGamesAPI().then(response => {
     nextGameName.value = response[0].game_name;
     nextGameDate.value = response[0].date;
     teams.value[0] = response[0].club1_name;
     teams.value[1] = response[0].club2_name;
-    getDateAPI().then(response => {
-        let curDate: number = (new Date(response.date)).getTime() / 1000;
-        distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
-        isLoading.value = false;
-    }).catch((_error: {}) => { });
+    curDate = (new Date(store.Date)).getTime() / 1000;
+    distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
+    isLoading.value = false;
 }).catch((_error: {}) => { });
 </script>
 <style>
