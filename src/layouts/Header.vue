@@ -31,6 +31,7 @@ import { storage } from "../utils";
 import { getDateAPI } from "@/apis/user";
 import { nextTurnAPI } from "@/apis/nextTurn";
 import { useStore } from '@/stores/store'
+import { getPlayersByClubAPI } from "@/apis/player";
 const store = useStore();
 
 let showExitModal: Ref<boolean> = ref(false);
@@ -40,13 +41,15 @@ defineComponent({
         Exit
     }
 });
-// let curDate: Ref<string> = ref("");
 onMounted(
     () => {
         getDateAPI().then(response => {
             store.Date = response.date;
-            // curDate.value = response.date;
         }).catch((_error: {}) => { });
+        getPlayersByClubAPI({ club_id: 1, is_player_club: true }).then((response) => {
+            store.playerData = response;
+        }).catch((_error: {}) => {
+        });
     }
 );
 declare const window: Window & { $router: Router };

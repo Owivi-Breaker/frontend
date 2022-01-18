@@ -41,7 +41,7 @@ let teams: Ref<Array<string>> = ref(["", ""]);
 let nextGameName: Ref<string> = ref("");
 let nextGameDate: Ref<string> = ref("");
 let distance: Ref<Number> = ref(0);
-let curDate: Ref<Number> = ref(0);
+let curDate: number;
 watch(() => store.Date, (newValue, oldValue) => {
     // console.log(newValue, oldValue, '改变')
     curDate = (new Date(store.Date)).getTime() / 1000;
