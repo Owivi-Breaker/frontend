@@ -24,14 +24,13 @@
     </n-modal>
 </template>
 <script lang="ts" setup>
-import { defineComponent, ref, onMounted, Ref } from "vue";
+import { defineComponent, ref, Ref } from "vue";
 import { ExitOutline, Exit } from "@vicons/ionicons5";
 import { Router } from "vue-router";
 import { storage } from "../utils";
 import { getDateAPI } from "@/apis/user";
 import { nextTurnAPI } from "@/apis/nextTurn";
 import { useStore } from '@/stores/store'
-import { getPlayersByClubAPI } from "@/apis/player";
 const store = useStore();
 
 let showExitModal: Ref<boolean> = ref(false);
@@ -41,17 +40,7 @@ defineComponent({
         Exit
     }
 });
-onMounted(
-    () => {
-        getDateAPI().then(response => {
-            store.Date = response.date;
-        }).catch((_error: {}) => { });
-        getPlayersByClubAPI({ club_id: 1, is_player_club: true }).then((response) => {
-            store.playerData = response;
-        }).catch((_error: {}) => {
-        });
-    }
-);
+
 declare const window: Window & { $router: Router };
 function goPre(): void {
     window.$router.go(-1);

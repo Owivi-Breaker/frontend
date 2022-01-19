@@ -64,7 +64,7 @@
             <n-card>
                 <n-scrollbar style="max-height: 800px;" x-scrollable>
                     <n-space>
-                        <n-popover v-for="elem in playerData" raw trigger="click">
+                        <n-popover v-for="elem in store.playerData" raw trigger="click">
                             <template #trigger>
                                 <n-card
                                     :bordered="false"
@@ -129,6 +129,8 @@
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
 import { ref, reactive, onMounted, computed } from "vue";
 import { getPlayersByClubAPI } from "@/apis/player";
+import { useStore } from '@/stores/store'
+const store = useStore();
 
 //region 拖曳功能
 const posInfo = reactive({
@@ -610,19 +612,8 @@ const dragend = (event: DragEvent) => {
 // endregion
 
 // region 获取球员信息
-let playerData = ref([]);
-
-onMounted(
-    () => {
-        getPlayersByClubAPI({ club_id: 1, is_player_club: true })
-            .then((response) => {
-                playerData.value = response;
-            });
-    }
-)
-
 const getPlayerDataById = (id: number) => {
-    for (let p of playerData.value) {
+    for (let p of store.playerData) {
         if (p['id'] == id) {
             return p
         }
