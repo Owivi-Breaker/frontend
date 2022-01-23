@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from "vue";
+import { Ref, ref } from "vue";
 import { getPlayersByClubAPI } from "@/apis/player";
 
 // useStore could be anything like useUser, useCart
@@ -9,7 +9,10 @@ export const useStore = defineStore('main', {
         return {
             // all these properties will have their type inferred automatically
             Date: "",
-            playerData: [],
+            playerData: [] as any[],
+            perfData: [] as any[],
+            capaLoading: true,
+            perfLoading: true,
         }
     },
     getters: {},
