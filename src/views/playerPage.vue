@@ -305,7 +305,6 @@ const totalGameDataOption = computed(() => {
 
 let loNumChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
 let ratingChart: Ref<string> = ref("Chart" + Date.now() + Math.random());
-declare const window: Window & { $nextTick: any };
 onMounted(() => {
     getSaveMeAPI().then(response => {
         let gameSeason: number = response.season; // TODO 以后写到全局变量里去

@@ -1,9 +1,9 @@
 <template>
-    <n-grid cols="2">
+    <n-grid cols="3" x-gap="10">
         <n-gi>
             <n-card class="field">
                 <!--阵容块-->
-                <div v-for="(value,key) in posInfo" :style="value.fieldStyle">
+                <div v-for="(value, key) in posInfo" :style="value.fieldStyle">
                     <n-space justify="center">
                         <!--阵容槽-->
                         <div
@@ -51,14 +51,13 @@
                 </div>
 
                 <!--遮罩层-->
-                <template v-for="(value,key) in posInfo">
+                <template v-for="(value, key) in posInfo">
                     <div v-show="value.isMasked" :style="value.maskStyle" class="mask" @drop="fieldDrop($event, key)" @dragover.prevent>
                         <n-h4>{{ key }}</n-h4>
                     </div>
                 </template>
             </n-card>
         </n-gi>
-
         <n-gi>
             <!--选项栏-->
             <n-card>
@@ -122,14 +121,29 @@
                 </n-scrollbar>
             </n-card>
         </n-gi>
+        <n-gi>
+            <n-grid cols="1" y-gap="10">
+                <n-gi>
+                    <TacticalSelector></TacticalSelector>
+                </n-gi>
+                <n-gi>
+                    <n-space align="center" justify="end">
+                        <n-button v-on:click="skipGame">跳过比赛</n-button>
+                        <n-button color="#037dff" v-on:click="startGame">开始比赛</n-button>
+                    </n-space>
+                </n-gi>
+            </n-grid>
+        </n-gi>
     </n-grid>
 </template>
 
 <script lang="ts" setup>
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
-import { ref, reactive, onMounted, computed } from "vue";
+import { ref, reactive, onMounted, computed, Ref } from "vue";
 import { getPlayersByClubAPI } from "@/apis/player";
-import { useStore } from '@/stores/store'
+import { useStore } from '@/stores/store';
+import TacticalSelector from "@/components/TacticalSelector.vue";
+import { Router } from 'vue-router';
 const store = useStore();
 
 //region 拖曳功能
@@ -646,7 +660,15 @@ const getUltimateTactic = () => {
     }
     return re
 }
-
+function skipGame(): void {
+    // 告诉后端跳过比赛
+    window.$router.push({ name: "endGame" });
+}
+declare const window: Window & { $router: Router };
+function startGame(): void {
+    // 告诉后端开始比赛，调用/start-game接口
+    window.$router.push({ name: "onGame" });
+}
 </script>
 
 
