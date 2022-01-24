@@ -31,7 +31,10 @@ import { storage } from "../utils";
 import { getDateAPI } from "@/apis/user";
 import { nextTurnAPI } from "@/apis/nextTurn";
 import { useStore } from '@/stores/store'
+import key from 'keymaster'
 const store = useStore();
+
+key('space', function(){ nextDay() });
 
 let showExitModal: Ref<boolean> = ref(false);
 defineComponent({

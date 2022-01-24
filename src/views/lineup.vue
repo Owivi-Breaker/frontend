@@ -14,10 +14,15 @@
                             @drop="positionDrop($event, pos)"
                             @dragover.prevent
                         >
-                            <div v-if="position[pos]" class="avatar">
+                            <div v-if="position[pos]">
                                 <n-popover raw trigger="click">
                                     <template #trigger>
-                                        <Avataaars :isCircle="false" height="90%" v-bind="getAvatar(position[pos])" width="90%" />
+                                        <n-space vertical align="center">
+                                            <div style="height:50px;width:50px">
+                                                <Avataaars :isCircle="false" v-bind="getAvatar(position[pos])"/>
+                                            </div>
+                                            <n-h4>{{ getPlayerDataById(position[pos]).translated_name }}</n-h4>
+                                        </n-space>
                                     </template>
                                     <n-card :title="getPlayerDataById(position[pos]).translated_name">
                                         <template #header-extra>
@@ -44,7 +49,6 @@
                                         </n-descriptions>
                                     </n-card>
                                 </n-popover>
-                                {{ getPlayerDataById(position[pos]).translated_name }}
                             </div>
                         </div>
                     </n-space>
@@ -63,7 +67,7 @@
             <!--选项栏-->
             <n-card>
                 <n-scrollbar style="max-height: 800px;" x-scrollable>
-                    <n-space>
+                    <n-space justify="space-around">
                         <n-popover v-for="elem in store.playerData" raw trigger="click">
                             <template #trigger>
                                 <n-card
@@ -76,14 +80,17 @@
                                     @drop="selectionDrop($event, elem)"
                                     @dragover.prevent
                                 >
-                                    <n-space>
-                                        <n-h3>{{ elem.translated_name }}</n-h3>
+                                    <n-space vertical align="center">
+                                        <div style="height:50px;width:50px">
+                                            <Avataaars :isCircle="false" v-bind="elem.avatar"></Avataaars>
+                                        </div>
+                                        <n-h4>{{ elem.translated_name }}</n-h4>
                                     </n-space>
                                 </n-card>
                             </template>
                             <n-card>
                                 <template #header>
-                                    <n-h2 style="margin: 0 0 0 0;">{{ elem.translated_name }}</n-h2>
+                                    <n-h2>{{ elem.translated_name }}</n-h2>
                                 </template>
                                 <template #header-extra>
                                     <n-progress
@@ -91,7 +98,7 @@
                                         :percentage="[20, 50]"
                                         :stroke-width="10"
                                         status="success"
-                                        style="width: 40px; margin: 0 0 0 0;"
+                                        style="width: 40px"
                                         type="multiple-circle"
                                     ></n-progress>
                                 </template>
@@ -609,8 +616,6 @@ const dragend = (event: DragEvent) => {
     }
 }
 
-// endregion
-
 // region 获取球员信息
 const getPlayerDataById = (id: number) => {
     for (let p of store.playerData) {
@@ -651,13 +656,6 @@ const getUltimateTactic = () => {
 
 
 <style>
-.player {
-    height: 40%;
-    width: 30%;
-    background-color: rgba(255, 255, 255, 0.2);
-    border-radius: 50%;
-}
-
 .field {
     height: 600px;
     background: rgb(56, 125, 50);
@@ -666,13 +664,5 @@ const getUltimateTactic = () => {
 .mask {
     background: #878b99;
     opacity: 0.4;
-}
-
-.avatar {
-    margin: 0 auto;
-}
-
-.selection {
-    height: 10%;
 }
 </style>
