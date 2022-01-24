@@ -66,7 +66,7 @@ getIncomingGamesAPI().then(response => {
     isLoading.value = false;
 }).catch((_error: {}) => { });
 </script>
-<style>
+<style scoped>
 .nextGameCard {
     margin-bottom: 16px;
 }

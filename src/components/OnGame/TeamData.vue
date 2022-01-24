@@ -4,6 +4,17 @@
             <img :src="'http://s1.s100.vip:13127/Public/' + name + '.png'" alt="图片" class="teamAvatar" />
         </template>
         <n-scrollbar style="max-height: 280px;">
+            <n-space class="itemSpace" align="center" justify="space-between">
+                <div class="name">姓名</div>
+                <div class="stamina">体力</div>
+                <div class="rating">实时评分</div>
+                <div class="goal">进球</div>
+                <div class="assist">助攻</div>
+                <div class="pass">传球总 / 传球成功</div>
+                <div class="tackle">抢断总 / 抢断成功</div>
+                <div class="dribble">过人总 / 过人成功</div>
+                <div class="aerial">争顶总 / 争顶成功</div>
+            </n-space>
             <PlayerItem v-for="item in perfData" v-bind:player="item"></PlayerItem>
         </n-scrollbar>
     </n-card>
@@ -12,7 +23,6 @@
 import { onMounted, Ref, ref, h, computed, ComputedRef } from "vue";
 import { getPlayersByClubAPI, getPlayerTotalGameDataAPI } from "@/apis/player";
 import { getSaveMeAPI } from "@/apis/save";
-import { getColor } from "@/utils/colorMap";
 import PlayerItem from "@/components/OnGame/PlayerItem.vue";
 let props: any = defineProps({
     club: Object
@@ -91,9 +101,57 @@ onMounted(
     }
 )
 </script>
-<style>
+<style scoped>
 .teamAvatar {
     width: 40px;
     height: 40px;
+}
+.itemSpace {
+    font-size: small;
+    cursor: default;
+    border: 1px solid rgb(239, 239, 245);
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+    background-color: rgb(247, 247, 250);
+    height: 100%;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+.name {
+    display: inline-block;
+    width: 80px;
+}
+.stamina {
+    display: inline-block;
+    width: 20px;
+}
+.rating {
+    display: inline-block;
+    width: 30px;
+}
+.goal {
+    display: inline-block;
+    width: 15px;
+}
+.assist {
+    display: inline-block;
+    width: 15px;
+}
+.pass {
+    display: inline-block;
+    width: 60px;
+}
+.tackle {
+    display: inline-block;
+    width: 60px;
+}
+.dribble {
+    display: inline-block;
+    width: 60px;
+}
+.aerial {
+    display: inline-block;
+    width: 60px;
 }
 </style>

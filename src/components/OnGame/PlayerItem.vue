@@ -45,12 +45,15 @@ onMounted(() => {
 })
 let mouseOn: Ref<Boolean> = ref(false)
 </script>
-<style>
+<style scoped>
 .itemSpace {
     font-size: small;
-    border-bottom: 1px solid rgb(239, 239, 245);
+    border: 1px solid rgb(239, 239, 245);
+    border-top: 0;
     cursor: default;
-    padding: 1px;
+    padding-top: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 .itemSpaceOn {
     background-color: rgb(244, 251, 255);
