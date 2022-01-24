@@ -3,10 +3,8 @@
         <template #header-extra>
             <n-button v-on:click="goToMail()">查看更多</n-button>
         </template>
-        <n-scrollbar style="max-height: 400px;" x-scrollable>
-            <p class="itemList" v-for="item in mailList" v-if="!isLoading">
-                <MailBoxHomeItem v-bind:mail="item"></MailBoxHomeItem>
-            </p>
+        <n-scrollbar style="max-height: 400px;">
+            <MailBoxHomeItem v-for="item in mailList" v-if="!isLoading" v-bind:mail="item"></MailBoxHomeItem>
         </n-scrollbar>
     </n-card>
 </template>
@@ -82,9 +80,5 @@ function goToMail(): void {
 <style>
 .mailCard {
     height: 500px;
-}
-.itemList {
-    margin-top: 0;
-    margin-bottom: 0;
 }
 </style>

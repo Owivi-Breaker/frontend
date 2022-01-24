@@ -54,6 +54,7 @@ let mouseOn: Ref<Boolean> = ref(false)
     padding-top: 5px;
     padding-left: 10px;
     padding-right: 10px;
+    margin: 0 !important;
 }
 .itemSpaceOn {
     background-color: rgb(244, 251, 255);

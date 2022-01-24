@@ -110,13 +110,14 @@ onMounted(
     font-size: small;
     cursor: default;
     border: 1px solid rgb(239, 239, 245);
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     background-color: rgb(247, 247, 250);
     height: 100%;
     padding-top: 5px;
     padding-left: 10px;
     padding-right: 10px;
+    margin: 0 !important;
 }
 .name {
     display: inline-block;

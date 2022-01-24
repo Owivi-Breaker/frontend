@@ -80,7 +80,7 @@ function showDetial(): void {
 .mailContainer {
     height: 60px;
     background-color: white;
-    margin-bottom: 5px;
+    margin: 0 !important;
     padding-left: 20px;
     padding-right: 20px;
     border-radius: 10px;
