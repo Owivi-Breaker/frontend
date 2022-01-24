@@ -12,7 +12,7 @@
 </template>
 <script lang="ts" setup>
 import { ref, onMounted, Ref } from "vue";
-import MailBoxHomeItem from "@/components/MailBoxHomeItem.vue";
+import MailBoxHomeItem from "@/components/Home/MailBoxItem.vue";
 import { Router } from "vue-router";
 let mailList: Ref<Array<Object>> = ref([]);
 let isLoading: Ref<boolean> = ref(true);

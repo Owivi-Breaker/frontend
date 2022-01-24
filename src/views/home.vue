@@ -10,9 +10,9 @@
     </n-grid>
 </template>
 <script lang="ts" setup>
-import NextGameHome from "@/components/NextGameHome.vue";
-import MailBoxHome from "@/components/MailBoxHome.vue";
-import PointsTableHome from "@/components/PointsTableHome.vue";
+import NextGameHome from "@/components/Home/NextGame.vue";
+import MailBoxHome from "@/components/Home/MailBox.vue";
+import PointsTableHome from "@/components/Home/PointsTable.vue";
 </script>
 <style>
 body {
