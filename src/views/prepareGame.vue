@@ -19,7 +19,7 @@
                                     <template #trigger>
                                         <n-space vertical align="center">
                                             <div style="height:50px;width:50px">
-                                                <Avataaars :isCircle="false" v-bind="getAvatar(position[pos])"/>
+                                                <Avataaars :isCircle="false" v-bind="getAvatar(position[pos])" />
                                             </div>
                                             <n-h4>{{ getPlayerDataById(position[pos]).translated_name }}</n-h4>
                                         </n-space>

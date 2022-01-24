@@ -290,6 +290,11 @@
     "jest-diff" "^26.0.0"
     "pretty-format" "^26.0.0"
 
+"@types/keymaster@^1.6.30":
+  "integrity" "sha512-mtL/NuDBX72zmyIa3cYHA1bQj1WAYlSC4eZcIQj+DHJkcRyTRF2XJXo7DBmkkY8TEq7XaAf7B8TGxs5PHhjRtw=="
+  "resolved" "https://registry.npmjs.org/@types/keymaster/-/keymaster-1.6.30.tgz"
+  "version" "1.6.30"
+
 "@types/lodash-es@^4.17.4":
   "integrity" "sha512-SHBoI8/0aoMQWAgUHMQ599VM6ZiSKg8sh/0cFqqlQQMyY9uEplc0ULU5yQNzcvdR4ZKa0ey8+vFmahuRbOCT1A=="
   "resolved" "https://registry.npmjs.org/@types/lodash-es/-/lodash-es-4.17.5.tgz"
@@ -1018,6 +1023,11 @@
   dependencies:
     "is-promise" "^2.0.0"
     "promise" "^7.0.1"
+
+"keymaster@^1.6.2":
+  "integrity" "sha1-4a5U0OqUiPn2C2a2aPAumhlGxus="
+  "resolved" "https://registry.npmjs.org/keymaster/-/keymaster-1.6.2.tgz"
+  "version" "1.6.2"
 
 "loader-utils@^1.1.0":
   "integrity" "sha512-qH0WSMBtn/oHuwjy/NucEgbx5dbxxnxup9s4PVXJUDHZBQY+s0NWA9rJf53RBnQZxfch7euUui7hpoAPvALZdA=="

@@ -1,5 +1,11 @@
 <template>
-    <div class="mailContainer" v-bind:class="{ mailContainerBlack: mouseOn }" v-on:click="showDetial()" v-on:mouseenter="mouseEnter()" v-on:mouseleave="mouseOut()">
+    <div
+        class="mailContainer"
+        v-bind:class="{ mailContainerBlack: mouseOn }"
+        v-on:click="showDetial()"
+        v-on:mouseenter="mouseOn = true;"
+        v-on:mouseleave="mouseOn = false;"
+    >
         <n-grid cols="20" x-gap="10">
             <n-gi span="2">
                 <n-space class="mailItem" align="center">
@@ -60,12 +66,6 @@ onMounted(
     }
 )
 let mouseOn: Ref<Boolean> = ref(false)
-function mouseEnter(): void {
-    mouseOn.value = true;
-}
-function mouseOut(): void {
-    mouseOn.value = false;
-}
 let showModal: Ref<Boolean> = ref(false);
 let content: Ref<String> = ref("");
 function showDetial(): void {

@@ -1,15 +1,20 @@
 <template>
-    <n-grid cols="3" x-gap="10">
-        <n-gi>
+    <n-grid cols="10" x-gap="10">
+        <n-gi span="3">
             <n-card>
                 <n-scrollbar style="max-height: 780px;">
                     <n-timeline>
-                        <n-timeline-item v-bind:color="getColor(item.level, '', 1, 5)" v-for="item in commentaryList" v-bind:title="item.content" v-bind:time="item.time"></n-timeline-item>
+                        <n-timeline-item
+                            v-bind:color="getColor(item.level, '', 1, 5)"
+                            v-for="item in commentaryList"
+                            v-bind:title="item.content"
+                            v-bind:time="item.time"
+                        ></n-timeline-item>
                     </n-timeline>
                 </n-scrollbar>
             </n-card>
         </n-gi>
-        <n-gi>
+        <n-gi span="3">
             <n-grid cols="1" y-gap="10">
                 <n-gi>
                     <GameStatus></GameStatus>
@@ -19,7 +24,7 @@
                 </n-gi>
             </n-grid>
         </n-gi>
-        <n-gi>
+        <n-gi span="4">
             <n-grid cols="1" y-gap="10">
                 <n-gi v-for="item in teams">
                     <TeamData v-bind:club="item" style="height:403px"></TeamData>
@@ -76,6 +81,6 @@ let teams = [
     {
         "id": 2,
         "name": "曼联"
-    }
+    },
 ]
 </script>

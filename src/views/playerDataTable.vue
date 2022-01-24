@@ -11,7 +11,7 @@
 </template>
 <script lang="ts" setup>
 import { getColor } from "@/utils/colorMap"
-import { h, ref, computed, Ref, ComputedRef} from "vue";
+import { h, ref, computed, Ref, ComputedRef } from "vue";
 import { NTag } from "naive-ui";
 import { useStore } from '@/stores/store'
 const store = useStore();
@@ -35,28 +35,28 @@ let capaData: ComputedRef<any> = computed(() =>
 );
 let perfData: ComputedRef<any> = computed(() =>
     store.perfData.map((value: any) => {
-      function deal(key: string, rawKey: string): void {
-        value[key] = value[rawKey];
-        if (key === "平均评分") {
-          value[key] = Math.round(value[key] * 100) / 100;
+        function deal(key: string, rawKey: string): void {
+            value[key] = value[rawKey];
+            if (key === "平均评分") {
+                value[key] = Math.round(value[key] * 100) / 100;
+            }
+            if (value[key] > perfMax[key]) {
+                perfMax[key] = value[key];
+            }
         }
-        if (value[key] > perfMax[key]) {
-          perfMax[key] = value[key];
-        }
-      }
-      deal("出场", "appearance");
-      deal("进球", "goals");
-      deal("助攻", "assists");
-      deal("平均评分", "final_rating");
-      deal("传球总", "passes");
-      deal("传球成功", "pass_success");
-      deal("抢断总", "tackles");
-      deal("抢断成功", "tackle_success");
-      deal("过人总", "dribbles");
-      deal("过人成功", "dribble_success");
-      deal("争顶总", "aerials");
-      deal("争顶成功", "aerial_success");
-      return value;
+        deal("出场", "appearance");
+        deal("进球", "goals");
+        deal("助攻", "assists");
+        deal("平均评分", "final_rating");
+        deal("传球总", "passes");
+        deal("传球成功", "pass_success");
+        deal("抢断总", "tackles");
+        deal("抢断成功", "tackle_success");
+        deal("过人总", "dribbles");
+        deal("过人成功", "dribble_success");
+        deal("争顶总", "aerials");
+        deal("争顶成功", "aerial_success");
+        return value;
     })
 );
 let perfMax: any = {

@@ -4,7 +4,7 @@
             <img :src="'http://s1.s100.vip:13127/Public/' + name + '.png'" alt="图片" class="teamAvatar" />
         </template>
         <n-scrollbar style="max-height: 280px;">
-            <n-data-table :columns="perfColumns" :data="perfLoading ? [] : perfData" :loading="perfLoading" size="small" />
+            <PlayerItem v-for="item in perfData" v-bind:player="item"></PlayerItem>
         </n-scrollbar>
     </n-card>
 </template>
@@ -12,7 +12,8 @@
 import { onMounted, Ref, ref, h, computed, ComputedRef } from "vue";
 import { getPlayersByClubAPI, getPlayerTotalGameDataAPI } from "@/apis/player";
 import { getSaveMeAPI } from "@/apis/save";
-import { getColor } from "@/utils/colorMap"
+import { getColor } from "@/utils/colorMap";
+import PlayerItem from "@/components/OnGame/PlayerItem.vue";
 let props: any = defineProps({
     club: Object
 });
@@ -61,7 +62,6 @@ let perfData: ComputedRef<any> = computed(() =>
     rawPerfData.value.map((value: any) => {
         function deal(key: string, rawKey: string): void {
             value[key] = value[rawKey];
-            delete value[rawKey];
             if (key === "平均评分") {
                 value[key] = Math.round(value[key] * 100) / 100;
             }
@@ -84,63 +84,6 @@ let perfData: ComputedRef<any> = computed(() =>
         return value;
     })
 );
-class perfItem {
-    title: string;
-    key: string;
-    fixed: string | null;
-    width: number | null;
-    align: string;
-    render: Function | null;
-    sorter: string | Function;
-    constructor(title: string) {
-        this.title = title;
-        this.key = title;
-        this.fixed = title === "姓名" ? "left" : null;
-        this.width = title === "姓名" ? 150 : null;
-        this.align = "left";
-        if (title === "姓名" || title === "出场" || title === "进球" || title === "助攻" || title === "平均评分") {
-            this.render = (row: any) => {
-                return h("p", {
-                    style: {
-                        "margin": 0,
-                        "color": getColor(row[this.key], "text", 0, perfMax[title])
-                    },
-                }, { default: () => row[this.key] });
-            }
-            this.sorter = "default";
-        }
-        else {
-            let sumKey: string = this.key.slice(0, 2);
-            this.render = (row: any) => {
-                return h("p", {
-                    style: {
-                        "margin": 0,
-                        "color": getColor(row[this.key], "text", 0, perfMax[title])
-                    },
-                }, {
-                    default: () => [
-                        h("span", {
-                            style: {
-                                "margin": 0,
-                                "color": getColor(row[sumKey + "总"], "text", 0, perfMax[sumKey + "总"])
-                            },
-                        }, { default: () => row[sumKey + "总"] }),
-                        " / ",
-                        h("span", {
-                            style: {
-                                "margin": 0,
-                                "color": getColor(row[sumKey + "成功"], "text", 0, perfMax[sumKey + "成功"])
-                            },
-                        }, { default: () => row[sumKey + "成功"] })
-                    ]
-                });
-            }
-            this.sorter = (a: { [x: string]: number; }, b: { [x: string]: number; }) => a[sumKey + "成功"] - b[sumKey + "成功"];
-        }
-    }
-}
-let perfColumns: Array<Object> = [new perfItem("姓名"), new perfItem("出场"), new perfItem("进球"), new perfItem("助攻"), new perfItem("平均评分"),
-new perfItem("传球（总/成功）"), new perfItem("抢断（总/成功）"), new perfItem("过人（总/成功）"), new perfItem("争顶（总/成功）")];
 onMounted(
     () => {
         id.value = props.club.id;
