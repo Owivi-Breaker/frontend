@@ -57,11 +57,29 @@ const mainRoutes: RouteRecordRaw[] = [
         }
     },
     {
-        name: 'lineup',
-        path: '/lineup',
-        component: () => import('../views/lineup.vue'),
+        name: 'prepareGame',
+        path: '/prepareGame',
+        component: () => import('../views/prepareGame.vue'),
         meta: {
-            title: '阵容',
+            title: '赛前准备',
+            requiresAuth: true
+        }
+    },
+    {
+        name: 'onGame',
+        path: '/onGame',
+        component: () => import('../views/onGame.vue'),
+        meta: {
+            title: '比赛进行中',
+            requiresAuth: true
+        }
+    },
+    {
+        name: 'endGame',
+        path: '/endGame',
+        component: () => import('../views/endGame.vue'),
+        meta: {
+            title: '比赛结果',
             requiresAuth: true
         }
     },

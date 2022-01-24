@@ -73,13 +73,13 @@ const menuOptions = [
             RouterLink,
             {
                 to: {
-                    name: 'lineup',
+                    name: 'prepareGame',
                     params: {
                         lang: 'zh-CN'
                     }
                 }
             },
-            { default: () => '阵容' }
+            { default: () => '赛前准备' }
         ),
         key: 'lineup',
         icon: renderIcon(BookIcon)
