@@ -1,5 +1,5 @@
 <template>
-    <n-card v-bind:title="name">
+    <n-card title=" ">
         <template #header-extra>
             <img :src="'http://s1.s100.vip:13127/Public/' + name + '.png'" alt="图片" class="teamAvatar" />
         </template>

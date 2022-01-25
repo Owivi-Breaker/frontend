@@ -1,0 +1,114 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{98535918-84c9-47d1-8e90-c446bef575bc}</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <ProjectView>ShowAllFiles</ProjectView>
+    <StartupFile>vite.config.ts</StartupFile>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <EnableTypeScript>true</EnableTypeScript>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">17.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <ItemGroup>
+    <Content Include="index.html" />
+    <Content Include="package-lock.json" />
+    <Content Include="package.json" />
+    <Content Include="src\components\OnGame\TacticalStatistic.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <Content Include="src\components\OnGame\TacticalStatisticItem.vue">
+      <SubType>Code</SubType>
+    </Content>
+    <None Include="tsconfig.json" />
+    <Content Include="README.md" />
+    <None Include="keymaster.d.ts" />
+    <None Include="vite.config.ts" />
+    <Content Include="public\favicon.ico" />
+    <None Include="src\env.d.ts" />
+    <None Include="src\main.ts" />
+    <None Include="src\naive.ts" />
+    <None Include="src\apis\club.ts" />
+    <None Include="src\apis\league.ts" />
+    <None Include="src\apis\login.ts" />
+    <None Include="src\apis\nextTurn.ts" />
+    <None Include="src\apis\player.ts" />
+    <None Include="src\apis\save.ts" />
+    <None Include="src\apis\user.ts" />
+    <None Include="src\components\index.ts" />
+    <None Include="src\router\index.ts" />
+    <None Include="src\router\routes.ts" />
+    <None Include="src\stores\store.ts" />
+    <None Include="src\types\axios.d.ts" />
+    <None Include="src\types\env.d.ts" />
+    <None Include="src\utils\colorMap.ts" />
+    <None Include="src\utils\http.ts" />
+    <None Include="src\utils\index.ts" />
+    <None Include="src\utils\request.ts" />
+    <None Include="src\utils\storage.ts" />
+    <Content Include="src\assets\json\five-leagues-list.json" />
+    <Content Include="src\assets\json\super-leagues-list.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="public" />
+    <Folder Include="src" />
+    <Folder Include="src\apis" />
+    <Folder Include="src\assets" />
+    <Folder Include="src\assets\json" />
+    <Folder Include="src\components" />
+    <Folder Include="src\components\Home" />
+    <Folder Include="src\components\OnGame" />
+    <Folder Include="src\layouts" />
+    <Folder Include="src\router" />
+    <Folder Include="src\stores" />
+    <Folder Include="src\types" />
+    <Folder Include="src\utils" />
+    <Folder Include="src\views" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
