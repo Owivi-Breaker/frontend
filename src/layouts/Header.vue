@@ -31,7 +31,7 @@ import { storage } from "../utils";
 import { getDateAPI } from "@/apis/user";
 import { nextTurnAPI } from "@/apis/nextTurn";
 import { useStore } from '@/stores/store'
-import key from 'keymaster'
+import key from 'Keymaster'
 const store = useStore();
 
 key('space', function(){ nextDay() });
@@ -54,7 +54,7 @@ function ExitLogin(): void {
     window.$router.push({ name: "login" });
 }
 function nextDay(): void {
-    nextTurnAPI({ turn_num: 1 }).then(_response => {
+    nextTurnAPI().then(_response => {
         getDateAPI().then(response => {
             store.Date = response.date;
         }).catch((_error: {}) => { });

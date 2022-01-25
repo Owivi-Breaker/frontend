@@ -1,6 +1,10 @@
 <template>
     <n-h2>球员列表</n-h2>
+<<<<<<< Updated upstream
     <n-spin class="loading" size="medium" v-if="!store.playerData.length" />
+=======
+    <n-spin class="loading" size="medium" v-if="!store.playerData.length"/>
+>>>>>>> Stashed changes
     <n-grid cols="2 l:2 xl:3 2xl:3" responsive="screen" x-gap="20" y-gap="20">
         <n-gi v-for="item in store.playerData.slice(start, end)">
             <PlayerCard :playerData="item"></PlayerCard>
@@ -8,7 +12,11 @@
     </n-grid>
     <n-space v-if="store.playerData.length" class="分页" justify="end">
         <n-pagination v-model:page="pageIndex" :page-count="store.playerData.length / pageSize"
+<<<<<<< Updated upstream
                       :on-update:page="setPage" />
+=======
+                      :on-update:page="setPage"/>
+>>>>>>> Stashed changes
     </n-space>
 </template>
 <script lang="ts" setup>
