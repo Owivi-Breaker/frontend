@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <Name>OwiviOsa前端</Name>
+    <RootNamespace>OwiviOsa前端</RootNamespace>
+    <SaveNodeJsSettingsInProjectFile>True</SaveNodeJsSettingsInProjectFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>3b0e077f-3b5f-4d5d-bdf5-62dfc1a240c5</ProjectGuid>
+    <ProjectHome>.</ProjectHome>
+    <StartupFile>node_modules\vite\bin\vite.js</StartupFile>
+    <SearchPath>
+    </SearchPath>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <NodejsPort>19231</NodejsPort>
+    <EnableTypeScript>true</EnableTypeScript>
+    <StartWebBrowser>True</StartWebBrowser>
+    <ScriptArguments>--mode production</ScriptArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="public\" />
+    <Folder Include="src\" />
+    <Folder Include="src\apis\" />
+    <Folder Include="src\assets\" />
+    <Folder Include="src\assets\json\" />
+    <Folder Include="src\components\" />
+    <Folder Include="src\components\Home\" />
+    <Folder Include="src\components\OnGame\" />
+    <Folder Include="src\layouts\" />
+    <Folder Include="src\router\" />
+    <Folder Include="src\stores\" />
+    <Folder Include="src\types\" />
+    <Folder Include="src\utils\" />
+    <Folder Include="src\views\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="src\apis\club.ts" />
+    <TypeScriptCompile Include="src\apis\league.ts" />
+    <TypeScriptCompile Include="src\apis\login.ts" />
+    <TypeScriptCompile Include="src\apis\nextTurn.ts" />
+    <TypeScriptCompile Include="src\apis\player.ts" />
+    <TypeScriptCompile Include="src\apis\save.ts" />
+    <TypeScriptCompile Include="src\apis\user.ts" />
+    <TypeScriptCompile Include="src\components\index.ts" />
+    <TypeScriptCompile Include="src\env.d.ts" />
+    <TypeScriptCompile Include="src\main.ts" />
+    <TypeScriptCompile Include="src\naive.ts" />
+    <TypeScriptCompile Include="src\router\index.ts" />
+    <TypeScriptCompile Include="src\router\routes.ts" />
+    <TypeScriptCompile Include="src\stores\store.ts" />
+    <TypeScriptCompile Include="src\types\axios.d.ts" />
+    <TypeScriptCompile Include="src\types\env.d.ts" />
+    <TypeScriptCompile Include="src\utils\colorMap.ts" />
+    <TypeScriptCompile Include="src\utils\http.ts" />
+    <TypeScriptCompile Include="src\utils\index.ts" />
+    <TypeScriptCompile Include="src\utils\request.ts" />
+    <TypeScriptCompile Include="src\utils\storage.ts" />
+    <TypeScriptCompile Include="vite.config.ts" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include=".env" />
+    <Content Include=".env.development" />
+    <Content Include=".env.production" />
+    <Content Include="index.html" />
+    <Content Include="OwiviOsa前端.njsproj.user" />
+    <Content Include="package-lock.json" />
+    <Content Include="package.json" />
+    <Content Include="public\favicon.ico" />
+    <Content Include="README.md" />
+    <Content Include="src\App.vue" />
+    <Content Include="src\assets\json\five-leagues-list.json" />
+    <Content Include="src\assets\json\super-leagues-list.json" />
+    <Content Include="src\components\CapaProgress.vue" />
+    <Content Include="src\components\Home\MailBox.vue" />
+    <Content Include="src\components\Home\MailBoxItem.vue" />
+    <Content Include="src\components\Home\NextGame.vue" />
+    <Content Include="src\components\Home\PointsTable.vue" />
+    <Content Include="src\components\OnGame\GameStatus.vue" />
+    <Content Include="src\components\OnGame\PlayerItem.vue" />
+    <Content Include="src\components\OnGame\TacticalStatistic.vue" />
+    <Content Include="src\components\OnGame\TacticalStatisticItem.vue" />
+    <Content Include="src\components\OnGame\TeamData.vue" />
+    <Content Include="src\components\PlayerCard.vue" />
+    <Content Include="src\components\PlayGround.vue" />
+    <Content Include="src\components\Provider.vue" />
+    <Content Include="src\components\TacticalSelector.vue" />
+    <Content Include="src\components\Viewer.vue" />
+    <Content Include="src\layouts\Footer.vue" />
+    <Content Include="src\layouts\Header.vue" />
+    <Content Include="src\layouts\index.vue" />
+    <Content Include="src\layouts\Sidebar.vue" />
+    <Content Include="src\views\about.vue" />
+    <Content Include="src\views\clubPlayer.vue" />
+    <Content Include="src\views\endGame.vue" />
+    <Content Include="src\views\error.vue" />
+    <Content Include="src\views\home.vue" />
+    <Content Include="src\views\login.vue" />
+    <Content Include="src\views\mail.vue" />
+    <Content Include="src\views\onGame.vue" />
+    <Content Include="src\views\playerDataTable.vue" />
+    <Content Include="src\views\playerPage.vue" />
+    <Content Include="src\views\prepareGame.vue" />
+    <Content Include="src\views\register.vue" />
+    <Content Include="src\views\selectSave.vue" />
+    <Content Include="tsconfig.json" />
+    <Content Include="yarn.lock" />
+  </ItemGroup>
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsToolsV2.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
