@@ -1,0 +1,1 @@
+import{h as a}from"./http.f8166dba.js";const t=t=>a.get(`/club/${t.club_id}/player`,t),e=t=>a.get(`/player/${t.player_id}`,t),l=t=>a.get(`/player/${t.player_id}/total-game-data`,t);export{e as a,t as b,l as g};
