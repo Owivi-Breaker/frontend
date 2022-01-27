@@ -25,8 +25,10 @@ service.interceptors.request.use(
         const saveId = storage.get('saveId');
         if (saveId) {
             if (config.method === 'post') {
+                config.params = {
+                    save_id: saveId,
+                };
                 config.data = {
-                    saveId: saveId,
                     ...config.data
                 };
             } else if (config.method === 'get') {

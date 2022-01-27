@@ -22,6 +22,9 @@
             <n-button class="returnButton" type="primary" v-on:click="showExitModal = false">返回</n-button>
         </n-card>
     </n-modal>
+    <n-modal v-model:show="showGameModal" v-bind:mask-closable="false">
+        <n-card title="有比赛"></n-card>
+    </n-modal>
 </template>
 <script lang="ts" setup>
 import { defineComponent, ref, Ref } from "vue";
@@ -34,7 +37,7 @@ import { useStore } from '@/stores/store'
 import key from 'Keymaster'
 const store = useStore();
 
-key('space', function(){ nextDay() });
+key('space', function () { nextDay() });
 
 let showExitModal: Ref<boolean> = ref(false);
 defineComponent({
@@ -53,11 +56,17 @@ function ExitLogin(): void {
     storage.remove("saveId");
     window.$router.push({ name: "login" });
 }
+let showGameModal: Ref<boolean> = ref(false);
 function nextDay(): void {
-    nextTurnAPI().then(_response => {
-        getDateAPI().then(response => {
-            store.Date = response.date;
-        }).catch((_error: {}) => { });
+    nextTurnAPI().then((response: any) => {
+        if (response.state === "pve") {
+            showGameModal.value = true;
+        }
+        else {
+            getDateAPI().then((response: { date: any; }) => {
+                store.Date = response.date;
+            }).catch((_error: {}) => { });
+        }
     }).catch((_error: {}) => { });
 }
 </script>

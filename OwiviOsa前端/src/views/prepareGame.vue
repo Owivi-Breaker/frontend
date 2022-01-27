@@ -131,13 +131,16 @@
         <n-gi>
             <n-grid cols="1" y-gap="10">
                 <n-gi>
-                    <TacticalSelector></TacticalSelector>
-                </n-gi>
-                <n-gi>
-                    <n-space align="center" justify="end">
-                        <n-button v-on:click="skipGame">跳过比赛</n-button>
-                        <n-button color="#037dff" v-on:click="startGame">开始比赛</n-button>
-                    </n-space>
+                    <n-card title="战术配置">
+                        <n-space align="center" item-style="display: flex; align-item: center;" justify="space-between">
+                            <p style="margin: 0;">以</p>
+                            <n-select style="width:195px;" v-model:value="curTactic" v-bind:options="tactics" />
+                            <p style="margin: 0;">战术</p>
+                            <n-button type="primary" v-on:click="startGame">开始比赛</n-button>
+                            <p style="margin: 0;">或</p>
+                            <n-button v-on:click="skipGame">跳过比赛</n-button>
+                        </n-space>
+                    </n-card>
                 </n-gi>
             </n-grid>
         </n-gi>
@@ -148,11 +151,11 @@
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
 import { ref, reactive, onMounted, computed, Ref } from "vue";
 import { getPlayersByClubAPI } from "@/apis/player";
+import { gamePveSkipAPI, gamePveStartAPI, gamePveNextTurnAPI } from "@/apis/gamePve";
 import { useStore } from '@/stores/store';
 import TacticalSelector from "@/components/OnGame/TacticalSelector.vue";
 import { Router } from 'vue-router';
 const store = useStore();
-
 //region 拖曳功能
 const posInfo = reactive({
     ST: {
@@ -665,17 +668,53 @@ const getUltimateTactic = () => {
     }
     return re
 }
-function skipGame(): void {
-    // 告诉后端跳过比赛
-    window.$router.push({ name: "endGame" });
-}
 declare const window: Window & { $router: Router };
+let curTactic: Ref<string> = ref("wing_cross");
+let tactics: Ref<Array<any>> = ref([
+    {
+        label: '下底传中',
+        value: 'wing_cross',
+        weight: 50
+    },
+    {
+        label: '边路内切',
+        value: 'under_cutting',
+        weight: 50
+    },
+    {
+        label: '倒三角',
+        value: 'pull_back',
+        weight: 50
+    },
+    {
+        label: '中路渗透',
+        value: 'middle_attack',
+        weight: 50
+    },
+    {
+        label: '防守反击',
+        value: 'counter_attack',
+        weight: 50
+    },
+]);
+function skipGame(): void {
+    gamePveSkipAPI().then((response: any) => {
+        window.$router.push({ name: "endGame" });
+    }).catch((_error: any) => { });
+}
 function startGame(): void {
-    // 告诉后端开始比赛，调用/start-game接口
-    window.$router.push({ name: "onGame" });
+    let data = {
+        lineup: {},
+        tactic_weight: {}
+    }
+    gamePveStartAPI(data).then((response: any) => {
+        gamePveNextTurnAPI({ tactic: curTactic.value }).then((response: any) => {
+            store.gamePveData = response;
+            window.$router.push({ name: "onGame" });
+        }).catch((_error: any) => { });
+    }).catch((_error: any) => { });
 }
 </script>
-
 
 <style>
 .field {

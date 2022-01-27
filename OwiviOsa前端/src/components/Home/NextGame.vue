@@ -46,7 +46,7 @@ watch(() => store.Date, (newValue, oldValue) => {
     // console.log(newValue, oldValue, '改变')
     curDate = (new Date(store.Date)).getTime() / 1000;
     distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
-    if(distance.value == 0){
+    if (distance.value == 0) {
         getIncomingGamesAPI().then(response => {
             nextGameName.value = response[0].game_name;
             nextGameDate.value = response[0].date;

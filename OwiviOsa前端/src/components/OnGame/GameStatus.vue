@@ -24,7 +24,7 @@
                     </div>
                 </n-gi>
             </n-grid>
-            <div class="time">{{ nowTime }}:00</div>
+            <div class="time">{{ nowTimeMinute }}:{{ nowTimeSecond }}</div>
         </div>
     </n-card>
 </template>
@@ -37,15 +37,30 @@ let props: any = defineProps({
     computerTeamInfo: Object
 });
 let leftTeam: ComputedRef = computed(() => {
-    return props.playerTeamInfo["isHome"] ? props.playerTeamInfo : props.computerTeamInfo;
+    console.log("ddddddd")
+    console.log(props.playerTeamInfo);
+    if (props.homeClubId === props.playerTeamInfo.club_id) {
+        return props.playerTeamInfo;
+    }
+    else {
+        return props.computerTeamInfo;
+    }
 });
 let rightTeam: ComputedRef = computed(() => {
-    return props.playerTeamInfo["isHome"] ? props.computerTeamInfo : props.playerTeamInfo;
+    if (props.homeClubId !== props.playerTeamInfo.club_id) {
+        return props.playerTeamInfo;
+    }
+    else {
+        return props.computerTeamInfo;
+    }
 });
-let nowTime: ComputedRef = computed(() => {
-    return props.turns * 90 / 50;
+let nowTimeMinute: ComputedRef = computed(() => {
+    return Math.floor(props.turns * 90 / 50).toString().padStart(2, "0");
 });
-defineExpose({ leftTeam, rightTeam, nowTime });
+let nowTimeSecond: ComputedRef = computed(() => {
+    return Math.round((props.turns * 90 / 50 - nowTimeMinute.value) * 60).toString().padStart(2, "0");
+});
+defineExpose({ leftTeam, rightTeam, nowTimeMinute, nowTimeSecond });
 </script>
 <style>
 .firstTeam {
@@ -61,11 +76,11 @@ defineExpose({ leftTeam, rightTeam, nowTime });
 }
 
 .teamName {
-    font-size: x-large;
+    font-size: 20px;
 }
 
 .gamePoint {
-    font-size: 40px;
+    font-size: 30px;
 }
 
 .time {
@@ -74,21 +89,21 @@ defineExpose({ leftTeam, rightTeam, nowTime });
 }
 
 .colon {
-    font-size: 40px;
+    font-size: 30px;
     text-align: center;
 }
 
 .tenSpan {
-    width: 10%;
-}
-
-.fiveSpan {
     width: 5%;
 }
 
+.fiveSpan {
+    width: 2.5%;
+}
+
 .teamAvatar {
-    width: 60px;
-    height: 60px;
+    width: 45px;
+    height: 45px;
     padding: 5px;
 }
 </style>

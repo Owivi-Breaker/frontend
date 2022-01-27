@@ -13,7 +13,7 @@
                 <n-collapse-transition v-bind:appear="true" v-bind:show="!isAuto">
                     <n-space align="center" item-style="display: flex; align-item: center;" justify="space-between">
                         <p>执行</p>
-                        <n-select style="width:200px;" v-model:value="curTactic" v-bind:options="tactics" />
+                        <n-select style="width:300px;" v-model:value="curTactic" v-bind:options="tactics" />
                         <n-button type="primary" v-on:click="goNextTurn">NOW</n-button>
                     </n-space>
                 </n-collapse-transition>
@@ -35,7 +35,8 @@
 import { Ref, ref, onMounted, watch } from 'vue';
 import { gamePveNextTurnAPI } from "@/apis/gamePve";
 import { useStore } from '@/stores/store';
-import key from 'Keymaster'
+import { getClubByIdAPI } from "@/apis/club";
+import { Router } from 'vue-router';
 const store = useStore();
 let isAuto: Ref<boolean> = ref(false);
 let curTactic: Ref<string> = ref("wing_cross");
@@ -66,11 +67,21 @@ let tactics: Ref<Array<any>> = ref([
         weight: 50
     },
 ]);
+declare const window: Window & { $router: Router };
 function goNextTurn(): void {
     gamePveNextTurnAPI({ tactic: curTactic.value }).then((response: any) => {
-        store.gamePveData = response;
-        console.log(store.gamePveData);
-    });
+        if (response["game_info"]["turns"] > 50) {
+            window.$router.push({ name: "endGame" });
+        }
+        let temp = response;
+        getClubByIdAPI({ club_id: temp["player_team_info"]["club_id"] }).then((response: any) => {
+            temp["player_team_info"]["name"] = response["name"];
+            getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] }).then((response: any) => {
+                temp["computer_team_info"]["name"] = response["name"];
+                store.gamePveData = temp;
+            }).catch((_error: any) => { });
+        }).catch((_error: any) => { });
+    }).catch((_error: any) => { });
 }
 let timer: NodeJS.Timeout = null;
 watch(() => isAuto.value, (newVal) => {
