@@ -29,65 +29,66 @@
     </n-card>
 </template>
 <script lang="ts" setup>
-    import { computed, ComputedRef } from "vue";
-    let props: any = defineProps({
-        turns: Number,
-        playerTeamInfo: Object,
-        computerTeamInfo: Object
-    });
-    let leftTeam: ComputedRef = computed(() => {
-        return props.playerTeamInfo["isHome"] ? props.playerTeamInfo : props.computerTeamInfo;
-    });
-    let rightTeam: ComputedRef = computed(() => {
-        return props.playerTeamInfo["isHome"] ? props.computerTeamInfo : props.playerTeamInfo;
-    });
-    let nowTime: ComputedRef = computed(() => {
-        return props.turns * 90 / 50;
-    });
-    defineExpose({ leftTeam, rightTeam, nowTime });
+import { computed, ComputedRef } from "vue";
+let props: any = defineProps({
+    turns: Number,
+    homeClubId: Number,
+    playerTeamInfo: Object,
+    computerTeamInfo: Object
+});
+let leftTeam: ComputedRef = computed(() => {
+    return props.playerTeamInfo["isHome"] ? props.playerTeamInfo : props.computerTeamInfo;
+});
+let rightTeam: ComputedRef = computed(() => {
+    return props.playerTeamInfo["isHome"] ? props.computerTeamInfo : props.playerTeamInfo;
+});
+let nowTime: ComputedRef = computed(() => {
+    return props.turns * 90 / 50;
+});
+defineExpose({ leftTeam, rightTeam, nowTime });
 </script>
 <style>
-    .firstTeam {
-        display: flex;
-        justify-content: end;
-        align-items: Center;
-    }
+.firstTeam {
+    display: flex;
+    justify-content: end;
+    align-items: Center;
+}
 
-    .secondTeam {
-        display: flex;
-        justify-content: start;
-        align-items: Center;
-    }
+.secondTeam {
+    display: flex;
+    justify-content: start;
+    align-items: Center;
+}
 
-    .teamName {
-        font-size: x-large;
-    }
+.teamName {
+    font-size: x-large;
+}
 
-    .gamePoint {
-        font-size: 40px;
-    }
+.gamePoint {
+    font-size: 40px;
+}
 
-    .time {
-        text-align: center;
-        font-size: 35px;
-    }
+.time {
+    text-align: center;
+    font-size: 35px;
+}
 
-    .colon {
-        font-size: 40px;
-        text-align: center;
-    }
+.colon {
+    font-size: 40px;
+    text-align: center;
+}
 
-    .tenSpan {
-        width: 10%;
-    }
+.tenSpan {
+    width: 10%;
+}
 
-    .fiveSpan {
-        width: 5%;
-    }
+.fiveSpan {
+    width: 5%;
+}
 
-    .teamAvatar {
-        width: 60px;
-        height: 60px;
-        padding: 5px;
-    }
+.teamAvatar {
+    width: 60px;
+    height: 60px;
+    padding: 5px;
+}
 </style>
