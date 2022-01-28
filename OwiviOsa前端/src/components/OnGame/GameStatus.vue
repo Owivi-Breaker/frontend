@@ -34,31 +34,31 @@ let props: any = defineProps({
     turns: Number,
     homeClubId: Number,
     playerTeamInfo: Object,
-    computerTeamInfo: Object
+    computerTeamInfo: Object,
 });
 let leftTeam: ComputedRef = computed(() => {
-    console.log("ddddddd")
-    console.log(props.playerTeamInfo);
     if (props.homeClubId === props.playerTeamInfo.club_id) {
         return props.playerTeamInfo;
-    }
-    else {
+    } else {
         return props.computerTeamInfo;
     }
 });
 let rightTeam: ComputedRef = computed(() => {
     if (props.homeClubId !== props.playerTeamInfo.club_id) {
         return props.playerTeamInfo;
-    }
-    else {
+    } else {
         return props.computerTeamInfo;
     }
 });
 let nowTimeMinute: ComputedRef = computed(() => {
-    return Math.floor(props.turns * 90 / 50).toString().padStart(2, "0");
+    return Math.floor(((props.turns - 1) * 90) / 50)
+        .toString()
+        .padStart(2, "0");
 });
 let nowTimeSecond: ComputedRef = computed(() => {
-    return Math.round((props.turns * 90 / 50 - nowTimeMinute.value) * 60).toString().padStart(2, "0");
+    return Math.round((((props.turns - 1) * 90) / 50 - nowTimeMinute.value) * 60)
+        .toString()
+        .padStart(2, "0");
 });
 defineExpose({ leftTeam, rightTeam, nowTimeMinute, nowTimeSecond });
 </script>

@@ -13,6 +13,8 @@ export const useStore = defineStore('main', {
             perfData: [] as any[],
             capaLoading: true,
             perfLoading: true,
+            gamePveData: Object,
+            playerNameId: [] as any[],
         }
     },
     getters: {},

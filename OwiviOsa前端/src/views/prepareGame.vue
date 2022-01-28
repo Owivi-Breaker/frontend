@@ -18,7 +18,7 @@
                                 <n-popover raw trigger="click">
                                     <template #trigger>
                                         <n-space vertical align="center">
-                                            <div style="height:50px;width:50px">
+                                            <div style="height: 50px; width: 50px">
                                                 <Avataaars :isCircle="false" v-bind="getAvatar(position[pos])" />
                                             </div>
                                             <n-h4>{{ getPlayerDataById(position[pos]).translated_name }}</n-h4>
@@ -31,15 +31,13 @@
                                                 :percentage="[20, 50]"
                                                 :stroke-width="10"
                                                 status="success"
-                                                style="width: 40px; margin: 0 10px 0 40px;"
+                                                style="width: 40px; margin: 0 10px 0 40px"
                                                 type="multiple-circle"
                                             ></n-progress>
                                         </template>
                                         <n-descriptions :column="3" label-placement="top">
                                             <n-descriptions-item label="能力">
-                                                {{
-                                                    getPlayerDataById(position[pos]).location_capa[key]
-                                                }}
+                                                {{ getPlayerDataById(position[pos]).location_capa[key] }}
                                             </n-descriptions-item>
                                             <n-descriptions-item label="位置">{{ key }}</n-descriptions-item>
                                             <n-descriptions-item label="占位">bar</n-descriptions-item>
@@ -65,7 +63,7 @@
         <n-gi>
             <!--选项栏-->
             <n-card>
-                <n-scrollbar style="max-height: 800px;" x-scrollable>
+                <n-scrollbar style="max-height: 800px" x-scrollable>
                     <n-space justify="space-around">
                         <n-popover v-for="elem in store.playerData" raw trigger="click">
                             <template #trigger>
@@ -80,7 +78,7 @@
                                     @dragover.prevent
                                 >
                                     <n-space vertical align="center">
-                                        <div style="height:50px;width:50px">
+                                        <div style="height: 50px; width: 50px">
                                             <Avataaars :isCircle="false" v-bind="elem.avatar"></Avataaars>
                                         </div>
                                         <n-h4>{{ elem.translated_name }}</n-h4>
@@ -103,16 +101,14 @@
                                 </template>
                                 <n-grid cols="3">
                                     <n-gi span="1">
-                                        <div style="display:flex; height:120px;width:120px;margin:0 30px 30px 0">
+                                        <div style="display: flex; height: 120px; width: 120px; margin: 0 30px 30px 0">
                                             <Avataaars :isCircle="false" v-bind="elem.avatar"></Avataaars>
                                         </div>
                                     </n-gi>
                                     <n-gi span="2">
                                         <n-descriptions :column="3" label-placement="top">
                                             <n-descriptions-item label="能力">
-                                                {{
-                                                    elem.top_capa
-                                                }}
+                                                {{ elem.top_capa }}
                                             </n-descriptions-item>
                                             <n-descriptions-item label="占位">bar</n-descriptions-item>
                                             <n-descriptions-item label="占位">bar</n-descriptions-item>
@@ -133,11 +129,11 @@
                 <n-gi>
                     <n-card title="战术配置">
                         <n-space align="center" item-style="display: flex; align-item: center;" justify="space-between">
-                            <p style="margin: 0;">以</p>
-                            <n-select style="width:195px;" v-model:value="curTactic" v-bind:options="tactics" />
-                            <p style="margin: 0;">战术</p>
+                            <p style="margin: 0">以</p>
+                            <n-select style="width: 195px" v-model:value="curTactic" v-bind:options="tactics" />
+                            <p style="margin: 0">战术</p>
                             <n-button type="primary" v-on:click="startGame">开始比赛</n-button>
-                            <p style="margin: 0;">或</p>
+                            <p style="margin: 0">或</p>
                             <n-button v-on:click="skipGame">跳过比赛</n-button>
                         </n-space>
                     </n-card>
@@ -148,257 +144,258 @@
 </template>
 
 <script lang="ts" setup>
-import Avataaars from 'vuejs-avataaars/src/Avataaars.vue'
+import Avataaars from "vuejs-avataaars/src/Avataaars.vue";
 import { ref, reactive, onMounted, computed, Ref } from "vue";
 import { getPlayersByClubAPI } from "@/apis/player";
 import { gamePveSkipAPI, gamePveStartAPI, gamePveNextTurnAPI } from "@/apis/gamePve";
-import { useStore } from '@/stores/store';
+import { getClubByIdAPI } from "@/apis/club";
+import { useStore } from "@/stores/store";
 import TacticalSelector from "@/components/OnGame/TacticalSelector.vue";
-import { Router } from 'vue-router';
+import { Router } from "vue-router";
 const store = useStore();
 //region 拖曳功能
 const posInfo = reactive({
     ST: {
-        name: ['ST1', 'ST2'],
+        name: ["ST1", "ST2"],
         isMasked: false,
         activeNum: 0,
         maxNum: 2,
         fieldStyle: {
-            position: 'absolute',
-            left: '30%',
-            top: '5%',
-            height: '15%',
-            width: '40%',
+            position: "absolute",
+            left: "30%",
+            top: "5%",
+            height: "15%",
+            width: "40%",
         },
         maskStyle: {
-            position: 'absolute',
-            left: '30%',
-            top: '5%',
-            height: '15%',
-            width: '40%'
-        }
+            position: "absolute",
+            left: "30%",
+            top: "5%",
+            height: "15%",
+            width: "40%",
+        },
     },
     LW: {
-        name: ['LW'],
+        name: ["LW"],
         isMasked: false,
         activeNum: 0,
         maxNum: 1,
         fieldStyle: {
-            position: 'absolute',
-            left: '0',
-            top: '8%',
-            height: '15%',
-            width: '29%',
+            position: "absolute",
+            left: "0",
+            top: "8%",
+            height: "15%",
+            width: "29%",
         },
         maskStyle: {
-            position: 'absolute',
-            left: '0',
-            top: '8%',
-            height: '15%',
-            width: '29%',
-        }
+            position: "absolute",
+            left: "0",
+            top: "8%",
+            height: "15%",
+            width: "29%",
+        },
     },
     RW: {
-        name: ['RW'],
+        name: ["RW"],
         isMasked: false,
         activeNum: 0,
         maxNum: 1,
         fieldStyle: {
-            position: 'absolute',
-            left: '71%',
-            top: '8%',
-            height: '15%',
-            width: '30%',
+            position: "absolute",
+            left: "71%",
+            top: "8%",
+            height: "15%",
+            width: "30%",
         },
         maskStyle: {
-            position: 'absolute',
-            left: '71%',
-            top: '8%',
-            height: '15%',
-            width: '30%',
-        }
+            position: "absolute",
+            left: "71%",
+            top: "8%",
+            height: "15%",
+            width: "30%",
+        },
     },
     CAM: {
-        name: ['CAM1', 'CAM2'],
+        name: ["CAM1", "CAM2"],
         isMasked: false,
         activeNum: 0,
         maxNum: 2,
         fieldStyle: {
-            position: 'absolute',
-            left: '30%',
-            top: '21%',
-            height: '14%',
-            width: '40%',
+            position: "absolute",
+            left: "30%",
+            top: "21%",
+            height: "14%",
+            width: "40%",
         },
         maskStyle: {
-            position: 'absolute',
-            left: '30%',
-            top: '21%',
-            height: '14%',
-            width: '40%',
-        }
+            position: "absolute",
+            left: "30%",
+            top: "21%",
+            height: "14%",
+            width: "40%",
+        },
     },
     LM: {
-        name: ['LM'],
+        name: ["LM"],
         isMasked: false,
         activeNum: 0,
         maxNum: 1,
         fieldStyle: {
-            position: 'absolute',
-            left: '0',
-            top: '33%',
-            height: '14%',
-            width: '24%',
+            position: "absolute",
+            left: "0",
+            top: "33%",
+            height: "14%",
+            width: "24%",
         },
         maskStyle: {
-            position: 'absolute',
-            left: '0',
-            top: '33%',
-            height: '14%',
-            width: '24%',
-        }
+            position: "absolute",
+            left: "0",
+            top: "33%",
+            height: "14%",
+            width: "24%",
+        },
     },
     RM: {
-        name: ['RM'],
+        name: ["RM"],
         isMasked: false,
         activeNum: 0,
         maxNum: 1,
         fieldStyle: {
-            position: 'absolute',
-            left: '76%',
-            top: '33%',
-            height: '14%',
-            width: '24%',
+            position: "absolute",
+            left: "76%",
+            top: "33%",
+            height: "14%",
+            width: "24%",
         },
         maskStyle: {
-            position: 'absolute',
-            left: '76%',
-            top: '33%',
-            height: '14%',
-            width: '24%',
-        }
+            position: "absolute",
+            left: "76%",
+            top: "33%",
+            height: "14%",
+            width: "24%",
+        },
     },
     CM: {
-        name: ['CM1', 'CM2', 'CM3'],
+        name: ["CM1", "CM2", "CM3"],
         isMasked: false,
         activeNum: 0,
         maxNum: 3,
         fieldStyle: {
-            position: 'absolute',
-            left: '25%',
-            top: '36%',
-            height: '14%',
-            width: '50%',
+            position: "absolute",
+            left: "25%",
+            top: "36%",
+            height: "14%",
+            width: "50%",
         },
         maskStyle: {
-            position: 'absolute',
-            left: '25%',
-            top: '36%',
-            height: '14%',
-            width: '50%',
-        }
+            position: "absolute",
+            left: "25%",
+            top: "36%",
+            height: "14%",
+            width: "50%",
+        },
     },
     CDM: {
-        name: ['CDM1', 'CDM2'],
+        name: ["CDM1", "CDM2"],
         isMasked: false,
         activeNum: 0,
         maxNum: 2,
         fieldStyle: {
-            position: 'absolute',
-            left: '30%',
-            top: '51%',
-            height: '14%',
-            width: '40%',
+            position: "absolute",
+            left: "30%",
+            top: "51%",
+            height: "14%",
+            width: "40%",
         },
         maskStyle: {
-            position: 'absolute',
-            left: '30%',
-            top: '51%',
-            height: '14%',
-            width: '40%',
-        }
+            position: "absolute",
+            left: "30%",
+            top: "51%",
+            height: "14%",
+            width: "40%",
+        },
     },
     LB: {
-        name: ['LB'],
+        name: ["LB"],
         isMasked: false,
         activeNum: 0,
         maxNum: 1,
         fieldStyle: {
-            position: 'absolute',
-            left: '0',
-            top: '63%',
-            height: '14%',
-            width: '24%',
+            position: "absolute",
+            left: "0",
+            top: "63%",
+            height: "14%",
+            width: "24%",
         },
         maskStyle: {
-            position: 'absolute',
-            left: '0',
-            top: '63%',
-            height: '14%',
-            width: '24%',
-        }
+            position: "absolute",
+            left: "0",
+            top: "63%",
+            height: "14%",
+            width: "24%",
+        },
     },
     RB: {
-        name: ['RB'],
+        name: ["RB"],
         isMasked: false,
         activeNum: 0,
         maxNum: 1,
         fieldStyle: {
-            position: 'absolute',
-            left: '76%',
-            top: '63%',
-            height: '14%',
-            width: '24%',
+            position: "absolute",
+            left: "76%",
+            top: "63%",
+            height: "14%",
+            width: "24%",
         },
         maskStyle: {
-            position: 'absolute',
-            left: '76%',
-            top: '63%',
-            height: '14%',
-            width: '24%',
-        }
+            position: "absolute",
+            left: "76%",
+            top: "63%",
+            height: "14%",
+            width: "24%",
+        },
     },
     CB: {
-        name: ['CB1', 'CB2', 'CB3'],
+        name: ["CB1", "CB2", "CB3"],
         isMasked: false,
         activeNum: 0,
         maxNum: 3,
         fieldStyle: {
-            position: 'absolute',
-            left: '25%',
-            top: '66%',
-            height: '14%',
-            width: '50%',
+            position: "absolute",
+            left: "25%",
+            top: "66%",
+            height: "14%",
+            width: "50%",
         },
         maskStyle: {
-            position: 'absolute',
-            left: '25%',
-            top: '66%',
-            height: '14%',
-            width: '50%',
-        }
+            position: "absolute",
+            left: "25%",
+            top: "66%",
+            height: "14%",
+            width: "50%",
+        },
     },
     GK: {
-        name: ['GK'],
+        name: ["GK"],
         isMasked: false,
         activeNum: 0,
         maxNum: 1,
         fieldStyle: {
-            position: 'absolute',
-            left: '30%',
-            top: '81%',
-            height: '14%',
-            width: '40%',
+            position: "absolute",
+            left: "30%",
+            top: "81%",
+            height: "14%",
+            width: "40%",
         },
         maskStyle: {
-            position: 'absolute',
-            left: '30%',
-            top: '81%',
-            height: '14%',
-            width: '40%',
-        }
-    }
-}) as any
+            position: "absolute",
+            left: "30%",
+            top: "81%",
+            height: "14%",
+            width: "40%",
+        },
+    },
+}) as any;
 
 const position = reactive({
     LW: null,
@@ -419,33 +416,29 @@ const position = reactive({
     CB2: null,
     CB3: null,
     RB: null,
-    GK: null
-
-}) as any
-
+    GK: null,
+}) as any;
 
 // 被编入阵容的球员数量
-const activePlayerNum = computed(
-    () => {
-        let count = 0
-        for (let i in position) {
-            if (position[i] != null) {
-                count++
-            }
+const activePlayerNum = computed(() => {
+    let count = 0;
+    for (let i in position) {
+        if (position[i] != null) {
+            count++;
         }
-        return count
     }
-)
+    return count;
+});
 
 // 判断该id球员是否被选中
 const isChosen = (id: number) => {
     for (let key in position) {
         if (position[key] == id) {
-            return true
+            return true;
         }
     }
-    return false
-}
+    return false;
+};
 // 将所有未满位置的遮罩层打开
 const openMaskNotEmpty = (oriPos: string | null) => {
     for (let key in posInfo) {
@@ -454,9 +447,9 @@ const openMaskNotEmpty = (oriPos: string | null) => {
             // 小位置
             if (position[pos] == null) {
                 // 如果有未满的位置，打开遮罩层
-                posInfo[key].isMasked = true
-                console.log(`${key} 的遮罩层已打开`)
-                break
+                posInfo[key].isMasked = true;
+                console.log(`${key} 的遮罩层已打开`);
+                break;
             }
         }
     }
@@ -465,254 +458,264 @@ const openMaskNotEmpty = (oriPos: string | null) => {
         for (let key in posInfo) {
             for (let pos of posInfo[key].name) {
                 if (pos == oriPos && posInfo[key].isMasked == true) {
-                    posInfo[key].isMasked = false
-                    console.log(`${key} 由于是拖曳源，因此关闭遮罩层`)
-                    break
+                    posInfo[key].isMasked = false;
+                    console.log(`${key} 由于是拖曳源，因此关闭遮罩层`);
+                    break;
                 }
             }
         }
     }
-
-}
+};
 
 // 关闭所有遮罩层
 const closeAllMask = () => {
     for (let key in posInfo) {
-        posInfo[key].isMasked = false
+        posInfo[key].isMasked = false;
     }
-}
-
+};
 
 const activePos = (pos: string | number) => {
     // 获取指定大位置的非空小位置
-    let posList = posInfo[pos].name
+    let posList = posInfo[pos].name;
     return posList.filter((val: string) => {
-        return position[val] != null
-    }
-    )
-}
+        return position[val] != null;
+    });
+};
 
 const selectionDragstart = (event: DragEvent, elem: any) => {
-    openMaskNotEmpty(null)
+    openMaskNotEmpty(null);
     if (event.dataTransfer && event.target) {
-        event.dataTransfer.setData('dragId', elem.id)
-        event.dataTransfer.setData('dragCompo', 'selection')
+        event.dataTransfer.setData("dragId", elem.id);
+        event.dataTransfer.setData("dragCompo", "selection");
     }
-
-}
+};
 
 const selectionDrop = (event: DragEvent, elem: any) => {
     if (event.dataTransfer) {
-        let dragCompo = event.dataTransfer.getData('dragCompo')
-        if (dragCompo == 'selection') {
+        let dragCompo = event.dataTransfer.getData("dragCompo");
+        if (dragCompo == "selection") {
             // do nothing
-            console.log('禁止从选项栏移到选项栏')
-        } else if (dragCompo == 'position') {
+            console.log("禁止从选项栏移到选项栏");
+        } else if (dragCompo == "position") {
             // 检查大位置区域中是否已有此球员
             for (let key in position) {
                 if (position[key] == elem.id) {
-                    position[key] = null
-                    break
+                    position[key] = null;
+                    break;
                 }
             }
-            console.log("阵容槽到选项栏")
-            let fromPos = event.dataTransfer.getData('pos')
-            console.log(`${fromPos} 上的 ${position[fromPos]} 被替换为 ${elem.id}`)
-            position[fromPos] = elem.id
-
+            console.log("阵容槽到选项栏");
+            let fromPos = event.dataTransfer.getData("pos");
+            console.log(`${fromPos} 上的 ${position[fromPos]} 被替换为 ${elem.id}`);
+            position[fromPos] = elem.id;
         }
     }
-}
+};
 
 const positionDragstart = (event: DragEvent, pos: string) => {
     // 打开所有未满位置的遮罩层
-    openMaskNotEmpty(pos)
+    openMaskNotEmpty(pos);
 
     if (event.dataTransfer) {
-        event.dataTransfer.setData('dragId', position[pos])
-        event.dataTransfer.setData('dragCompo', 'position')
-        event.dataTransfer.setData('pos', pos)
+        event.dataTransfer.setData("dragId", position[pos]);
+        event.dataTransfer.setData("dragCompo", "position");
+        event.dataTransfer.setData("pos", pos);
     }
-
-}
+};
 
 const positionDrop = (event: DragEvent, pos: string) => {
     if (event.dataTransfer) {
-        let dragCompo = event.dataTransfer.getData('dragCompo')
-        let dragId = event.dataTransfer.getData('dragId')
-        if (dragCompo == 'selection') {
+        let dragCompo = event.dataTransfer.getData("dragCompo");
+        let dragId = event.dataTransfer.getData("dragId");
+        if (dragCompo == "selection") {
             if (activePlayerNum.value >= 11) {
-                return
+                return;
             }
-            console.log("选项位到阵容槽")
+            console.log("选项位到阵容槽");
             for (let key in position) {
                 if (position[key] == dragId) {
                     // 保证不出现两个相同球员
-                    position[key] = null
+                    position[key] = null;
                 }
             }
-            console.log(`${dragId} 移动到 ${pos} 位置`)
-            position[pos] = dragId
-            console.log(position)
-        } else if (dragCompo == 'position') {
-            console.log("阵容槽到阵容槽")
-            let fromPos = event.dataTransfer.getData('pos')
+            console.log(`${dragId} 移动到 ${pos} 位置`);
+            position[pos] = dragId;
+            console.log(position);
+        } else if (dragCompo == "position") {
+            console.log("阵容槽到阵容槽");
+            let fromPos = event.dataTransfer.getData("pos");
             if (fromPos == pos) {
-                console.log("没移动")
+                console.log("没移动");
             } else {
                 if (position[pos] == null) {
-                    console.log(`${dragId} 从 ${fromPos} 移到 ${pos}`)
-                    position[fromPos] = null
-                    position[pos] = dragId
+                    console.log(`${dragId} 从 ${fromPos} 移到 ${pos}`);
+                    position[fromPos] = null;
+                    position[pos] = dragId;
                 } else {
-                    console.log(`${dragId} 与 ${position[pos]} 交换位置 ; ${fromPos} 换到 ${pos}`)
-                    position[fromPos] = position[pos]
-                    position[pos] = dragId
+                    console.log(`${dragId} 与 ${position[pos]} 交换位置 ; ${fromPos} 换到 ${pos}`);
+                    position[fromPos] = position[pos];
+                    position[pos] = dragId;
                 }
             }
         }
     }
-}
+};
 
 const fieldDrop = (event: DragEvent, pos: string | number) => {
     if (event.dataTransfer) {
-        let dragCompo = event.dataTransfer.getData('dragCompo')
-        let dragId = event.dataTransfer.getData('dragId')
-        let fromPos = event.dataTransfer.getData('pos')
-        if (dragCompo == 'selection') {
+        let dragCompo = event.dataTransfer.getData("dragCompo");
+        let dragId = event.dataTransfer.getData("dragId");
+        let fromPos = event.dataTransfer.getData("pos");
+        if (dragCompo == "selection") {
             if (activePlayerNum.value >= 11) {
-                return
+                return;
             }
             // 检查大位置区域中是否已有此球员
-            let existKey: string = ''
+            let existKey: string = "";
             for (let key in position) {
                 if (position[key] == dragId) {
-                    existKey = key
-                    break
+                    existKey = key;
+                    break;
                 }
             }
             // 挑选空位 将球员放入
             for (let i = 0; i < posInfo[pos].name.length; i++) {
-                let nowPos: string = posInfo[pos].name[i] // 取出当前遍历到的小位置
+                let nowPos: string = posInfo[pos].name[i]; // 取出当前遍历到的小位置
                 if (!position[nowPos]) {
                     // 填充任意一个没有球员的阵容槽
-                    position[nowPos] = dragId
-                    console.log(`球员 ${dragId} 经过位置块拖曳到位置 ${nowPos}`)
+                    position[nowPos] = dragId;
+                    console.log(`球员 ${dragId} 经过位置块拖曳到位置 ${nowPos}`);
                     if (existKey) {
-                        position[existKey] = null
+                        position[existKey] = null;
                     }
-                    break
+                    break;
                 }
             }
-        } else if (dragCompo == 'position') {
+        } else if (dragCompo == "position") {
             // 挑选空位 将球员放入
-            let success = false
+            let success = false;
             for (let i = 0; i < posInfo[pos].name.length; i++) {
-                let nowPos: string = posInfo[pos].name[i] // 取出当前遍历到的小位置
+                let nowPos: string = posInfo[pos].name[i]; // 取出当前遍历到的小位置
                 if (!position[nowPos]) {
                     // 填充任意一个没有球员的阵容槽
-                    position[nowPos] = dragId
-                    console.log(`球员 ${dragId} 从 ${fromPos} 转移到位置 ${nowPos}`)
-                    success = true
-                    break
+                    position[nowPos] = dragId;
+                    console.log(`球员 ${dragId} 从 ${fromPos} 转移到位置 ${nowPos}`);
+                    success = true;
+                    break;
                 }
             }
             if (success) {
                 // 删除原位置上的球员
-                position[fromPos] = null
+                position[fromPos] = null;
             }
-
         }
     }
-}
+};
 
 const dragend = (event: DragEvent) => {
-    closeAllMask()
+    closeAllMask();
     if (event.dataTransfer) {
-        event.dataTransfer.clearData()
+        event.dataTransfer.clearData();
     }
-}
+};
 
 // region 获取球员信息
 const getPlayerDataById = (id: number) => {
     for (let p of store.playerData) {
-        if (p['id'] == id) {
-            return p
+        if (p["id"] == id) {
+            return p;
         }
     }
-    return null
-}
+    return null;
+};
 
 const getAvatar = (playerId: number | null) => {
     if (playerId == null) {
-        return {}
+        return {};
     }
-    let playerData: any = getPlayerDataById(playerId)
+    let playerData: any = getPlayerDataById(playerId);
     if (playerData == null) {
-        return {}
+        return {};
     }
-    return playerData.avatar
-}
+    return playerData.avatar;
+};
 // endregion
 
 // 获取最终阵容
 const getUltimateTactic = () => {
-    let re = {} as any
+    let re = {} as any;
     for (let key in posInfo) {
-        re[key] = []
+        re[key] = [];
         for (let pos of posInfo[key].name) {
             if (position[pos] != null) {
-                re[key].push(position[pos])
+                re[key].push(position[pos]);
             }
         }
     }
-    return re
-}
+    return re;
+};
 declare const window: Window & { $router: Router };
 let curTactic: Ref<string> = ref("wing_cross");
 let tactics: Ref<Array<any>> = ref([
     {
-        label: '下底传中',
-        value: 'wing_cross',
-        weight: 50
+        label: "下底传中",
+        value: "wing_cross",
+        weight: 50,
     },
     {
-        label: '边路内切',
-        value: 'under_cutting',
-        weight: 50
+        label: "边路内切",
+        value: "under_cutting",
+        weight: 50,
     },
     {
-        label: '倒三角',
-        value: 'pull_back',
-        weight: 50
+        label: "倒三角",
+        value: "pull_back",
+        weight: 50,
     },
     {
-        label: '中路渗透',
-        value: 'middle_attack',
-        weight: 50
+        label: "中路渗透",
+        value: "middle_attack",
+        weight: 50,
     },
     {
-        label: '防守反击',
-        value: 'counter_attack',
-        weight: 50
+        label: "防守反击",
+        value: "counter_attack",
+        weight: 50,
     },
 ]);
 function skipGame(): void {
-    gamePveSkipAPI().then((response: any) => {
-        window.$router.push({ name: "endGame" });
-    }).catch((_error: any) => { });
+    gamePveSkipAPI()
+        .then((response: any) => {
+            window.$router.push({ name: "endGame" });
+        })
+        .catch((_error: any) => {});
 }
 function startGame(): void {
     let data = {
         lineup: {},
-        tactic_weight: {}
-    }
-    gamePveStartAPI(data).then((response: any) => {
-        gamePveNextTurnAPI({ tactic: curTactic.value }).then((response: any) => {
-            store.gamePveData = response;
-            window.$router.push({ name: "onGame" });
-        }).catch((_error: any) => { });
-    }).catch((_error: any) => { });
+        tactic_weight: {},
+    };
+    gamePveStartAPI(data)
+        .then((response: any) => {
+            gamePveNextTurnAPI({ tactic: curTactic.value })
+                .then((response: any) => {
+                    let temp = response;
+                    getClubByIdAPI({ club_id: temp["player_team_info"]["club_id"] })
+                        .then((response: any) => {
+                            temp["player_team_info"]["name"] = response["name"];
+                            getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] })
+                                .then((response: any) => {
+                                    temp["computer_team_info"]["name"] = response["name"];
+                                    store.gamePveData = temp;
+                                    window.$router.push({ name: "onGame" });
+                                })
+                                .catch((_error: any) => {});
+                        })
+                        .catch((_error: any) => {});
+                })
+                .catch((_error: any) => {});
+        })
+        .catch((_error: any) => {});
 }
 </script>
 
