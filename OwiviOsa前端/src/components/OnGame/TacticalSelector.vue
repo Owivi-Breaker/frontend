@@ -32,12 +32,13 @@
     </n-card>
 </template>
 <script lang="ts" setup>
-import { Ref, ref, onMounted, watch } from "vue";
+import { Ref, ref, watch } from "vue";
 import { gamePveNextTurnAPI } from "@/apis/gamePve";
 import { useStore } from "@/stores/store";
 import { getClubByIdAPI } from "@/apis/club";
 import { Router } from "vue-router";
 const store = useStore();
+declare const window: Window & { $router: Router };
 let isAuto: Ref<boolean> = ref(false);
 let curTactic: Ref<string> = ref("wing_cross");
 let tactics: Ref<Array<any>> = ref([
@@ -67,30 +68,46 @@ let tactics: Ref<Array<any>> = ref([
         weight: 50,
     },
 ]);
-declare const window: Window & { $router: Router };
+let timer: NodeJS.Timeout | null = null;
 function goNextTurn(): void {
     gamePveNextTurnAPI({ tactic: curTactic.value })
         .then((response: any) => {
-            if (response["game_info"]["turns"] > 50) {
-                clearInterval(timer);
+            if (response["game_info"]["turns"] > 51) {
+                if (timer) {
+                    clearInterval(timer);
+                }
                 window.$router.push({ name: "endGame" });
+                return;
             }
             let temp = response;
-            getClubByIdAPI({ club_id: temp["player_team_info"]["club_id"] })
-                .then((response: any) => {
-                    temp["player_team_info"]["name"] = response["name"];
-                    getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] })
-                        .then((response: any) => {
-                            temp["computer_team_info"]["name"] = response["name"];
-                            store.gamePveData = temp;
-                        })
-                        .catch((_error: any) => {});
-                })
-                .catch((_error: any) => {});
-        })
-        .catch((_error: any) => {});
+            if (store.clubNameId[temp["player_team_info"]["club_id"]]) {
+                temp["player_team_info"]["name"] = store.clubNameId[temp["player_team_info"]["club_id"]];
+                if (store.clubNameId[temp["computer_team_info"]["club_id"]]) {
+                    temp["computer_team_info"]["name"] = store.clubNameId[temp["computer_team_info"]["club_id"]];
+                } else {
+                    getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] }).then((response: any) => {
+                        temp["computer_team_info"]["name"] = response["name"];
+                        store.clubNameId[temp["computer_team_info"]["club_id"]] = response["name"];
+                    }).catch((_error: any) => { });
+                }
+            } else {
+                getClubByIdAPI({ club_id: temp["player_team_info"]["club_id"] })
+                    .then((response: any) => {
+                        temp["player_team_info"]["name"] = response["name"];
+                        store.clubNameId[temp["player_team_info"]["club_id"]] = response["name"];
+                        if (store.clubNameId[temp["computer_team_info"]["club_id"]]) {
+                            temp["computer_team_info"]["name"] = store.clubNameId[temp["computer_team_info"]["club_id"]];
+                        } else {
+                            getClubzByIdAPI({ club_id: temp["computer_team_info"]["club_id"] }).then((response: any) => {
+                                temp["computer_team_info"]["name"] = response["name"];
+                                store.clubNameId[temp["computer_team_info"]["club_id"]] = response["name"];
+                            }).catch((_error: any) => { });
+                        }
+                    }).catch((_error: any) => { });
+            }
+            store.gamePveData = temp;
+        }).catch((_error: any) => { });
 }
-let timer: NodeJS.Timeout;
 watch(
     () => isAuto.value,
     (newVal) => {
@@ -109,8 +126,11 @@ watch(
             goNextTurn();
             timer = setInterval(goNextTurn, 1000);
         } else {
-            clearInterval(timer);
+            if (timer) {
+                clearInterval(timer);
+            }
         }
     }
 );
+defineExpose({ isAuto, curTactic, tactics });
 </script>

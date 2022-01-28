@@ -26,9 +26,7 @@ import { getPlayerByIdAPI } from "@/apis/player";
 import { PlayerItem } from "@/components/OnGame";
 import { useStore } from "@/stores/store";
 const store = useStore();
-defineComponent({
-    PlayerItem,
-});
+defineComponent({ PlayerItem });
 let props: any = defineProps({
     club: Object,
     playerInfo: Array,
@@ -36,7 +34,7 @@ let props: any = defineProps({
 let perfData: ComputedRef<any> = computed(() => {
     let result = props.playerInfo;
     for (let i: number = 0; i < props.playerInfo.length; i++) {
-        if (store.playerNameId !== [] && store.playerNameId[result[i]["player_id"]] !== undefined) {
+        if (store.playerNameId[result[i]["player_id"]] !== undefined) {
             result[i]["name"] = store.playerNameId[result[i]["player_id"]];
         } else {
             getPlayerByIdAPI({ player_id: props.playerInfo[i]["player_id"] }).then((response) => {
@@ -47,6 +45,7 @@ let perfData: ComputedRef<any> = computed(() => {
     }
     return result;
 });
+defineExpose({ props, perfData });
 </script>
 
 <style scoped>

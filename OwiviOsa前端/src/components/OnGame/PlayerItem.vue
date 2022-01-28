@@ -51,16 +51,14 @@
     </n-popover>
 </template>
 <script lang="ts" setup>
-import { computed, ComputedRef, defineComponent, onMounted, Ref, ref, watch } from "vue";
+import { defineComponent, Ref, ref } from "vue";
 import Avataaars from "vuejs-avataaars/src/Avataaars.vue";
 defineComponent({ Avataaars });
 let props: any = defineProps({
     player: Object,
 });
-let test: ComputedRef = computed(() => {
-    console.log(props.player);
-});
 let mouseOn: Ref<Boolean> = ref(false);
+defineExpose({ mouseOn, props });
 </script>
 <style scoped>
 .itemSpace {

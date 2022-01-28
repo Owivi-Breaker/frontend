@@ -46,7 +46,7 @@
     </n-grid>
 </template>
 <script lang="ts" setup>
-import { computed, ComputedRef, defineComponent, Ref, ref, onMounted, watch, nextTick } from "vue";
+import { computed, ComputedRef, defineComponent, ref, watch, nextTick, Ref } from "vue";
 import { GameStatus, TeamData, TacticalStatistic, TacticalSelector } from "@/components/OnGame";
 import { getColor } from "@/utils/colorMap";
 import { useStore } from "@/stores/store";
@@ -56,7 +56,6 @@ defineComponent({ GameStatus, TeamData, TacticalStatistic, TacticalSelector });
 let totalData: ComputedRef = computed(() => {
     return store.gamePveData;
 });
-onMounted(() => {});
 let homeTeam: ComputedRef = computed(() => {
     if (totalData.value.game_info.home_club_id === totalData.value.player_team_info.club_id) {
         return totalData.value.player_team_info;
@@ -85,16 +84,11 @@ let foreignPlayerInfo: ComputedRef = computed(() => {
         return totalData.value.computer_players_info;
     }
 });
-const nScrollBarRef = ref<ScrollbarInst | null>(null);
-// 解说数据处理
+const nScrollBarRef: Ref<ScrollbarInst | null> = ref(null);
 let commentaryList: ComputedRef = computed(() => {
     let scriptList: Array<string> = totalData.value["game_info"]["script"].split("\n\n");
     let result = new Array<any>();
-    result.push({
-        content: scriptList[0],
-        time: "00:00",
-        level: 1,
-    });
+    result.push({ content: scriptList[0], time: "00:00", level: 1 });
     for (let i: number = 1; i < scriptList.length; i++) {
         let unit: number = (90 / 50) * 60;
         let bottomTime: number = (i - 1) * unit;
@@ -140,20 +134,5 @@ watch(
     },
     { immediate: true }
 );
-let teams = [
-    {
-        id: 1,
-        name: "曼城",
-    },
-    {
-        id: 2,
-        name: "曼联",
-    },
-];
-defineExpose({
-    getColor,
-    commentaryList,
-    totalData,
-    teams,
-});
+defineExpose({ getColor, homeTeam, foreignTeam, homePlayerInfo, foreignPlayerInfo, commentaryList, totalData });
 </script>
