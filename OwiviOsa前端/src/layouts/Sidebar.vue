@@ -85,6 +85,22 @@ const menuOptions = [
         icon: renderIcon(BookIcon)
     },
     {
+        label: () => h(
+            RouterLink,
+            {
+                to: {
+                    name: 'gameResult',
+                    params: {
+                        lang: 'zh-CN'
+                    }
+                }
+            },
+            { default: () => '比赛结果' }
+        ),
+        key: 'gameResult',
+        icon: renderIcon(BookIcon)
+    },
+    {
         label: '赛程',
         key: 'games',
         icon: renderIcon(BookIcon)

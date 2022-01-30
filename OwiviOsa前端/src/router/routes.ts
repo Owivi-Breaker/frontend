@@ -30,6 +30,15 @@ const mainRoutes: RouteRecordRaw[] = [
         }
     },
     {
+        name: 'gameResult',
+        path: '/gameResult',
+        component: () => import('../views/gameResult.vue'),
+        meta: {
+            title: "比赛结果",
+            requiresAuth: true // 需要登陆才能访问
+        }
+    },
+    {
         name: 'mail',
         path: '/mail',
         component: () => import('../views/Mail.vue'),
