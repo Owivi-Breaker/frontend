@@ -37,7 +37,7 @@ import { useStore } from '@/stores/store'
 import key from 'Keymaster'
 const store = useStore();
 
-key('space', function () { nextDay() });
+key('space', function () { nextDay() ; return false});
 
 let showExitModal: Ref<boolean> = ref(false);
 defineComponent({
