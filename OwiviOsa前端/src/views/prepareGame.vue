@@ -3,16 +3,17 @@
         <n-gi>
             <n-card class="field">
                 <!--阵容块-->
-                <div v-for="(value, key) in posInfo" :style="value.fieldStyle">
+                <div v-for="(value, key) in posInfo" v-bind:key="key" :style="value.fieldStyle">
                     <n-space justify="center">
                         <!--阵容槽-->
                         <div
-                            v-for="pos in activePos(key)"
+                            v-for="(pos, key) in activePos(key)"
                             :draggable="true"
                             @dragend="dragend"
                             @dragstart="positionDragstart($event, pos)"
                             @drop="positionDrop($event, pos)"
                             @dragover.prevent
+                            v-bind:key="key"
                         >
                             <div v-if="position[pos]">
                                 <n-popover raw trigger="click">
@@ -53,7 +54,7 @@
                 </div>
 
                 <!--遮罩层-->
-                <template v-for="(value, key) in posInfo">
+                <template v-for="(value, key) in posInfo" v-bind:key="key">
                     <div v-show="value.isMasked" :style="value.maskStyle" class="mask" @drop="fieldDrop($event, key)" @dragover.prevent>
                         <n-h4>{{ key }}</n-h4>
                     </div>
@@ -65,7 +66,7 @@
             <n-card>
                 <n-scrollbar style="max-height: 800px" x-scrollable>
                     <n-space justify="space-around">
-                        <n-popover v-for="elem in store.playerData" raw trigger="click">
+                        <n-popover v-for="(elem, key) in store.playerData" v-bind:key="key" raw trigger="click">
                             <template #trigger>
                                 <n-card
                                     :bordered="false"
@@ -90,14 +91,7 @@
                                     <n-h2>{{ elem.translated_name }}</n-h2>
                                 </template>
                                 <template #header-extra>
-                                    <n-progress
-                                        :circle-gap="5"
-                                        :percentage="[20, 50]"
-                                        :stroke-width="10"
-                                        status="success"
-                                        style="width: 40px"
-                                        type="multiple-circle"
-                                    ></n-progress>
+                                    <n-progress :circle-gap="5" :percentage="[20, 50]" :stroke-width="10" status="success" style="width: 40px" type="multiple-circle"></n-progress>
                                 </template>
                                 <n-grid cols="3">
                                     <n-gi span="1">
@@ -128,10 +122,13 @@
             <n-grid cols="1" y-gap="10">
                 <n-gi>
                     <n-card title="战术配置">
-                        <n-space align="center" item-style="display: flex; align-item: center;" justify="space-between">
-                            <p style="margin: 0">以</p>
-                            <n-select style="width: 195px" v-model:value="curTactic" v-bind:options="tactics" />
-                            <p style="margin: 0">战术</p>
+                        <n-statistic v-for="(item, key) in tactics" v-bind:key="key">
+                            <template #label>{{ item["label"] }}</template>
+                            <template #default>
+                                <n-slider v-model:value="item.weight" />
+                            </template>
+                        </n-statistic>
+                        <n-space align="center" item-style="display: flex; align-item: center;" justify="end">
                             <n-button type="primary" v-on:click="startGame">开始比赛</n-button>
                             <p style="margin: 0">或</p>
                             <n-button v-on:click="skipGame">跳过比赛</n-button>
@@ -145,13 +142,13 @@
 
 <script lang="ts" setup>
 import Avataaars from "vuejs-avataaars/src/Avataaars.vue";
-import { ref, reactive, onMounted, computed, Ref } from "vue";
+import { ref, reactive, onMounted, computed, Ref, defineComponent } from "vue";
 import { getPlayersByClubAPI } from "@/apis/player";
 import { gamePveSkipAPI, gamePveStartAPI, gamePveNextTurnAPI } from "@/apis/gamePve";
 import { getClubByIdAPI } from "@/apis/club";
 import { useStore } from "@/stores/store";
-import TacticalSelector from "@/components/OnGame/TacticalSelector.vue";
 import { Router } from "vue-router";
+defineComponent({ Avataaars });
 const store = useStore();
 //region 拖曳功能
 const posInfo = reactive({
@@ -684,39 +681,36 @@ let tactics: Ref<Array<any>> = ref([
     },
 ]);
 function skipGame(): void {
-    gamePveSkipAPI()
-        .then((response: any) => {
+    let temp: any = new Object();
+    for (let item in tactics.value) {
+        temp[tactics.value[item].value] = tactics.value[item].weight;
+    }
+    let data = {
+        lineup: {},
+        tactic_weight: temp,
+    };
+    gamePveSkipAPI(data)
+        .then((_response: any) => {
             window.$router.push({ name: "endGame" });
         })
         .catch((_error: any) => {});
 }
 function startGame(): void {
+    let temp: any = new Object();
+    for (let item in tactics.value) {
+        temp[tactics.value[item].value] = tactics.value[item].weight;
+    }
     let data = {
         lineup: {},
-        tactic_weight: {},
+        tactic_weight: temp,
     };
     gamePveStartAPI(data)
-        .then((response: any) => {
-            gamePveNextTurnAPI({ tactic: curTactic.value })
-                .then((response: any) => {
-                    let temp = response;
-                    getClubByIdAPI({ club_id: temp["player_team_info"]["club_id"] })
-                        .then((response: any) => {
-                            temp["player_team_info"]["name"] = response["name"];
-                            getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] })
-                                .then((response: any) => {
-                                    temp["computer_team_info"]["name"] = response["name"];
-                                    store.gamePveData = temp;
-                                    window.$router.push({ name: "onGame" });
-                                })
-                                .catch((_error: any) => {});
-                        })
-                        .catch((_error: any) => {});
-                })
-                .catch((_error: any) => {});
+        .then((_response: any) => {
+            window.$router.push({ name: "onGame" });
         })
         .catch((_error: any) => {});
 }
+defineExpose({ getUltimateTactic, getAvatar, getPlayerDataById, dragend, fieldDrop, tactics, curTactic, skipGame, startGame });
 </script>
 
 <style>

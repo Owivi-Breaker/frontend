@@ -70,6 +70,19 @@ let tactics: Ref<Array<any>> = ref([
 ]);
 let timer: NodeJS.Timeout | null = null;
 function goNextTurn(): void {
+    if (isAuto.value) {
+        let possibleList: Array<number> = [tactics.value[0].weight, 0, 0, 0, 0];
+        for (let i: number = 1; i < tactics.value.length; i++) {
+            possibleList[i] = possibleList[i - 1] + tactics.value[i].weight;
+        }
+        let result: number = Math.round(Math.random() * possibleList[possibleList.length - 1]);
+        for (let i: number = 0; i < possibleList.length; i++) {
+            if (result < possibleList[i]) {
+                curTactic.value = tactics.value[i].value;
+                break;
+            }
+        }
+    }
     gamePveNextTurnAPI({ tactic: curTactic.value })
         .then((response: any) => {
             if (response["game_info"]["turns"] > 51) {
@@ -84,11 +97,15 @@ function goNextTurn(): void {
                 temp["player_team_info"]["name"] = store.clubNameId[temp["player_team_info"]["club_id"]];
                 if (store.clubNameId[temp["computer_team_info"]["club_id"]]) {
                     temp["computer_team_info"]["name"] = store.clubNameId[temp["computer_team_info"]["club_id"]];
+                    store.gamePveData = temp;
                 } else {
-                    getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] }).then((response: any) => {
-                        temp["computer_team_info"]["name"] = response["name"];
-                        store.clubNameId[temp["computer_team_info"]["club_id"]] = response["name"];
-                    }).catch((_error: any) => { });
+                    getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] })
+                        .then((response: any) => {
+                            temp["computer_team_info"]["name"] = response["name"];
+                            store.clubNameId[temp["computer_team_info"]["club_id"]] = response["name"];
+                            store.gamePveData = temp;
+                        })
+                        .catch((_error: any) => {});
                 }
             } else {
                 getClubByIdAPI({ club_id: temp["player_team_info"]["club_id"] })
@@ -97,32 +114,26 @@ function goNextTurn(): void {
                         store.clubNameId[temp["player_team_info"]["club_id"]] = response["name"];
                         if (store.clubNameId[temp["computer_team_info"]["club_id"]]) {
                             temp["computer_team_info"]["name"] = store.clubNameId[temp["computer_team_info"]["club_id"]];
+                            store.gamePveData = temp;
                         } else {
-                            getClubzByIdAPI({ club_id: temp["computer_team_info"]["club_id"] }).then((response: any) => {
-                                temp["computer_team_info"]["name"] = response["name"];
-                                store.clubNameId[temp["computer_team_info"]["club_id"]] = response["name"];
-                            }).catch((_error: any) => { });
+                            getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] })
+                                .then((response: any) => {
+                                    temp["computer_team_info"]["name"] = response["name"];
+                                    store.clubNameId[temp["computer_team_info"]["club_id"]] = response["name"];
+                                    store.gamePveData = temp;
+                                })
+                                .catch((_error: any) => {});
                         }
-                    }).catch((_error: any) => { });
+                    })
+                    .catch((_error: any) => {});
             }
-            store.gamePveData = temp;
-        }).catch((_error: any) => { });
+        })
+        .catch((_error: any) => {});
 }
 watch(
     () => isAuto.value,
     (newVal) => {
         if (newVal) {
-            let possibleList: Array<number> = [tactics.value[0].weight, 0, 0, 0, 0];
-            for (let i: number = 1; i < tactics.value.length; i++) {
-                possibleList[i] = possibleList[i - 1] + tactics.value[i].weight;
-            }
-            let result: number = Math.round(Math.random() * possibleList[possibleList.length - 1]);
-            for (let i: number = 0; i < possibleList.length; i++) {
-                if (result < possibleList[i]) {
-                    curTactic.value = tactics.value[i].value;
-                    break;
-                }
-            }
             goNextTurn();
             timer = setInterval(goNextTurn, 1000);
         } else {

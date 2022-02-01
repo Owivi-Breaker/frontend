@@ -31,12 +31,14 @@ let props: any = defineProps({
     club: Object,
     playerInfo: Array,
 });
+let isGetting: Array<boolean> = [false, false, false, false, false, false, false, false, false, false, false];
 let perfData: ComputedRef<any> = computed(() => {
     let result = props.playerInfo;
     for (let i: number = 0; i < props.playerInfo.length; i++) {
-        if (store.playerNameId[result[i]["player_id"]] !== undefined) {
+        if (store.playerNameId[result[i]["player_id"]] !== undefined || isGetting[i]) {
             result[i]["name"] = store.playerNameId[result[i]["player_id"]];
         } else {
+            isGetting[i] = true;
             getPlayerByIdAPI({ player_id: props.playerInfo[i]["player_id"] }).then((response) => {
                 result[i]["name"] = response["translated_name"];
                 store.playerNameId[result[i]["player_id"]] = response["translated_name"];

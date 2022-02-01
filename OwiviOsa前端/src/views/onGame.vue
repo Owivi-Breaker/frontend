@@ -53,6 +53,7 @@ import { useStore } from "@/stores/store";
 import { ScrollbarInst } from "naive-ui";
 const store = useStore();
 defineComponent({ GameStatus, TeamData, TacticalStatistic, TacticalSelector });
+let isLoading: Ref<boolean> = ref(true);
 let totalData: ComputedRef = computed(() => {
     return store.gamePveData;
 });
