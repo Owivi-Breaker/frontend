@@ -33,7 +33,7 @@
 </template>
 <script lang="ts" setup>
 import { Ref, ref, watch } from "vue";
-import { gamePveNextTurnAPI } from "@/apis/gamePve";
+import { gamePveNextTurnAPI, gamePveShowGameInfoAPI } from "@/apis/gamePve";
 import { useStore } from "@/stores/store";
 import { getClubByIdAPI } from "@/apis/club";
 import { Router } from "vue-router";
@@ -69,6 +69,52 @@ let tactics: Ref<Array<any>> = ref([
     },
 ]);
 let timer: NodeJS.Timeout | null = null;
+gamePveShowGameInfoAPI()
+    .then((response: any) => {
+        if (response["game_info"]["turns"] > 51) {
+            if (timer) {
+                clearInterval(timer);
+            }
+            window.$router.push({ name: "endGame" });
+            return;
+        }
+        let temp = response;
+        if (store.clubNameId[temp["player_team_info"]["club_id"]]) {
+            temp["player_team_info"]["name"] = store.clubNameId[temp["player_team_info"]["club_id"]];
+            if (store.clubNameId[temp["computer_team_info"]["club_id"]]) {
+                temp["computer_team_info"]["name"] = store.clubNameId[temp["computer_team_info"]["club_id"]];
+                store.gamePveData = temp;
+            } else {
+                getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] })
+                    .then((response: any) => {
+                        temp["computer_team_info"]["name"] = response["name"];
+                        store.clubNameId[temp["computer_team_info"]["club_id"]] = response["name"];
+                        store.gamePveData = temp;
+                    })
+                    .catch((_error: any) => {});
+            }
+        } else {
+            getClubByIdAPI({ club_id: temp["player_team_info"]["club_id"] })
+                .then((response: any) => {
+                    temp["player_team_info"]["name"] = response["name"];
+                    store.clubNameId[temp["player_team_info"]["club_id"]] = response["name"];
+                    if (store.clubNameId[temp["computer_team_info"]["club_id"]]) {
+                        temp["computer_team_info"]["name"] = store.clubNameId[temp["computer_team_info"]["club_id"]];
+                        store.gamePveData = temp;
+                    } else {
+                        getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] })
+                            .then((response: any) => {
+                                temp["computer_team_info"]["name"] = response["name"];
+                                store.clubNameId[temp["computer_team_info"]["club_id"]] = response["name"];
+                                store.gamePveData = temp;
+                            })
+                            .catch((_error: any) => {});
+                    }
+                })
+                .catch((_error: any) => {});
+        }
+    })
+    .catch((_error: any) => {});
 function goNextTurn(): void {
     if (isAuto.value) {
         let possibleList: Array<number> = [tactics.value[0].weight, 0, 0, 0, 0];
@@ -93,40 +139,9 @@ function goNextTurn(): void {
                 return;
             }
             let temp = response;
-            if (store.clubNameId[temp["player_team_info"]["club_id"]]) {
-                temp["player_team_info"]["name"] = store.clubNameId[temp["player_team_info"]["club_id"]];
-                if (store.clubNameId[temp["computer_team_info"]["club_id"]]) {
-                    temp["computer_team_info"]["name"] = store.clubNameId[temp["computer_team_info"]["club_id"]];
-                    store.gamePveData = temp;
-                } else {
-                    getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] })
-                        .then((response: any) => {
-                            temp["computer_team_info"]["name"] = response["name"];
-                            store.clubNameId[temp["computer_team_info"]["club_id"]] = response["name"];
-                            store.gamePveData = temp;
-                        })
-                        .catch((_error: any) => {});
-                }
-            } else {
-                getClubByIdAPI({ club_id: temp["player_team_info"]["club_id"] })
-                    .then((response: any) => {
-                        temp["player_team_info"]["name"] = response["name"];
-                        store.clubNameId[temp["player_team_info"]["club_id"]] = response["name"];
-                        if (store.clubNameId[temp["computer_team_info"]["club_id"]]) {
-                            temp["computer_team_info"]["name"] = store.clubNameId[temp["computer_team_info"]["club_id"]];
-                            store.gamePveData = temp;
-                        } else {
-                            getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] })
-                                .then((response: any) => {
-                                    temp["computer_team_info"]["name"] = response["name"];
-                                    store.clubNameId[temp["computer_team_info"]["club_id"]] = response["name"];
-                                    store.gamePveData = temp;
-                                })
-                                .catch((_error: any) => {});
-                        }
-                    })
-                    .catch((_error: any) => {});
-            }
+            temp["player_team_info"]["name"] = store.clubNameId[temp["player_team_info"]["club_id"]];
+            temp["computer_team_info"]["name"] = store.clubNameId[temp["computer_team_info"]["club_id"]];
+            store.gamePveData = temp;
         })
         .catch((_error: any) => {});
 }
