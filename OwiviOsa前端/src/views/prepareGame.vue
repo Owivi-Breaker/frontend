@@ -649,9 +649,16 @@ const getUltimateTactic = () => {
             }
         }
     }
-    return re;
+    let result = {} as any;
+    for (let key in re) {
+        for (let i: number = 0; i < re[key].length; i++) {
+            let id = re[key][i];
+            result[id] = key;
+        }
+    }
+    return result;
 };
-declare const window: Window & { $router: Router };
+declare const window: Window & { $router: Router; $message: any };
 let curTactic: Ref<string> = ref("wing_cross");
 let tactics: Ref<Array<any>> = ref([
     {
@@ -681,30 +688,32 @@ let tactics: Ref<Array<any>> = ref([
     },
 ]);
 function skipGame(): void {
-    let temp: any = new Object();
-    for (let item in tactics.value) {
-        temp[tactics.value[item].value] = tactics.value[item].weight;
+    let lineup: Object = getUltimateTactic();
+    if (Object.keys(lineup).length < 11) {
+        window.$message.error("阵容不完整，请补充球员");
+        return;
     }
-    let data = {
-        lineup: {},
-        tactic_weight: temp,
-    };
-    gamePveSkipAPI(data)
+    let tactic: any = new Object();
+    for (let item in tactics.value) {
+        tactic[tactics.value[item].value] = tactics.value[item].weight;
+    }
+    gamePveSkipAPI({ lineup: lineup, tactic_weight: tactic })
         .then((_response: any) => {
             window.$router.push({ name: "endGame" });
         })
         .catch((_error: any) => {});
 }
 function startGame(): void {
-    let temp: any = new Object();
-    for (let item in tactics.value) {
-        temp[tactics.value[item].value] = tactics.value[item].weight;
+    let lineup: Object = getUltimateTactic();
+    if (Object.keys(lineup).length < 11) {
+        window.$message.error("阵容不完整，请补充球员");
+        return;
     }
-    let data = {
-        lineup: {},
-        tactic_weight: temp,
-    };
-    gamePveStartAPI(data)
+    let tactic: any = new Object();
+    for (let item in tactics.value) {
+        tactic[tactics.value[item].value] = tactics.value[item].weight;
+    }
+    gamePveStartAPI({ lineup: lineup, tactic_weight: tactic })
         .then((_response: any) => {
             window.$router.push({ name: "onGame" });
         })
