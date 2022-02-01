@@ -22,10 +22,44 @@
             <n-button class="returnButton" type="primary" v-on:click="showExitModal = false">返回</n-button>
         </n-card>
     </n-modal>
-    <n-modal v-model:show="showGameModal" v-bind:mask-closable="false">
-        <n-card title="有比赛"></n-card>
+    <n-modal v-model:show="showGameModal">
+        <n-card class="willGameCard" title="即将进行比赛">
+            <template #header> 即将进行比赛 </template>
+            <template #default>
+                <n-grid :cols="21" x-gap="12" y-gap="12">
+                    <n-gi span="10">
+                        <div class="firstTeam">
+                            <img :src="'http://s1.s100.vip:13127/Public/' + store.nextGame.teams[0] + '.png'" alt="图片" class="teamAvatar" />
+                            <span class="tenSpan"></span>
+                            <span class="teamName">{{ store.nextGame.teams[0] }}</span>
+                            <span class="fiveSpan"></span>
+                            <span class="gamePoint">{{ 0 }}</span>
+                        </div>
+                    </n-gi>
+                    <n-gi span="1">
+                        <div class="colon">:</div>
+                    </n-gi>
+                    <n-gi span="10">
+                        <div class="secondTeam">
+                            <span class="gamePoint">{{ 0 }}</span>
+                            <span class="tenSpan"></span>
+                            <span class="teamName">{{ store.nextGame.teams[0] }}</span>
+                            <span class="fiveSpan"></span>
+                            <img :src="'http://s1.s100.vip:13127/Public/' + store.nextGame.teams[1] + '.png'" alt="图片" class="teamAvatar" />
+                        </div>
+                    </n-gi>
+                    <n-gi span="21">
+                        <n-space justify="end">
+                            <n-button v-on:click="showGameModal = false">还没准备好</n-button>
+                            <n-button type="primary" v-on:click="nextDay">现在开始！</n-button>
+                        </n-space>
+                    </n-gi>
+                </n-grid>
+            </template>
+        </n-card>
     </n-modal>
 </template>
+
 <script lang="ts" setup>
 import { defineComponent, ref, Ref } from "vue";
 import { ExitOutline, Exit } from "@vicons/ionicons5";
@@ -33,18 +67,21 @@ import { Router } from "vue-router";
 import { storage } from "../utils";
 import { getDateAPI } from "@/apis/user";
 import { nextTurnAPI } from "@/apis/nextTurn";
-import { useStore } from '@/stores/store'
-import key from 'Keymaster'
+import { useStore } from "@/stores/store";
+import key from "Keymaster";
 const store = useStore();
 
-key('space', function () { nextDay() ; return false});
+key("space", function () {
+    nextDay();
+    return false;
+});
 
 let showExitModal: Ref<boolean> = ref(false);
 defineComponent({
     components: {
         ExitOutline,
-        Exit
-    }
+        Exit,
+    },
 });
 
 declare const window: Window & { $router: Router };
@@ -58,19 +95,28 @@ function ExitLogin(): void {
 }
 let showGameModal: Ref<boolean> = ref(false);
 function nextDay(): void {
-    nextTurnAPI().then((response: any) => {
-        if (response.state === "pve") {
-            showGameModal.value = true;
-        }
-        else {
-            getDateAPI().then((response: { date: any; }) => {
-                store.Date = response.date;
-            }).catch((_error: {}) => { });
-        }
-    }).catch((_error: {}) => { });
+    if (store.nextGame.distance === 1 && showGameModal.value === false) {
+        showGameModal.value = true;
+        return;
+    }
+    nextTurnAPI()
+        .then((response: any) => {
+            if (response.state === "pve") {
+                showGameModal.value = false;
+                window.$router.push({ name: "prepareGame" });
+            }
+            getDateAPI()
+                .then((response: { date: any }) => {
+                    store.Date = response.date;
+                })
+                .catch((_error: {}) => {});
+        })
+        .catch((_error: {}) => {});
 }
+defineExpose({ ExitLogin, goPre, nextDay, showExitModal, showGameModal });
 </script>
-<style>
+
+<style scoped>
 .bigSpace {
     height: 60px;
 }
@@ -87,10 +133,44 @@ function nextDay(): void {
 .exitModalContent {
     font-size: medium;
 }
+.willGameCard {
+    width: 800px;
+}
 .confirmButton {
     margin-top: 15px;
 }
 .returnButton {
     margin-left: 15px;
+}
+.firstTeam {
+    display: flex;
+    justify-content: end;
+    align-items: Center;
+}
+.secondTeam {
+    display: flex;
+    justify-content: start;
+    align-items: Center;
+}
+.teamName {
+    font-size: 30px;
+}
+.gamePoint {
+    font-size: 40px;
+}
+.colon {
+    font-size: 40px;
+    text-align: center;
+}
+.tenSpan {
+    width: 10%;
+}
+.fiveSpan {
+    width: 5%;
+}
+.teamAvatar {
+    width: 60px;
+    height: 60px;
+    padding: 5px;
 }
 </style>

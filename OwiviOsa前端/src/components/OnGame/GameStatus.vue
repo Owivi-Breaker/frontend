@@ -1,31 +1,29 @@
 <template>
     <n-card>
-        <div>
-            <n-grid :cols="21" x-gap="12">
-                <n-gi span="10">
-                    <div class="firstTeam">
-                        <img :src="'http://s1.s100.vip:13127/Public/' + leftTeam['name'] + '.png'" alt="图片" class="teamAvatar" />
-                        <span class="tenSpan"></span>
-                        <span class="teamName">{{ leftTeam["name"] }}</span>
-                        <span class="fiveSpan"></span>
-                        <span class="gamePoint">{{ leftTeam["score"] }}</span>
-                    </div>
-                </n-gi>
-                <n-gi span="1">
-                    <div class="colon">:</div>
-                </n-gi>
-                <n-gi span="10">
-                    <div class="secondTeam">
-                        <span class="gamePoint">{{ rightTeam["score"] }}</span>
-                        <span class="tenSpan"></span>
-                        <span class="teamName">{{ rightTeam["name"] }}</span>
-                        <span class="fiveSpan"></span>
-                        <img :src="'http://s1.s100.vip:13127/Public/' + rightTeam['name'] + '.png'" alt="图片" class="teamAvatar" />
-                    </div>
-                </n-gi>
-            </n-grid>
-            <div class="time">{{ nowTimeMinute }}:{{ nowTimeSecond }}</div>
-        </div>
+        <n-grid :cols="21" x-gap="12">
+            <n-gi span="10">
+                <div class="firstTeam">
+                    <img :src="'http://s1.s100.vip:13127/Public/' + leftTeam['name'] + '.png'" alt="图片" class="teamAvatar" />
+                    <span class="tenSpan"></span>
+                    <span class="teamName">{{ leftTeam["name"] }}</span>
+                    <span class="fiveSpan"></span>
+                    <span class="gamePoint">{{ leftTeam["score"] }}</span>
+                </div>
+            </n-gi>
+            <n-gi span="1">
+                <div class="colon">:</div>
+            </n-gi>
+            <n-gi span="10">
+                <div class="secondTeam">
+                    <span class="gamePoint">{{ rightTeam["score"] }}</span>
+                    <span class="tenSpan"></span>
+                    <span class="teamName">{{ rightTeam["name"] }}</span>
+                    <span class="fiveSpan"></span>
+                    <img :src="'http://s1.s100.vip:13127/Public/' + rightTeam['name'] + '.png'" alt="图片" class="teamAvatar" />
+                </div>
+            </n-gi>
+        </n-grid>
+        <div class="time">{{ nowTimeMinute }}:{{ nowTimeSecond }}</div>
     </n-card>
 </template>
 <script lang="ts" setup>
@@ -62,7 +60,7 @@ let nowTimeSecond: ComputedRef = computed(() => {
 });
 defineExpose({ leftTeam, rightTeam, nowTimeMinute, nowTimeSecond });
 </script>
-<style>
+<style scoped>
 .firstTeam {
     display: flex;
     justify-content: end;

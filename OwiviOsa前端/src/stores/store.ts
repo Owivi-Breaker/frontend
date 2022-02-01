@@ -14,6 +14,7 @@ export const useStore = defineStore("main", {
             gamePveData: Object,
             playerNameId: [] as any[],
             clubNameId: [] as any[],
+            nextGame: { teams: [], distance: 0 } as any,
         }
     },
     getters: {},

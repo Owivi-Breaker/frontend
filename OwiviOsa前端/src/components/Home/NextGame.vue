@@ -1,6 +1,6 @@
 <template>
     <n-card class="nextGameCard" title="下一场比赛-未开始">
-        <n-spin style="margin-left: 49%;" size="medium" v-if="isLoading" />
+        <n-spin style="margin-left: 49%" size="medium" v-if="isLoading" />
         <div v-if="!isLoading">
             <n-grid :cols="21" x-gap="12">
                 <n-gi span="10">
@@ -34,37 +34,49 @@
 <script lang="ts" setup>
 import { ref, Ref, watch } from "vue";
 import { getIncomingGamesAPI } from "@/apis/club";
-import { useStore } from '@/stores/store'
+import { useStore } from "@/stores/store";
 const store = useStore();
 let isLoading: Ref<boolean> = ref(true);
 let teams: Ref<Array<string>> = ref(["", ""]);
 let nextGameName: Ref<string> = ref("");
 let nextGameDate: Ref<string> = ref("");
-let distance: Ref<Number> = ref(0);
+let distance: Ref<number> = ref(0);
 let curDate: number;
-watch(() => store.Date, (newValue, oldValue) => {
-    // console.log(newValue, oldValue, '改变')
-    curDate = (new Date(store.Date)).getTime() / 1000;
-    distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
-    if (distance.value == 0) {
-        getIncomingGamesAPI().then(response => {
-            nextGameName.value = response[0].game_name;
-            nextGameDate.value = response[0].date;
-            teams.value[0] = response[0].club1_name;
-            teams.value[1] = response[0].club2_name;
-            distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
-        }).catch((_error: {}) => { });
+watch(
+    () => store.Date,
+    (_newValue, _oldValue) => {
+        curDate = new Date(store.Date).getTime() / 1000;
+        distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
+        store.nextGame.teams = teams.value;
+        store.nextGame.distance = distance.value;
+        if (distance.value == 0) {
+            getIncomingGamesAPI()
+                .then((response) => {
+                    nextGameName.value = response[0].game_name;
+                    nextGameDate.value = response[0].date;
+                    teams.value[0] = response[0].club1_name;
+                    teams.value[1] = response[0].club2_name;
+                    distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
+                    store.nextGame.teams = teams.value;
+                    store.nextGame.distance = distance.value;
+                })
+                .catch((_error: {}) => {});
+        }
     }
-})
-getIncomingGamesAPI().then(response => {
-    nextGameName.value = response[0].game_name;
-    nextGameDate.value = response[0].date;
-    teams.value[0] = response[0].club1_name;
-    teams.value[1] = response[0].club2_name;
-    curDate = (new Date(store.Date)).getTime() / 1000;
-    distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
-    isLoading.value = false;
-}).catch((_error: {}) => { });
+);
+getIncomingGamesAPI()
+    .then((response) => {
+        nextGameName.value = response[0].game_name;
+        nextGameDate.value = response[0].date;
+        teams.value[0] = response[0].club1_name;
+        teams.value[1] = response[0].club2_name;
+        curDate = new Date(store.Date).getTime() / 1000;
+        distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
+        store.nextGame.teams = teams.value;
+        store.nextGame.distance = distance.value;
+        isLoading.value = false;
+    })
+    .catch((_error: {}) => {});
 </script>
 <style scoped>
 .nextGameCard {
