@@ -1,14 +1,13 @@
 <template>
-	<n-layout has-sider position="absolute">
-		<Sidebar />
-		<n-layout>
-			<Header />
-			<n-layout-content content-style="padding: 24px; min-height: 85vh">
-				<Viewer />
-			</n-layout-content>
-			<!-- <Footer/> -->
-		</n-layout>
-	</n-layout>
+    <n-layout position="absolute">
+        <Header />
+        <n-layout has-sider position="absolute" style="top: 64px;">
+            <Sidebar />
+            <n-layout content-style="padding: 10px;" :native-scrollbar="false">
+                <Viewer />
+            </n-layout>
+        </n-layout>
+    </n-layout>
 </template>
 <script lang="ts" setup>
 import Sidebar from './Sidebar.vue'

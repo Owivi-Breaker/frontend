@@ -12,7 +12,6 @@
                 </n-space>
                 <p>{{ gameResult.name }} 第 {{ gameResult.season }} 赛季</p>
                 <p>{{ gameResult.date }}</p>
-                <p>MVP：{{ gameResult.mvp }}</p>
                 <p>控球率：{{ gameResult.teams_info[0].attempts }}/{{ gameResult.teams_info[1].attempts }}</p>
             </div>
             <img :src="'http://s1.s100.vip:13127/Public/' + gameResult.teams_info[1].club_name + '.png'" alt="图片" class="avatar" />
@@ -28,15 +27,31 @@
                 <p>中路渗透：{{ gameResult.teams_info[0].middle_attack_success }}/{{ gameResult.teams_info[0].middle_attack }}</p>
                 <p>防守反击：{{ gameResult.teams_info[0].counter_attack_success }}/{{ gameResult.teams_info[0].counter_attack }}</p>
             </n-card>
-            <n-card style="margin: 20px auto">
-                <n-tab-pane name="playersInfo" tab="表现">
-                    <n-data-table :columns="columns" :data="perfData" striped />
-                </n-tab-pane>
-            </n-card>
+            <div style="margin: 10px auto">
+                <endGameTeamData v-bind:playerInfo="gameResult.teams_info[0].players_info" style="height: 406px"></endGameTeamData>
+            </div>
         </n-gi>
         <n-gi>
+            <n-card v-if="mvpPlayer">
+                <img src="../../public/MVP.png" alt="图片" style="height: 40px;width: 80px"/>
+                <div>
+                    <Avataaars height="80" width="80" v-bind="mvpPlayer.avatar" />
+                    <p>{{ mvpPlayer.translated_name }}</p>
+                    <p>{{ mvpPlayer.club_name }}</p>
+                </div>
+            </n-card>
+            <n-card style="margin: 10px auto">
+                <div style="overflow: auto;">
+                    <n-timeline horizontal size="large">
+                        <n-timeline-item
+                            v-for="(item, index) in gameResult.goal_record" v-bind:key="index"
+                            :title="item.player_name"
+                            :content="item.club_name" />
+                    </n-timeline>
+                </div>
+            </n-card>
             <n-card>
-                <n-scrollbar style="max-height: 400px">
+                <n-scrollbar style="max-height: 280px">
                     <n-timeline>
                         <n-timeline-item v-for="(item, key) in gameResult.script.split('\n')" v-bind:key="key" type="success" :content="item" />
                     </n-timeline>
@@ -52,9 +67,9 @@
                 <p>中路渗透：{{ gameResult.teams_info[1].middle_attack_success }}/{{ gameResult.teams_info[1].middle_attack }}</p>
                 <p>防守反击：{{ gameResult.teams_info[1].counter_attack_success }}/{{ gameResult.teams_info[1].counter_attack }}</p>
             </n-card>
-            <n-card style="margin: 20px auto">
-
-            </n-card>
+            <div style="margin: 10px auto">
+                <endGameTeamData v-bind:playerInfo="gameResult.teams_info[1].players_info" style="height: 406px"></endGameTeamData>
+            </div>
         </n-gi>
     </n-grid>
 </template>
@@ -62,12 +77,19 @@
 <script lang="ts" setup>
 import { getGameByIdAPI } from "@/apis/game";
 import { ref, Ref } from "vue";
+import { endGameTeamData } from "@/components/endGame";
+import { getPlayerByIdAPI } from "@/apis/player";
+import Avataaars from "vuejs-avataaars/src/Avataaars.vue";
 
 let gameResult: Ref = ref();
+let mvpPlayer: Ref = ref();
 
-getGameByIdAPI({ game_id: 4000 })
+getGameByIdAPI({ game_id: 4001 })
     .then((response) => {
         gameResult.value = response;
+        getPlayerByIdAPI({ player_id: response.mvp }).then((response) => {
+            mvpPlayer.value = response;
+        }).catch((_error: {}) => {});
     })
     .catch((_error: {}) => {});
 </script>
