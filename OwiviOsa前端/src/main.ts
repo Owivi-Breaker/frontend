@@ -4,6 +4,7 @@ import router from '@/router' // 路由引入
 import naive from './naive' // naive-ui 组件局部引入
 import { createPinia } from 'pinia' // pinia引入
 const app = createApp(App)
+import './index.css'
 
 
 app.use(router)
