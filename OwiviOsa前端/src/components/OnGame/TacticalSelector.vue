@@ -131,11 +131,11 @@ function goNextTurn(): void {
     }
     gamePveNextTurnAPI({ tactic: curTactic.value })
         .then((response: any) => {
-            if (response["game_info"]["turns"] > 51) {
+            if (response.game_id !== 0) {
                 if (timer) {
                     clearInterval(timer);
                 }
-                window.$router.push({ name: "endGame" });
+                window.$router.push({ name: "endGame" , query: { id: response.game_id } });
                 return;
             }
             let temp = response;
