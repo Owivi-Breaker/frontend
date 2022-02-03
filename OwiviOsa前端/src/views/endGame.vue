@@ -80,11 +80,14 @@ import { ref, Ref } from "vue";
 import { endGameTeamData } from "@/components/endGame";
 import { getPlayerByIdAPI } from "@/apis/player";
 import Avataaars from "vuejs-avataaars/src/Avataaars.vue";
+import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
 
+let route: RouteLocationNormalizedLoaded = useRoute();
+let gameId: number = (Number)(route.query.id);
 let gameResult: Ref = ref();
 let mvpPlayer: Ref = ref();
 
-getGameByIdAPI({ game_id: 4001 })
+getGameByIdAPI({ game_id: gameId })
     .then((response) => {
         gameResult.value = response;
         getPlayerByIdAPI({ player_id: response.mvp }).then((response) => {
