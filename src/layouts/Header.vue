@@ -1,7 +1,11 @@
 <template>
     <n-layout-header bordered>
-        <n-space class="bigSpace" align="center" justify="space-between">
-            <n-space align="center" justify="start">
+        <n-space class="bigSpace mx-5" align="center" justify="space-between">
+            <n-space align="center" justify="start" >
+                <!-- logo -->
+                <!--<div class="font-bold italic text-2xl">-->
+                <!--    <span class="underline decoration-teal-500  decoration-4">TieB</span>reaker-->
+                <!--</div>-->
                 <n-button v-on:click="goPre" class="returnButton">返回</n-button>
             </n-space>
             <n-space align="center" justify="end">
@@ -116,7 +120,7 @@ function nextDay(): void {
         .then((response: any) => {
             if (response.state === "pve") {
                 showGameModal.value = false;
-                window.$router.push({ name: "prepareGame" });
+                window.$router.push({ name: "gamePrepare" });
             }
             getDateAPI()
                 .then((response: { date: any }) => {

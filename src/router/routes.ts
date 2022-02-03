@@ -22,7 +22,7 @@ const mainRoutes: RouteRecordRaw[] = [
     },
     {
         name: 'playerPerform',
-        path: '/playerPerform',
+        path: '/player-perform',
         component: () => import('../views/playerDataTable.vue'),
         meta: {
             title: "数据",
@@ -31,8 +31,8 @@ const mainRoutes: RouteRecordRaw[] = [
     },
     {
         name: 'gameResult',
-        path: '/gameResult',
-        component: () => import('../views/endGame.vue'),
+        path: '/game-result',
+        component: () => import('../views/gameEnd.vue'),
         meta: {
             title: "比赛结果",
             requiresAuth: true // 需要登陆才能访问
@@ -66,27 +66,27 @@ const mainRoutes: RouteRecordRaw[] = [
         }
     },
     {
-        name: 'prepareGame',
-        path: '/prepareGame',
-        component: () => import('../views/prepareGame.vue'),
+        name: 'gamePrepare',
+        path: '/game-prepare',
+        component: () => import('../views/gamePrepare.vue'),
         meta: {
             title: '赛前准备',
             requiresAuth: true
         }
     },
     {
-        name: 'onGame',
-        path: '/onGame',
-        component: () => import('../views/onGame.vue'),
+        name: 'gameOn',
+        path: '/game-on',
+        component: () => import('../views/gameOn.vue'),
         meta: {
             title: '比赛进行中',
             requiresAuth: true
         }
     },
     {
-        name: 'endGame',
-        path: '/endGame',
-        component: () => import('../views/endGame.vue'),
+        name: 'gameEnd',
+        path: '/game-end',
+        component: () => import('../views/gameEnd.vue'),
         meta: {
             title: '比赛结果',
             requiresAuth: true
@@ -96,6 +96,15 @@ const mainRoutes: RouteRecordRaw[] = [
         name: "playerPage",
         path: "/player-page",
         component: () => import('../views/playerPage.vue'),
+        meta: {
+            title: "球员页",
+            requiresAuth: true
+        }
+    },
+    {
+        name: "homeTest",
+        path: "/home-test",
+        component: () => import('../views/homeTest.vue'),
         meta: {
             title: "球员页",
             requiresAuth: true

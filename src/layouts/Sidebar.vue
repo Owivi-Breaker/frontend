@@ -3,6 +3,7 @@
         <div class="icon">
             <img alt="logo" class="img" src="http://s1.s100.vip:13127/Public/logo.png" />
         </div>
+
         <n-menu :collapsed-icon-size="22" :collapsed-width="64" :options="menuOptions" />
     </n-layout-sider>
 </template>
@@ -73,7 +74,7 @@ const menuOptions = [
             RouterLink,
             {
                 to: {
-                    name: 'prepareGame',
+                    name: 'gamePrepare',
                     params: {
                         lang: 'zh-CN'
                     }
@@ -103,6 +104,22 @@ const menuOptions = [
     {
         label: '赛程',
         key: 'games',
+        icon: renderIcon(BookIcon)
+    },
+    {
+        label: () => h(
+            RouterLink,
+            {
+                to: {
+                    name: 'homeTest',
+                    params: {
+                        lang: 'zh-CN'
+                    }
+                }
+            },
+            { default: () => '主页test' }
+        ),
+        key: 'homeTest',
         icon: renderIcon(BookIcon)
     },
     {

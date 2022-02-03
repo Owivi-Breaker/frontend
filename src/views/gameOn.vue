@@ -29,17 +29,20 @@
                     <TacticalSelector></TacticalSelector>
                 </n-gi>
                 <n-gi>
-                    <TacticalStatistic v-bind:playerTeamInfo="totalData['player_team_info']" v-bind:computerTeamInfo="totalData['computer_team_info']"></TacticalStatistic>
+                    <TacticalStatistic v-bind:playerTeamInfo="totalData['player_team_info']"
+                                       v-bind:computerTeamInfo="totalData['computer_team_info']"></TacticalStatistic>
                 </n-gi>
             </n-grid>
         </n-gi>
         <n-gi span="4">
             <n-grid cols="1" y-gap="10">
                 <n-gi>
-                    <TeamData v-bind:club="homeTeam" v-bind:playerInfo="homePlayerInfo" style="height: 406px"></TeamData>
+                    <TeamData v-bind:club="homeTeam" v-bind:playerInfo="homePlayerInfo"
+                              style="height: 406px"></TeamData>
                 </n-gi>
                 <n-gi>
-                    <TeamData v-bind:club="foreignTeam" v-bind:playerInfo="foreignPlayerInfo" style="height: 406px"></TeamData>
+                    <TeamData v-bind:club="foreignTeam" v-bind:playerInfo="foreignPlayerInfo"
+                              style="height: 406px"></TeamData>
                 </n-gi>
             </n-grid>
         </n-gi>
@@ -51,6 +54,7 @@ import { GameStatus, TeamData, TacticalStatistic, TacticalSelector } from "@/com
 import { getColor } from "@/utils/colorMap";
 import { useStore } from "@/stores/store";
 import { ScrollbarInst } from "naive-ui";
+
 const store = useStore();
 defineComponent({ GameStatus, TeamData, TacticalStatistic, TacticalSelector });
 let isLoading: Ref<boolean> = ref(true);

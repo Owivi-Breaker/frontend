@@ -699,7 +699,7 @@ function skipGame(): void {
     }
     gamePveSkipAPI({ lineup: lineup, tactic_weight: tactic })
         .then((_response: any) => {
-            window.$router.push({ name: "endGame" });
+            window.$router.push({ name: "gameEnd" });
         })
         .catch((_error: any) => {});
 }
@@ -715,7 +715,7 @@ function startGame(): void {
     }
     gamePveStartAPI({ lineup: lineup, tactic_weight: tactic })
         .then((_response: any) => {
-            window.$router.push({ name: "onGame" });
+            window.$router.push({ name: "gameOn" });
         })
         .catch((_error: any) => {});
 }

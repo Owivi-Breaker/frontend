@@ -77,7 +77,7 @@ let props: any = defineProps<{
 declare const window: Window & { $router: Router };
 
 function goDetail(): void {
-    window.$router.push({ path: "/player-page", query: { id: props.playerData.id } });
+    window.$router.push({ path: "player-page", query: { id: props.playerData.id } });
 }
 </script>
 <style>
