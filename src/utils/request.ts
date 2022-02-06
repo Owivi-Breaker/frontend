@@ -52,7 +52,7 @@ service.interceptors.response.use(
     // 对响应数据做处理
     response => {
         const res: object = response.data;
-        console.log('DEBUG: 拦截响应👇')
+        console.log('请求' + response.config.baseURL + response.config.url + ' 成功，返回：');
         console.log(res)
         if (response.status !== 200) {
             console.log('Error!');
@@ -64,7 +64,7 @@ service.interceptors.response.use(
         if (error && error.response) {
             // 1.公共错误处理
             // 2.根据响应码具体处理
-            console.log("DEBUG: 错误信息👇")
+            console.log('请求' + error.response.config.baseURL + error.response.config.url + ' 失败，返回：');
             console.log(error.response)
             switch (error.response.status) {
                 case 400:
@@ -106,7 +106,7 @@ service.interceptors.response.use(
                     //error.message = '请求超时'
                     break;
                 case 500:
-                    //error.message = '服务器端出错'
+                    window.$message.error("内部错误");
                     break;
                 case 501:
                     //error.message = '网络未实现'

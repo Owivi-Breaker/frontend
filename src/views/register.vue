@@ -13,8 +13,8 @@
                 <n-input class="roundInput" v-model:value="formValue.passwordAgain" placeholder="重复密码" @keyup.enter="postRegister" type="password" />
             </n-form-item>
             <n-form-item>
-                <n-checkbox v-model:checked="readProtocol" style="--label-padding:0px 0px 0px 8px;">我已阅读并同意</n-checkbox>
-                <p @click="showProtocol" style="text-decoration: underline; margin: 0px; cursor: pointer;">使用条款</p>
+                <n-checkbox v-model:checked="readProtocol" style="--label-padding: 0px 0px 0px 8px">我已阅读并同意</n-checkbox>
+                <p @click="showProtocol" style="text-decoration: underline; margin: 0px; cursor: pointer">使用条款</p>
             </n-form-item>
             <n-form-item>
                 <n-button class="roundButton" type="primary" v-on:click="postRegister" attr-type="button">立即注册</n-button>
@@ -25,8 +25,8 @@
             <a id="registerLink" href="/login">点我登录</a>
         </div>
         <n-modal v-model:show="showModal">
-            <n-card style="width: 600px;" title="使用条款" :bordered="false" size="huge">
-                <n-scrollbar x-scrollable style="max-height: 300px;">
+            <n-card style="width: 600px" title="使用条款" :bordered="false" size="huge">
+                <n-scrollbar x-scrollable style="max-height: 300px">
                     <div v-html="protocol"></div>
                 </n-scrollbar>
                 <template #footer>
@@ -39,8 +39,8 @@
 <script lang="ts" setup>
 import { ref, Ref } from "vue";
 import { Router } from "vue-router";
-import { createUserAPI } from '@/apis/user';
-import { getProtocolAPI } from '@/apis/login';
+import { createUserAPI } from "@/apis/user";
+import { getProtocolAPI } from "@/apis/login";
 interface Form {
     username: string;
     password: string;
@@ -59,63 +59,63 @@ let rules: object = {
         validator(_rule: any, value: string) {
             if (!value) {
                 return new Error("请输入邮箱或手机号。");
-            }
-            else if (!/^(\w+@(\w+\.)+\w+)|([0-9]{11})|\w+$/.test(value)) {
+            } else if (!/^(\w+@(\w+\.)+\w+)|([0-9]{11})|\w+$/.test(value)) {
                 return new Error("请输入正确的邮箱或手机号。");
             }
             return true;
         },
-        trigger: "blur"
+        trigger: "blur",
     },
     password: {
         required: true,
         message: "请输入密码。",
-        trigger: ["input", "blur"]
+        trigger: ["input", "blur"],
     },
     passwordAgain: {
         required: true,
         validator(_rule: any, value: string) {
             if (!value) {
                 return new Error("请输入重复密码。");
-            }
-            else if (value !== formValue.value.password) {
+            } else if (value !== formValue.value.password) {
                 return new Error("两次输入密码不一致。");
             }
             return true;
         },
-        trigger: ["input", "blur"]
-    }
+        trigger: ["input", "blur"],
+    },
 };
-declare const window: Window & { $message: any, $router: Router };
+declare const window: Window & { $message: any; $router: Router };
 function postRegister(): void {
     formRef.value.validate((errors: boolean) => {
         if (!errors) {
             createUserAPI({
                 email: formValue.value.username,
                 is_active: true,
-                password: formValue.value.password
-            }).then(_response => {
-                window.$message.success("注册成功");
-                // setTimeout(() => {
-                window.$router.push({ name: "login" });
-                // }, 800);
-            }).catch((_error: {}) => { });
-        }
-        else {
+                password: formValue.value.password,
+            })
+                .then((_response) => {
+                    window.$message.success("注册成功");
+                    // setTimeout(() => {
+                    window.$router.push({ name: "login" });
+                    // }, 800);
+                })
+                .catch((_error: {}) => {});
+        } else {
             window.$message.error("请正确输入信息");
         }
-    })
+    });
 }
 function clearPasswordAgain(): void {
     formValue.value.passwordAgain = "";
 }
 /* 展示协议 */
 function showProtocol(): void {
-    getProtocolAPI().then(response => {
+    getProtocolAPI().then((response) => {
         protocol.value = response;
     });
     showModal.value = true;
 }
+defineExpose({ rules, formRef, formValue, readProtocol, showModal, protocol, postRegister, clearPasswordAgain, showProtocol });
 </script>
 <style>
 body {
@@ -134,6 +134,7 @@ body {
 }
 #logo {
     width: 100px;
+    margin: auto;
 }
 #title {
     color: white;

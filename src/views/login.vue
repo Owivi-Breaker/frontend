@@ -1,6 +1,6 @@
 <template>
     <div class="loginDiv">
-        <img id="logo" alt="logo" name="logo" src="http://s1.s100.vip:13127/Public/logo.png" />
+        <img class="logo" alt="logo" name="logo" src="http://s1.s100.vip:13127/Public/logo.png" />
         <p id="title">登录</p>
         <n-form id="form" ref="formRef" :model="formValue" :rules="rules" :show-label="false">
             <n-form-item label="用户名" path="username">
@@ -27,9 +27,9 @@ import qs from "qs";
 import { ref, onMounted, Ref } from "vue";
 import { Router } from "vue-router";
 import { storage } from "@/utils";
-import { loginAPI } from "@/apis/login"
-let formValue: Ref<{ username: string; password: string; }> = ref({ username: "", password: "" });
-declare const window: Window & { $message: any, $router: Router };
+import { loginAPI } from "@/apis/login";
+let formValue: Ref<{ username: string; password: string }> = ref({ username: "", password: "" });
+declare const window: Window & { $message: any; $router: Router };
 // 输入验证
 let rules: object = {
     username: {
@@ -42,13 +42,13 @@ let rules: object = {
             }
             return true;
         },
-        trigger: "blur"
+        trigger: "blur",
     },
     password: {
         required: true,
         message: "请输入密码。",
-        trigger: ["input", "blur"]
-    }
+        trigger: ["input", "blur"],
+    },
 };
 // 获取浏览器中的cookie，如果有自动填入
 const GetCookie = (): void => {
@@ -63,14 +63,12 @@ const GetCookie = (): void => {
             }
         });
     }
-}
-onMounted(
-    () => {
-        storage.remove("token");
-        storage.remove("saveId");
-        GetCookie();
-    }
-);
+};
+onMounted(() => {
+    storage.remove("token");
+    storage.remove("saveId");
+    GetCookie();
+});
 /* 登录模块 */
 let formRef: Ref = ref(null); // 登录信息表格
 let needSave: Ref<boolean> = ref(true); // 是否记住账号密码
@@ -79,7 +77,7 @@ const SetCookie = (username: string, password: string, exdays: number): void => 
     exdate.setTime(exdate.getTime() + 24 * 60 * 60 * 1000 * exdays);
     window.document.cookie = "username" + "=" + username + ";path=/;expires=" + exdate.toUTCString();
     window.document.cookie = "password" + "=" + password + ";path=/;expires=" + exdate.toUTCString();
-}
+};
 // 登录按钮点击事件，验证并发送请求
 const PostLogin = (): void => {
     SetCookie("", "", -1);
@@ -88,8 +86,10 @@ const PostLogin = (): void => {
             loginAPI(
                 qs.stringify({
                     username: formValue.value.username,
-                    password: formValue.value.password
-                })).then((response: { access_token: string; }) => {
+                    password: formValue.value.password,
+                })
+            )
+                .then((response: { access_token: string }) => {
                     window.$message.success("登录成功");
                     let token: string = response.access_token;
                     storage.set("token", token);
@@ -99,13 +99,14 @@ const PostLogin = (): void => {
                     // setTimeout(() => {
                     window.$router.push({ name: "selectSave" });
                     // }, 1000);
-                }).catch((_error: {}) => { });
-        }
-        else {
+                })
+                .catch((_error: {}) => {});
+        } else {
             window.$message.error("请正确输入信息");
         }
-    })
-}
+    });
+};
+defineExpose({ formRef, formValue, rules, needSave, PostLogin });
 </script>
 <style>
 body {
@@ -122,8 +123,9 @@ body {
     right: 0;
     bottom: 0;
 }
-#logo {
+.logo {
     width: 100px;
+    margin: auto;
 }
 #title {
     color: white;

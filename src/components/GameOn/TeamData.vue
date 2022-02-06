@@ -1,7 +1,7 @@
 <template>
     <n-card title=" ">
         <template #header-extra>
-            <img :src="'http://s1.s100.vip:13127/Public/' + props.club.name + '.png'" alt="图片" class="teamAvatar" />
+            <img v-if="props.club" :src="'http://s1.s100.vip:13127/Public/' + props.club.name + '.png'" alt="图片" class="teamAvatar" />
         </template>
         <n-scrollbar style="max-height: 280px">
             <n-space class="itemSpace" align="center" justify="space-between">
@@ -23,7 +23,7 @@
 <script lang="ts" setup>
 import { computed, ComputedRef, defineComponent } from "vue";
 import { getPlayerByIdAPI } from "@/apis/player";
-import { PlayerItem } from "@/components/OnGame";
+import { PlayerItem } from "@/components/GameOn";
 import { useStore } from "@/stores/store";
 const store = useStore();
 defineComponent({ PlayerItem });
@@ -33,6 +33,9 @@ let props: any = defineProps({
 });
 let isGetting: Array<boolean> = [false, false, false, false, false, false, false, false, false, false, false];
 let perfData: ComputedRef<any> = computed(() => {
+    if (!props.playerInfo) {
+        return [];
+    }
     let result = props.playerInfo;
     for (let i: number = 0; i < props.playerInfo.length; i++) {
         if (store.playerNameId[result[i]["player_id"]] !== undefined || isGetting[i]) {

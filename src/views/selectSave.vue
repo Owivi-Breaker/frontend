@@ -1,6 +1,6 @@
 <template>
     <div class="selectSaveDiv">
-        <img id="logo" alt="logo" name="logo" src="https://www.naiveui.com/assets/naivelogo.93278402.svg" />
+        <img id="logo" alt="logo" name="logo" src="http://s1.s100.vip:13127/Public/logo.png" />
         <p class="title">选择存档</p>
         <n-select v-model:value="choseSave" :options="saveList" class="selectSave" placeholder="请选择" v-bind:loading="isSelectLoading" v-on:click="GetSave">
             <template #empty>
@@ -38,10 +38,11 @@
                     <n-scrollbar class="teamBar">
                         <n-card
                             v-for="(item, index) in teamList"
+                            v-bind:key="index"
                             v-model:title="teamList[index].name"
                             class="teamCard"
-                            v-on:mouseout="showGoButton = -1;"
-                            v-on:mouseover="showGoButton = index;"
+                            v-on:mouseout="showGoButton = -1"
+                            v-on:mouseover="showGoButton = index"
                         >
                             <div class="teamInformationDiv">
                                 资金：{{ teamList[index].finance }}
@@ -55,8 +56,16 @@
                 </n-layout>
             </n-layout>
             <template #footer>
-                <n-button class="bottomButton" style="right: 120px;" v-on:click="clubShowModal = false; leagueShowModal = true;">返回</n-button>
-                <n-button class="bottomButton" style="right: 50px;" v-on:click="clubShowModal = false;">关闭</n-button>
+                <n-button
+                    class="bottomButton"
+                    style="right: 120px"
+                    v-on:click="
+                        clubShowModal = false;
+                        leagueShowModal = true;
+                    "
+                    >返回</n-button
+                >
+                <n-button class="bottomButton" style="right: 50px" v-on:click="clubShowModal = false">关闭</n-button>
             </template>
         </n-card>
     </n-modal>
@@ -74,17 +83,16 @@
 <script lang="ts" setup>
 import { ref, defineComponent, onMounted } from "vue";
 import { Ref } from "@vue/reactivity";
-import { storage } from '../utils';
+import { storage } from "../utils";
 import fiveLeagues from "@/assets/json/five-leagues-list.json";
 import superLeagues from "@/assets/json/super-leagues-list.json";
 import { Router } from "vue-router";
-import { IosCheckmark } from '@vicons/ionicons4';
-import { getSaveAPI, createSaveAPI } from '@/apis/save'
+import { IosCheckmark } from "@vicons/ionicons4";
+import { getSaveAPI, createSaveAPI } from "@/apis/save";
 
-
-let leagueOptions: Ref<Array<{ label: string, value: string }>> = ref([
+let leagueOptions: Ref<Array<{ label: string; value: string }>> = ref([
     { label: "五大联赛", value: "五大联赛" },
-    { label: "超级联赛", value: "超级联赛" }
+    { label: "超级联赛", value: "超级联赛" },
 ]);
 let clubShowModal: Ref<boolean> = ref(false);
 let showGoButton: Ref<number> = ref(-1);
@@ -92,30 +100,28 @@ let loadShowModal: Ref<boolean> = ref(false);
 let isSelectLoading: Ref<boolean> = ref(false);
 defineComponent({
     components: {
-        IosCheckmark
-    }
+        IosCheckmark,
+    },
 });
-
 
 /* 获取存档信息 */
 let saveList: Ref<Array<object>> = ref([]);
 const GetSave = (): void => {
     isSelectLoading.value = true;
     getSaveAPI()
-        .then(response => {
+        .then((response) => {
             saveList.value = response;
             saveList.value.forEach(function (element: any) {
                 element.value = element.id;
                 element.label = "时间" + element.date + "，赛季" + element.season;
             });
-        }).catch((_error: {}) => { });
+        })
+        .catch((_error: {}) => {});
     isSelectLoading.value = false;
-}
-onMounted(
-    () => {
-        GetSave();
-    }
-)
+};
+onMounted(() => {
+    GetSave();
+});
 
 declare const window: Window & { $router: Router };
 // 存储存档id
@@ -125,13 +131,12 @@ const Enter = (): void => {
         storage.set("saveId", choseSave.value);
         window.$router.push({ name: "home" });
     }
-}
-
+};
 
 /* 选择联赛类型 */
 let leagueValue: Ref<string> = ref("五大联赛"); // 联赛名
 let competitionList: Ref = ref(); // 联赛具体信息
-let teamList: Ref<Array<{ name: string, finance: number, reputation: number }>> = ref([]);
+let teamList: Ref<Array<{ name: string; finance: number; reputation: number }>> = ref([]);
 let leagueShowModal: Ref<boolean> = ref(false);
 const SelectLeagues = (): void => {
     competitionList.value = [];
@@ -144,18 +149,17 @@ const SelectLeagues = (): void => {
         teamList.value[i] = {
             name: competitionList.value[0].clubs[i].name,
             finance: competitionList.value[0].clubs[i].finance,
-            reputation: competitionList.value[0].clubs[i].reputation
+            reputation: competitionList.value[0].clubs[i].reputation,
         };
     }
     leagueShowModal.value = false;
     clubShowModal.value = true;
-}
+};
 const ChangeCompetition = (_key: any, item: any): void => {
     item.clubs.forEach(function (element: any, index: number) {
         teamList.value[index] = { name: element.name, finance: element.finance, reputation: element.reputation };
-    })
-}
-
+    });
+};
 
 /* 新建存档 */
 let loadTitle: Ref<string> = ref("请稍候");
@@ -164,16 +168,35 @@ const NewSave = (index: number): void => {
     loadShowModal.value = true;
     createSaveAPI({
         type: leagueValue.value === "五大联赛" ? "five_leagues" : "super_leagues",
-        player_club_name: teamList.value[index].name
-    }).then(response => {
-        storage.set("saveId", response.id);
-        loadComplete.value = true;
-        loadTitle.value = "创建成功";
-        //setTimeout(() => {
-        window.$router.push({ name: "home" });
-        //}, 2000);
-    }).catch((_error: {}) => { });
-}
+        player_club_name: teamList.value[index].name,
+    })
+        .then((response) => {
+            storage.set("saveId", response.id);
+            loadComplete.value = true;
+            loadTitle.value = "创建成功";
+            window.$router.push({ name: "home" });
+        })
+        .catch((_error: {}) => {});
+};
+defineExpose({
+    leagueOptions,
+    leagueValue,
+    competitionList,
+    teamList,
+    leagueShowModal,
+    choseSave,
+    showGoButton,
+    loadShowModal,
+    isSelectLoading,
+    GetSave,
+    Enter,
+    SelectLeagues,
+    ChangeCompetition,
+    NewSave,
+    loadTitle,
+    loadComplete,
+    clubShowModal,
+});
 </script>
 <style>
 body {
@@ -192,6 +215,7 @@ body {
 }
 #logo {
     width: 100px;
+    margin: auto;
 }
 .title {
     color: white;

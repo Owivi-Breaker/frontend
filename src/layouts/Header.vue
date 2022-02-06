@@ -1,7 +1,7 @@
 <template>
     <n-layout-header bordered>
         <n-space class="bigSpace mx-5" align="center" justify="space-between">
-            <n-space align="center" justify="start" >
+            <n-space align="center" justify="start">
                 <!-- logo -->
                 <!--<div class="font-bold italic text-2xl">-->
                 <!--    <span class="underline decoration-teal-500  decoration-4">TieB</span>reaker-->
@@ -13,7 +13,7 @@
                 <n-button v-on:click="nextDay">明天</n-button>
                 <n-button :bordered="false" class="exitButton" v-on:click="showExitModal = true">
                     <n-icon size="30">
-                        <exit-outline/>
+                        <exit-outline />
                     </n-icon>
                 </n-button>
             </n-space>
@@ -33,8 +33,7 @@
                 <n-grid :cols="21" x-gap="12" y-gap="12">
                     <n-gi span="10">
                         <div class="firstTeam">
-                            <img :src="'http://s1.s100.vip:13127/Public/' + store.nextGame.teams[0] + '.png'" alt="图片"
-                                 class="teamAvatar"/>
+                            <img :src="'http://s1.s100.vip:13127/Public/' + store.nextGame.teams[0] + '.png'" alt="图片" class="teamAvatar" />
                             <span class="tenSpan"></span>
                             <span class="teamName">{{ store.nextGame.teams[0] }}</span>
                             <span class="fiveSpan"></span>
@@ -50,8 +49,7 @@
                             <span class="tenSpan"></span>
                             <span class="teamName">{{ store.nextGame.teams[0] }}</span>
                             <span class="fiveSpan"></span>
-                            <img :src="'http://s1.s100.vip:13127/Public/' + store.nextGame.teams[1] + '.png'" alt="图片"
-                                 class="teamAvatar"/>
+                            <img :src="'http://s1.s100.vip:13127/Public/' + store.nextGame.teams[1] + '.png'" alt="图片" class="teamAvatar" />
                         </div>
                     </n-gi>
                     <n-gi span="21">
@@ -75,6 +73,7 @@ import { getDateAPI } from "@/apis/user";
 import { nextTurnAPI } from "@/apis/nextTurn";
 import { useStore } from "@/stores/store";
 import key from "Keymaster";
+import { getIncomingGamesAPI } from "@/apis/club";
 
 const store = useStore();
 
@@ -83,11 +82,11 @@ onMounted(() => {
         nextDay();
         return false;
     });
-})
+});
 
-onBeforeUnmount((() => {
+onBeforeUnmount(() => {
     key.unbind("space");
-}))
+});
 
 let showExitModal: Ref<boolean> = ref(false);
 defineComponent({
@@ -112,6 +111,7 @@ function ExitLogin(): void {
 let showGameModal: Ref<boolean> = ref(false);
 
 function nextDay(): void {
+    console.log(store.nextGame.distance);
     if (store.nextGame.distance === 1 && showGameModal.value === false) {
         showGameModal.value = true;
         return;
@@ -125,14 +125,24 @@ function nextDay(): void {
             getDateAPI()
                 .then((response: { date: any }) => {
                     store.Date = response.date;
+                    store.nextGame.distance--;
+                    if (store.nextGame.distance == 0) {
+                        getIncomingGamesAPI()
+                            .then((response) => {
+                                let nextGameDate = response[0].date;
+                                let teams = new Array<string>(2);
+                                teams[0] = response[0].club1_name;
+                                teams[1] = response[0].club2_name;
+                                store.nextGame.distance = (new Date(nextGameDate).getTime() / 1000 - new Date(store.Date).getTime() / 1000) / 24 / 60 / 60;
+                                store.nextGame.teams = teams;
+                            })
+                            .catch((_error: {}) => {});
+                    }
                 })
-                .catch((_error: {}) => {
-                });
+                .catch((_error: {}) => {});
         })
-        .catch((_error: {}) => {
-        });
+        .catch((_error: {}) => {});
 }
-
 defineExpose({ ExitLogin, goPre, nextDay, showExitModal, showGameModal });
 </script>
 

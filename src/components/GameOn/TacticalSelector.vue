@@ -135,7 +135,7 @@ function goNextTurn(): void {
                 if (timer) {
                     clearInterval(timer);
                 }
-                window.$router.push({ name: "gameEnd" , query: { id: response.game_id } });
+                window.$router.push({ name: "gameEnd", query: { id: response.game_id } });
                 return;
             }
             let temp = response;

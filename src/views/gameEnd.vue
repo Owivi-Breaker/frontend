@@ -33,7 +33,7 @@
         </n-gi>
         <n-gi>
             <n-card v-if="mvpPlayer">
-                <img src="../../public/MVP.png" alt="图片" style="height: 40px;width: 80px"/>
+                <img src="../../public/MVP.png" alt="图片" style="height: 40px; width: 80px" />
                 <div>
                     <Avataaars height="80" width="80" v-bind="mvpPlayer.avatar" />
                     <p>{{ mvpPlayer.translated_name }}</p>
@@ -41,12 +41,9 @@
                 </div>
             </n-card>
             <n-card style="margin: 10px auto">
-                <div style="overflow: auto;">
+                <div style="overflow: auto">
                     <n-timeline horizontal size="large">
-                        <n-timeline-item
-                            v-for="(item, index) in gameResult.goal_record" v-bind:key="index"
-                            :title="item.player_name"
-                            :content="item.club_name" />
+                        <n-timeline-item v-for="(item, index) in gameResult.goal_record" v-bind:key="index" :title="item.player_name" :content="item.club_name" />
                     </n-timeline>
                 </div>
             </n-card>
@@ -76,25 +73,28 @@
 
 <script lang="ts" setup>
 import { getGameByIdAPI } from "@/apis/game";
-import { ref, Ref } from "vue";
-import { endGameTeamData } from "@/components/endGame";
+import { defineComponent, ref, Ref } from "vue";
+import { endGameTeamData } from "@/components/GameEnd";
 import { getPlayerByIdAPI } from "@/apis/player";
 import Avataaars from "vuejs-avataaars/src/Avataaars.vue";
 import { RouteLocationNormalizedLoaded, useRoute } from "vue-router";
-
+defineComponent({ endGameTeamData, Avataaars });
 let route: RouteLocationNormalizedLoaded = useRoute();
-let gameId: number = (Number)(route.query.id);
+let gameId: number = Number(route.query.id);
 let gameResult: Ref = ref();
 let mvpPlayer: Ref = ref();
 
 getGameByIdAPI({ game_id: gameId })
     .then((response) => {
         gameResult.value = response;
-        getPlayerByIdAPI({ player_id: response.mvp }).then((response) => {
-            mvpPlayer.value = response;
-        }).catch((_error: {}) => {});
+        getPlayerByIdAPI({ player_id: response.mvp })
+            .then((response) => {
+                mvpPlayer.value = response;
+            })
+            .catch((_error: {}) => {});
     })
     .catch((_error: {}) => {});
+defineExpose({ gameResult, mvpPlayer });
 </script>
 
 <style scoped>

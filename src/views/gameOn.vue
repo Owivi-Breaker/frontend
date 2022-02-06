@@ -19,6 +19,7 @@
             <n-grid cols="1" y-gap="10">
                 <n-gi>
                     <GameStatus
+                        v-if="totalData['game_info']"
                         v-bind:turns="totalData['game_info']['turns']"
                         v-bind:homeClubId="totalData['game_info']['home_club_id']"
                         v-bind:playerTeamInfo="totalData['player_team_info']"
@@ -29,20 +30,17 @@
                     <TacticalSelector></TacticalSelector>
                 </n-gi>
                 <n-gi>
-                    <TacticalStatistic v-bind:playerTeamInfo="totalData['player_team_info']"
-                                       v-bind:computerTeamInfo="totalData['computer_team_info']"></TacticalStatistic>
+                    <TacticalStatistic v-bind:playerTeamInfo="totalData['player_team_info']" v-bind:computerTeamInfo="totalData['computer_team_info']"></TacticalStatistic>
                 </n-gi>
             </n-grid>
         </n-gi>
         <n-gi span="4">
             <n-grid cols="1" y-gap="10">
                 <n-gi>
-                    <TeamData v-bind:club="homeTeam" v-bind:playerInfo="homePlayerInfo"
-                              style="height: 406px"></TeamData>
+                    <TeamData v-bind:club="homeTeam" v-bind:playerInfo="homePlayerInfo" style="height: 406px"></TeamData>
                 </n-gi>
                 <n-gi>
-                    <TeamData v-bind:club="foreignTeam" v-bind:playerInfo="foreignPlayerInfo"
-                              style="height: 406px"></TeamData>
+                    <TeamData v-bind:club="foreignTeam" v-bind:playerInfo="foreignPlayerInfo" style="height: 406px"></TeamData>
                 </n-gi>
             </n-grid>
         </n-gi>
@@ -50,18 +48,20 @@
 </template>
 <script lang="ts" setup>
 import { computed, ComputedRef, defineComponent, ref, watch, nextTick, Ref } from "vue";
-import { GameStatus, TeamData, TacticalStatistic, TacticalSelector } from "@/components/OnGame";
+import { GameStatus, TeamData, TacticalStatistic, TacticalSelector } from "@/components/GameOn";
 import { getColor } from "@/utils/colorMap";
 import { useStore } from "@/stores/store";
 import { ScrollbarInst } from "naive-ui";
 
 const store = useStore();
 defineComponent({ GameStatus, TeamData, TacticalStatistic, TacticalSelector });
-let isLoading: Ref<boolean> = ref(true);
 let totalData: ComputedRef = computed(() => {
     return store.gamePveData;
 });
 let homeTeam: ComputedRef = computed(() => {
+    if (!totalData.value.game_info) {
+        return null;
+    }
     if (totalData.value.game_info.home_club_id === totalData.value.player_team_info.club_id) {
         return totalData.value.player_team_info;
     } else {
@@ -69,6 +69,9 @@ let homeTeam: ComputedRef = computed(() => {
     }
 });
 let foreignTeam: ComputedRef = computed(() => {
+    if (!totalData.value.game_info) {
+        return null;
+    }
     if (totalData.value.game_info.home_club_id !== totalData.value.player_team_info.club_id) {
         return totalData.value.player_team_info;
     } else {
@@ -76,6 +79,9 @@ let foreignTeam: ComputedRef = computed(() => {
     }
 });
 let homePlayerInfo: ComputedRef = computed(() => {
+    if (!totalData.value.game_info) {
+        return null;
+    }
     if (totalData.value.game_info.home_club_id === totalData.value.player_team_info.club_id) {
         return totalData.value.player_players_info;
     } else {
@@ -83,6 +89,9 @@ let homePlayerInfo: ComputedRef = computed(() => {
     }
 });
 let foreignPlayerInfo: ComputedRef = computed(() => {
+    if (!totalData.value.game_info) {
+        return null;
+    }
     if (totalData.value.game_info.home_club_id !== totalData.value.player_team_info.club_id) {
         return totalData.value.player_players_info;
     } else {
@@ -91,40 +100,29 @@ let foreignPlayerInfo: ComputedRef = computed(() => {
 });
 const nScrollBarRef: Ref<ScrollbarInst | null> = ref(null);
 let commentaryList: ComputedRef = computed(() => {
-    let scriptList: Array<string> = totalData.value["game_info"]["script"].split("\n\n");
     let result = new Array<any>();
-    result.push({ content: scriptList[0], time: "00:00", level: 1 });
-    for (let i: number = 1; i < scriptList.length; i++) {
-        let unit: number = (90 / 50) * 60;
-        let bottomTime: number = (i - 1) * unit;
-        let topTime: number = i * unit;
-        let subScriptList: Array<string> = scriptList[i].split("\n");
-        if (i === scriptList.length - 1) {
-            subScriptList.pop();
-        }
-        for (let j: number = 0; j < subScriptList.length - 1; j++) {
-            let time: number = Math.floor(Math.random() * (topTime - bottomTime) + bottomTime) + 1;
-            let minute: string = Math.floor(time / 60)
-                .toString()
-                .padStart(2, "0");
-            let second: string = Math.floor(time % 60)
-                .toString()
-                .padStart(2, "0");
+    if (totalData.value["game_info"]) {
+        let scriptList: Array<string> = totalData.value["game_info"]["script"].split("\n\n");
+        for (let i: number = 0; i < scriptList.length; i++) {
+            let subScriptList: Array<string> = scriptList[i].split("\n");
+            if (i === scriptList.length - 1) {
+                subScriptList.pop();
+            }
+            for (let j: number = 0; j < subScriptList.length - 1; j++) {
+                let item: Array<string> = subScriptList[j].split("@");
+                result.push({
+                    content: item[0],
+                    time: item[1],
+                    level: item[2],
+                });
+            }
+            let item: Array<string> = subScriptList[subScriptList.length - 1].split("@");
             result.push({
-                content: subScriptList[j],
-                time: `${minute}:${second}`,
-                level: Math.floor(Math.random() * 5) + 1,
+                content: item[0],
+                time: item[1],
+                level: item[2],
             });
         }
-        result.push({
-            content: subScriptList[subScriptList.length - 1],
-            time: `${Math.floor(topTime / 60)
-                .toString()
-                .padStart(2, "0")}:${Math.floor(topTime % 60)
-                .toString()
-                .padStart(2, "0")}`,
-            level: Math.floor(Math.random() * 5) + 1,
-        });
     }
     return result;
 });
