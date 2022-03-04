@@ -13,3 +13,4 @@ lib
 .local
 !.env-config.ts
 package.json
+src
