@@ -1,23 +1,39 @@
-import { defineConfig } from "vite"
-import vue from "@vitejs/plugin-vue"
-import { resolve } from 'path'
-export const configureWebpack = {
-    devtool: 'source-map'
-};
-export default () => {
-    return defineConfig({
-        plugins: [vue()],
-        server: {
-            host: "0.0.0.0",
-            port: 19231
-        },
-        resolve: {
-            alias: {
-                "@": resolve(__dirname, 'src'), // 路径别名
-            },
-            extensions: ['.js', '.json', '.ts'] // 使用路径别名时想要省略的后缀名，可以自己 增减
-        },
-        base: './'
+import { fileURLToPath } from 'url';
+import { defineConfig, loadEnv } from 'vite';
+import { setupVitePlugins, define } from './build';
 
-    })
-}
+export default defineConfig(configEnv => {
+  const viteEnv = loadEnv(configEnv.mode, `.env.${configEnv.mode}`);
+
+  return {
+    base: viteEnv.VITE_APP_BASE_URL,
+    resolve: {
+      alias: {
+        '@': fileURLToPath(new URL('./src', import.meta.url)),
+        '~': fileURLToPath(new URL('./', import.meta.url))
+      }
+    },
+    define,
+    plugins: setupVitePlugins(configEnv),
+    css: {
+      preprocessorOptions: {
+        scss: {
+          additionalData: `@use "./src/styles/scss/global.scss" as *;`
+        }
+      }
+    },
+    assetsInclude: ['/public/**'],
+    server: {
+      fs: {
+        strict: false
+      },
+      host: '0.0.0.0',
+      port: 19231,
+      open: true
+    },
+    build: {
+      brotliSize: false,
+      sourcemap: false
+    }
+  };
+});

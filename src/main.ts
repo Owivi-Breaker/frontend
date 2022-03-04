@@ -1,18 +1,30 @@
-import { createApp } from 'vue'
-import App from './App.vue'
-import router from '@/router' // 路由引入
-import naive from './naive' // naive-ui 组件局部引入
-import { createPinia } from 'pinia' // pinia引入
-import './index.css' // tailwind引入
+import { createApp } from 'vue';
+import { setupAssets, setupNaiveUI } from '@/plugins';
+import { setupRouter } from '@/router';
+import { setupStore } from '@/store';
+import { setupDirectives } from '@/directives';
+import App from './App.vue';
 
-// 避免tailwind对naiveui的样式覆盖
-const meta = document.createElement('meta')
-meta.name = 'naive-ui-style'
-document.head.appendChild(meta)
+async function setupApp() {
+  // 引入静态资源
+  setupAssets();
 
-const app = createApp(App)
+  const app = createApp(App);
 
-app.use(router)
-app.use(naive)
-app.mount('#app')
-app.use(createPinia())
+  // 挂载pinia状态
+  setupStore(app);
+
+  // 挂载自定义vue指令
+  setupDirectives(app);
+
+  // 按需引入naiveUI
+  setupNaiveUI(app);
+
+  // 挂载路由
+  await setupRouter(app);
+
+  // 路由准备就绪后挂载 App
+  app.mount('#app');
+}
+
+setupApp();

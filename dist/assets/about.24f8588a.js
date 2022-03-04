@@ -1,1 +1,0 @@
-import{o as a,az as n,aI as o,aA as r}from"./vendor.3f82f248.js";const l={},s=r("h1",null,"About",-1),t=r("p",null,"噜啦啦噜丫丫",-1);l.render=function(r,l){return a(),n(o,null,[s,t],64)};export{l as default};
