@@ -15,7 +15,7 @@
     import { NTag } from "naive-ui";
     import { useStore } from '@/stores/store'
     const store = useStore();
-    let capaData: ComputedRef<any> = computed(() =>
+    let capaData: ComputedRef = computed(() =>
         store.playerData.map((value: any) => {
             value["姓名"] = value["translated_name"];
             value["年龄"] = value["age"];

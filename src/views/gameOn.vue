@@ -30,31 +30,34 @@
                     <TacticalSelector></TacticalSelector>
                 </n-gi>
                 <n-gi>
-                    <TacticalStatistic v-bind:playerTeamInfo="totalData['player_team_info']" v-bind:computerTeamInfo="totalData['computer_team_info']"></TacticalStatistic>
+                    <TacticalStatistic v-bind:playerTeamInfo="totalData['player_team_info']"
+                                       v-bind:computerTeamInfo="totalData['computer_team_info']"></TacticalStatistic>
                 </n-gi>
             </n-grid>
         </n-gi>
         <n-gi span="4">
             <n-grid cols="1" y-gap="10">
                 <n-gi>
-                    <TeamData v-bind:club="homeTeam" v-bind:playerInfo="homePlayerInfo" style="height: 406px"></TeamData>
+                    <TeamData v-bind:club="homeTeam" v-bind:playerInfo="homePlayerInfo"
+                              style="height: 406px"></TeamData>
                 </n-gi>
                 <n-gi>
-                    <TeamData v-bind:club="foreignTeam" v-bind:playerInfo="foreignPlayerInfo" style="height: 406px"></TeamData>
+                    <TeamData v-bind:club="foreignTeam" v-bind:playerInfo="foreignPlayerInfo"
+                              style="height: 406px"></TeamData>
                 </n-gi>
             </n-grid>
         </n-gi>
     </n-grid>
 </template>
 <script lang="ts" setup>
-import { computed, ComputedRef, defineComponent, ref, watch, nextTick, Ref } from "vue";
-import { GameStatus, TeamData, TacticalStatistic, TacticalSelector } from "@/components/GameOn";
-import { getColor } from "@/utils/colorMap";
-import { useStore } from "@/stores/store";
-import { ScrollbarInst } from "naive-ui";
+import {computed, ComputedRef, defineComponent, ref, watch, nextTick, Ref} from "vue";
+import {GameStatus, TeamData, TacticalStatistic, TacticalSelector} from "@/components/GameOn";
+import {getColor} from "@/utils/colorMap";
+import {useStore} from "@/stores/store";
+import {ScrollbarInst} from "naive-ui";
 
 const store = useStore();
-defineComponent({ GameStatus, TeamData, TacticalStatistic, TacticalSelector });
+defineComponent({GameStatus, TeamData, TacticalStatistic, TacticalSelector});
 let totalData: ComputedRef = computed(() => {
     return store.gamePveData;
 });
@@ -107,21 +110,24 @@ let commentaryList: ComputedRef = computed(() => {
             let subScriptList: Array<string> = scriptList[i].split("\n");
             if (i === scriptList.length - 1) {
                 subScriptList.pop();
+                continue;
             }
-            for (let j: number = 0; j < subScriptList.length - 1; j++) {
+            for (let j: number = 0; j <= subScriptList.length - 1; j++) {
                 let item: Array<string> = subScriptList[j].split("@");
-                result.push({
-                    content: item[0],
-                    time: item[1],
-                    level: item[2],
-                });
+                if (item[1].length <= 2) {
+                    result.push({
+                        content: item[0],
+                        time: "",
+                        level: item[1],
+                    });
+                } else {
+                    result.push({
+                        content: item[0],
+                        time: item[1],
+                        level: item[2],
+                    });
+                }
             }
-            let item: Array<string> = subScriptList[subScriptList.length - 1].split("@");
-            result.push({
-                content: item[0],
-                time: item[1],
-                level: item[2],
-            });
         }
     }
     return result;
@@ -135,7 +141,7 @@ watch(
             });
         }
     },
-    { immediate: true }
+    {immediate: true}
 );
-defineExpose({ getColor, homeTeam, foreignTeam, homePlayerInfo, foreignPlayerInfo, commentaryList, totalData });
+defineExpose({getColor, homeTeam, foreignTeam, homePlayerInfo, foreignPlayerInfo, commentaryList, totalData});
 </script>

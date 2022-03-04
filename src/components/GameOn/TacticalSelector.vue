@@ -13,8 +13,8 @@
                 <n-collapse-transition v-bind:appear="true" v-bind:show="!isAuto">
                     <n-space align="center" item-style="display: flex; align-item: center;" justify="space-between">
                         <p>执行</p>
-                        <n-select style="width: 300px" v-model:value="curTactic" v-bind:options="tactics" />
-                        <n-button type="primary" v-on:click="goNextTurn">NOW</n-button>
+                        <n-select style="width: 300px" v-model:value="curTactic" v-bind:options="tactics"/>
+                        <n-button type="primary" v-on:click="goNextTurn">{{ nowAndEnd }}</n-button>
                     </n-space>
                 </n-collapse-transition>
             </n-gi>
@@ -23,7 +23,7 @@
                     <n-statistic v-for="(item, key) in tactics" v-bind:key="key">
                         <template #label>{{ item["label"] }}</template>
                         <template #default>
-                            <n-slider v-model:value="item.weight" />
+                            <n-slider v-model:value="item.weight"/>
                         </template>
                     </n-statistic>
                 </n-collapse-transition>
@@ -32,11 +32,12 @@
     </n-card>
 </template>
 <script lang="ts" setup>
-import { Ref, ref, watch } from "vue";
-import { gamePveNextTurnAPI, gamePveShowGameInfoAPI } from "@/apis/gamePve";
-import { useStore } from "@/stores/store";
-import { getClubByIdAPI } from "@/apis/club";
-import { Router } from "vue-router";
+import {computed, ComputedRef, Ref, ref, watch} from "vue";
+import {gamePveNextTurnAPI, gamePveShowGameInfoAPI} from "@/apis/gamePve";
+import {useStore} from "@/stores/store";
+import {getClubByIdAPI} from "@/apis/club";
+import {Router} from "vue-router";
+
 const store = useStore();
 declare const window: Window & { $router: Router };
 let isAuto: Ref<boolean> = ref(false);
@@ -75,7 +76,7 @@ gamePveShowGameInfoAPI()
             if (timer) {
                 clearInterval(timer);
             }
-            window.$router.push({ name: "gameEnd" });
+            window.$router.push({name: "gameEnd"});
             return;
         }
         let temp = response;
@@ -85,16 +86,17 @@ gamePveShowGameInfoAPI()
                 temp["computer_team_info"]["name"] = store.clubNameId[temp["computer_team_info"]["club_id"]];
                 store.gamePveData = temp;
             } else {
-                getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] })
+                getClubByIdAPI({club_id: temp["computer_team_info"]["club_id"]})
                     .then((response: any) => {
                         temp["computer_team_info"]["name"] = response["name"];
                         store.clubNameId[temp["computer_team_info"]["club_id"]] = response["name"];
                         store.gamePveData = temp;
                     })
-                    .catch((_error: any) => {});
+                    .catch((_error: any) => {
+                    });
             }
         } else {
-            getClubByIdAPI({ club_id: temp["player_team_info"]["club_id"] })
+            getClubByIdAPI({club_id: temp["player_team_info"]["club_id"]})
                 .then((response: any) => {
                     temp["player_team_info"]["name"] = response["name"];
                     store.clubNameId[temp["player_team_info"]["club_id"]] = response["name"];
@@ -102,20 +104,36 @@ gamePveShowGameInfoAPI()
                         temp["computer_team_info"]["name"] = store.clubNameId[temp["computer_team_info"]["club_id"]];
                         store.gamePveData = temp;
                     } else {
-                        getClubByIdAPI({ club_id: temp["computer_team_info"]["club_id"] })
+                        getClubByIdAPI({club_id: temp["computer_team_info"]["club_id"]})
                             .then((response: any) => {
                                 temp["computer_team_info"]["name"] = response["name"];
                                 store.clubNameId[temp["computer_team_info"]["club_id"]] = response["name"];
                                 store.gamePveData = temp;
                             })
-                            .catch((_error: any) => {});
+                            .catch((_error: any) => {
+                            });
                     }
                 })
-                .catch((_error: any) => {});
+                .catch((_error: any) => {
+                });
         }
     })
-    .catch((_error: any) => {});
+    .catch((_error: any) => {
+    });
+let gameEndId: Ref<number> = ref(0);
+let nowAndEnd: ComputedRef = computed(() => {
+    return gameEndId.value === 0 ? "NOW" : "结束比赛";
+});
+
 function goNextTurn(): void {
+    if (gameEndId.value !== 0) {
+        if (timer) {
+            clearInterval(timer);
+        }
+        window.$router.push({name: "gameEnd", query: {id: gameEndId.value}});
+        store.gamePveData = {} as any;
+        return;
+    }
     if (isAuto.value) {
         let possibleList: Array<number> = [tactics.value[0].weight, 0, 0, 0, 0];
         for (let i: number = 1; i < tactics.value.length; i++) {
@@ -129,22 +147,20 @@ function goNextTurn(): void {
             }
         }
     }
-    gamePveNextTurnAPI({ tactic: curTactic.value })
+    gamePveNextTurnAPI({tactic: curTactic.value})
         .then((response: any) => {
             if (response.game_id !== 0) {
-                if (timer) {
-                    clearInterval(timer);
-                }
-                window.$router.push({ name: "gameEnd", query: { id: response.game_id } });
-                return;
+                gameEndId.value = response.game_id;
             }
             let temp = response;
             temp["player_team_info"]["name"] = store.clubNameId[temp["player_team_info"]["club_id"]];
             temp["computer_team_info"]["name"] = store.clubNameId[temp["computer_team_info"]["club_id"]];
             store.gamePveData = temp;
         })
-        .catch((_error: any) => {});
+        .catch((_error: any) => {
+        });
 }
+
 watch(
     () => isAuto.value,
     (newVal) => {
@@ -158,5 +174,5 @@ watch(
         }
     }
 );
-defineExpose({ isAuto, curTactic, tactics });
+defineExpose({isAuto, curTactic, tactics});
 </script>
