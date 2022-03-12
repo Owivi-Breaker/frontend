@@ -1,4 +1,4 @@
-import type { ConfigEnv, PluginOption } from 'vite';
+import type {ConfigEnv, PluginOption} from 'vite';
 import vue from './vue';
 import html from './html';
 import iconify from './iconify';
@@ -8,11 +8,11 @@ import visualizer from './visualizer';
 import svg from './svg';
 
 export function setupVitePlugins(configEnv: ConfigEnv): (PluginOption | PluginOption[])[] {
-  const plugins = [vue, html(configEnv), ...iconify, windicss, mock, svg];
+    const plugins = [vue, html(configEnv), ...iconify, windicss, mock, svg];
 
-  if (configEnv.command === 'build') {
-    plugins.push(visualizer);
-  }
+    if (configEnv.command === 'build') {
+        plugins.push(visualizer);
+    }
 
-  return plugins;
+    return plugins;
 }

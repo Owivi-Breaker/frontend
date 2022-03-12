@@ -6,4 +6,4 @@ import FullScreen from './FullScreen.vue';
 import ThemeMode from './ThemeMode.vue';
 import UserAvatar from './UserAvatar.vue';
 
-export { MenuCollapse, GlobalBreadcrumb, HeaderMenu, GithubSite, FullScreen, ThemeMode, UserAvatar };
+export {MenuCollapse, GlobalBreadcrumb, HeaderMenu, GithubSite, FullScreen, ThemeMode, UserAvatar};

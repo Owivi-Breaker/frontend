@@ -1,10 +1,10 @@
 import {
-  EnumLayoutComponentName,
-  EnumThemeLayoutMode,
-  EnumThemeTabMode,
-  EnumThemeHorizontalMenuPosition,
-  EnumThemeAnimateMode,
-  EnumLoginModule
+    EnumLayoutComponentName,
+    EnumLoginModule,
+    EnumThemeAnimateMode,
+    EnumThemeHorizontalMenuPosition,
+    EnumThemeLayoutMode,
+    EnumThemeTabMode
 } from '@/enum';
 
 /** 布局组件名称 */

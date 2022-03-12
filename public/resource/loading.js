@@ -3,7 +3,7 @@
  * @param { string }id - 元素id
  */
 function initSvgLogo(id) {
-  const svgStr = `<svg width="128px" height="128px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
+    const svgStr = `<svg width="128px" height="128px" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px"
 	y="0px" viewBox="0 0 158.9 158.9" style="enable-background:new 0 0 158.9 158.9;" xml:space="preserve">
 	<path style="fill:none" d="M0,158.9C0,106.3,0,53.7,0,1.1C0,0.2,0.2,0,1.1,0c52.2,0,104.5,0,156.7,0c0.9,0,1.1,0.2,1.1,1.1
 	c0,52.2,0,104.5,0,156.7c0,0.9-0.2,1.1-1.1,1.1C105.2,158.8,52.6,158.8,0,158.9z" />
@@ -24,19 +24,19 @@ function initSvgLogo(id) {
 	C73.3,117.7,77.9,121.3,77.9,126.6z" />
 </svg>
 `;
-  const appEl = document.querySelector(id);
-  const div = document.createElement('div');
-  div.innerHTML = svgStr;
-  if (appEl) {
-    appEl.appendChild(div);
-  }
+    const appEl = document.querySelector(id);
+    const div = document.createElement('div');
+    div.innerHTML = svgStr;
+    if (appEl) {
+        appEl.appendChild(div);
+    }
 }
 
 function addThemeColorCssVars() {
-  const key = '__THEME_COLOR__';
-  const themeColor = window.localStorage.getItem(key) || '#1890ff';
-  const cssVars = `--primary-color: ${themeColor}`;
-  document.documentElement.style.cssText = cssVars;
+    const key = '__THEME_COLOR__';
+    const themeColor = window.localStorage.getItem(key) || '#1890ff';
+    const cssVars = `--primary-color: ${themeColor}`;
+    document.documentElement.style.cssText = cssVars;
 }
 
 initSvgLogo('#loadingLogo');

@@ -1,13 +1,12 @@
 <template>
-  <n-space :vertical="true" :size="16">
-    <project-introduction />
-    <project-info />
-    <pro-dependency />
-    <dev-dependency />
-  </n-space>
+    <n-space :size="16" :vertical="true">
+        <project-introduction/>
+        <project-info/>
+        <pro-dependency/>
+        <dev-dependency/>
+    </n-space>
 </template>
 
-<script setup lang="ts">
-import { ProjectIntroduction, ProjectInfo, ProDependency, DevDependency } from './components';
-</script>
+<script lang="ts" setup>
+import {DevDependency, ProDependency, ProjectInfo, ProjectIntroduction} from './components';</script>
 <style scoped></style>

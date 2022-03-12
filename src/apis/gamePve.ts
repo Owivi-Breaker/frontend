@@ -1,15 +1,15 @@
 import http from '@/utils/http';
 
 const gamePveSkipAPI = (params: any) => {
-  return http.post('/game-pve/skip', params);
+    return http.post('/game-pve/skip', params);
 };
 const gamePveStartAPI = (params: any) => {
-  return http.post('/game-pve/start', params);
+    return http.post('/game-pve/start', params);
 };
 const gamePveNextTurnAPI = (params: { tactic: string }) => {
-  return http.get('/game-pve/next-turn', params);
+    return http.get('/game-pve/next-turn', params);
 };
 const gamePveShowGameInfoAPI = () => {
-  return http.get('/game-pve/show-game-info', null);
+    return http.get('/game-pve/show-game-info', null);
 };
-export { gamePveSkipAPI, gamePveStartAPI, gamePveNextTurnAPI, gamePveShowGameInfoAPI };
+export {gamePveSkipAPI, gamePveStartAPI, gamePveNextTurnAPI, gamePveShowGameInfoAPI};

@@ -1,8 +1,8 @@
-import { viteMockServe } from 'vite-plugin-mock';
+import {viteMockServe} from 'vite-plugin-mock';
 
 export default viteMockServe({
-  mockPath: 'mock',
-  injectCode: `
+    mockPath: 'mock',
+    injectCode: `
 		import { setupMockServer } from '../mock';
 		setupMockServer();
 	`

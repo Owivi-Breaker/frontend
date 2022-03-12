@@ -8,8 +8,8 @@ const CryptoSecret = '__CryptoJS_Secret__';
  * @param secret - 密钥
  */
 export function encrypto(data: any) {
-  const newData = JSON.stringify(data);
-  return CryptoJS.AES.encrypt(newData, CryptoSecret).toString();
+    const newData = JSON.stringify(data);
+    return CryptoJS.AES.encrypt(newData, CryptoSecret).toString();
 }
 
 /**
@@ -18,10 +18,10 @@ export function encrypto(data: any) {
  * @param secret - 密钥
  */
 export function decrypto(ciphertext: string) {
-  const bytes = CryptoJS.AES.decrypt(ciphertext, CryptoSecret);
-  const originalText = bytes.toString(CryptoJS.enc.Utf8);
-  if (originalText) {
-    return JSON.parse(originalText);
-  }
-  return null;
+    const bytes = CryptoJS.AES.decrypt(ciphertext, CryptoSecret);
+    const originalText = bytes.toString(CryptoJS.enc.Utf8);
+    if (originalText) {
+        return JSON.parse(originalText);
+    }
+    return null;
 }

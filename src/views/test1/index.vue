@@ -1,14 +1,13 @@
 <template>
-  <div>
-    <n-space :vertical="true" :size="16">
-      <top-chart />
-      <data-card />
-      <bottom-part />
-    </n-space>
-  </div>
+    <div>
+        <n-space :size="16" :vertical="true">
+            <top-chart/>
+            <data-card/>
+            <bottom-part/>
+        </n-space>
+    </div>
 </template>
 
 <script lang="ts" setup>
-import { TopChart, DataCard, BottomPart } from './components';
-</script>
+import {BottomPart, DataCard, TopChart} from './components';</script>
 <style scoped></style>

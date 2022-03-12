@@ -1,4 +1,4 @@
-import type { Component } from 'vue';
+import type {Component} from 'vue';
 
 type ViewComponent = Record<string, () => Promise<Component>>;
 
@@ -16,16 +16,16 @@ const SYSTEM_VIEW = 'system-view_';
 const viewKeys = Object.keys(importViews).filter(key => !key.includes(COMPONENTS_KEY));
 
 function getViewComponent() {
-  const components: ViewComponent = {};
-  viewKeys.forEach(key => {
-    const routeKey = key
-      .replace(PREFIX, '')
-      .replace(SUFFIX, '')
-      .replaceAll(PATH_SPLIT_MARK, ROUTE_KEY_SPLIT_MARK)
-      .replace(SYSTEM_VIEW, '');
-    components[routeKey] = importViews[key];
-  });
-  return components;
+    const components: ViewComponent = {};
+    viewKeys.forEach(key => {
+        const routeKey = key
+            .replace(PREFIX, '')
+            .replace(SUFFIX, '')
+            .replaceAll(PATH_SPLIT_MARK, ROUTE_KEY_SPLIT_MARK)
+            .replace(SYSTEM_VIEW, '');
+        components[routeKey] = importViews[key];
+    });
+    return components;
 }
 
 export const views = getViewComponent();

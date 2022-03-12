@@ -1,20 +1,20 @@
 import http from '@/utils/http';
 
 const getLeaguesAPI = () => {
-  return http.get('/league', null);
+    return http.get('/league', null);
 };
 const getLeagueMeAPI = () => {
-  return http.get('/league/me', null);
+    return http.get('/league/me', null);
 };
 const getLeagueByIdAPI = (params: { league_id: number }) => {
-  return http.get(`/league/${params.league_id}`, null);
+    return http.get(`/league/${params.league_id}`, null);
 };
 const getPointsTableByLeagueAPI = (params: { league_id: number; game_season: number }) => {
-  // 获取某联赛某赛季的积分榜
-  return http.get(`/league/${params.league_id}/points-table`, params);
+    // 获取某联赛某赛季的积分榜
+    return http.get(`/league/${params.league_id}/points-table`, params);
 };
 const getPlayerChartByLeagueAPI = (params: { league_id: number; game_season: number }) => {
-  // 获取某联赛某赛季的球员数据表
-  return http.get(`/league/${params.league_id}/player-chart`, params);
+    // 获取某联赛某赛季的球员数据表
+    return http.get(`/league/${params.league_id}/player-chart`, params);
 };
-export { getLeaguesAPI, getLeagueByIdAPI, getPointsTableByLeagueAPI, getPlayerChartByLeagueAPI, getLeagueMeAPI };
+export {getLeaguesAPI, getLeagueByIdAPI, getPointsTableByLeagueAPI, getPlayerChartByLeagueAPI, getLeagueMeAPI};

@@ -6,4 +6,4 @@ import PageFunc from './PageFunc/index.vue';
 import PageView from './PageView/index.vue';
 import ThemeConfig from './ThemeConfig/index.vue';
 
-export { DrawerButton, DarkMode, LayoutMode, ThemeColorSelect, PageFunc, PageView, ThemeConfig };
+export {DrawerButton, DarkMode, LayoutMode, ThemeColorSelect, PageFunc, PageView, ThemeConfig};

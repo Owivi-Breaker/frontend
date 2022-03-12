@@ -1,20 +1,20 @@
 <template>
-  <div>
-    <svg-fill-logo v-if="fill" />
-    <svg-logo v-else />
-  </div>
+    <div>
+        <svg-fill-logo v-if="fill"/>
+        <svg-logo v-else/>
+    </div>
 </template>
 
 <script lang="ts" setup>
-import { SvgLogo, SvgFillLogo } from './components';
+import {SvgFillLogo, SvgLogo} from './components';
 
 interface Props {
-  /** logo是否填充 */
-  fill?: boolean;
+    /** logo是否填充 */
+    fill?: boolean;
 }
 
 withDefaults(defineProps<Props>(), {
-  fill: false
+    fill: false
 });
 </script>
 <style scoped></style>

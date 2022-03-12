@@ -1,8 +1,7 @@
 <template>
-  <global-content :show-padding="false" />
+    <global-content :show-padding="false"/>
 </template>
 
-<script setup lang="ts">
-import { GlobalContent } from '../common';
-</script>
+<script lang="ts" setup>
+import {GlobalContent} from '../common';</script>
 <style scoped></style>

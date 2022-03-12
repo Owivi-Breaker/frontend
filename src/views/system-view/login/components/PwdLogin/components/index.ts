@@ -1,3 +1,3 @@
 import OtherLogin from './OtherLogin.vue';
 
-export { OtherLogin };
+export {OtherLogin};

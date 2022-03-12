@@ -4,4 +4,4 @@ import DarkModeSwitch from './DarkModeSwitch/index.vue';
 import DarkModeContainer from './DarkModeContainer/index.vue';
 import HoverContainer from './HoverContainer/index.vue';
 
-export { NaiveProvider, SystemLogo, DarkModeSwitch, DarkModeContainer, HoverContainer };
+export {NaiveProvider, SystemLogo, DarkModeSwitch, DarkModeContainer, HoverContainer};

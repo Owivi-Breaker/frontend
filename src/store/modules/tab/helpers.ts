@@ -1,21 +1,21 @@
-import type { RouteRecordNormalized, RouteLocationNormalizedLoaded } from 'vue-router';
-import type { GlobalTabRoute } from '@/interface';
+import type {RouteLocationNormalizedLoaded, RouteRecordNormalized} from 'vue-router';
+import type {GlobalTabRoute} from '@/interface';
 
 /**
- *	根据vue路由获取tab路由
+ *    根据vue路由获取tab路由
  * @param route
  */
 export function getTabRouteByVueRoute(route: RouteRecordNormalized | RouteLocationNormalizedLoaded) {
-  const tabRoute: GlobalTabRoute = {
-    name: route.name,
-    path: route.path,
-    meta: route.meta,
-    scrollPosition: {
-      left: 0,
-      top: 0
-    }
-  };
-  return tabRoute;
+    const tabRoute: GlobalTabRoute = {
+        name: route.name,
+        path: route.path,
+        meta: route.meta,
+        scrollPosition: {
+            left: 0,
+            top: 0
+        }
+    };
+    return tabRoute;
 }
 
 /**
@@ -24,7 +24,7 @@ export function getTabRouteByVueRoute(route: RouteRecordNormalized | RouteLocati
  * @param path - 该页签的路径
  */
 export function getIndexInTabRoutes(tabs: GlobalTabRoute[], path: string) {
-  return tabs.findIndex(tab => tab.path === path);
+    return tabs.findIndex(tab => tab.path === path);
 }
 
 /**
@@ -33,5 +33,5 @@ export function getIndexInTabRoutes(tabs: GlobalTabRoute[], path: string) {
  * @param path - 该页签的路径
  */
 export function isInTabRoutes(tabs: GlobalTabRoute[], path: string) {
-  return getIndexInTabRoutes(tabs, path) > -1;
+    return getIndexInTabRoutes(tabs, path) > -1;
 }

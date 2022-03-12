@@ -1,16 +1,16 @@
 <template>
-  <n-card title="开发环境依赖" :bordered="false" size="small" class="rounded-16px shadow-sm">
-    <n-descriptions label-placement="left" bordered size="small">
-      <n-descriptions-item v-for="item in devDependencies" :key="item.name" :label="item.name">
-        {{ item.version }}
-      </n-descriptions-item>
-    </n-descriptions>
-  </n-card>
+    <n-card :bordered="false" class="rounded-16px shadow-sm" size="small" title="开发环境依赖">
+        <n-descriptions bordered label-placement="left" size="small">
+            <n-descriptions-item v-for="item in devDependencies" :key="item.name" :label="item.name">
+                {{ item.version }}
+            </n-descriptions-item>
+        </n-descriptions>
+    </n-card>
 </template>
 
-<script setup lang="ts">
-import { pkgJson } from '../model';
+<script lang="ts" setup>
+import {pkgJson} from '../model';
 
-const { devDependencies } = pkgJson;
+const {devDependencies} = pkgJson;
 </script>
 <style scoped></style>

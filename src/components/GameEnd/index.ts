@@ -1,1 +1,1 @@
-export { default as endGameTeamData } from './endGameTeamData.vue';
+export {default as endGameTeamData} from './endGameTeamData.vue';

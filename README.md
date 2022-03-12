@@ -22,12 +22,15 @@ pnpm prepare
 ```
 
 ## 常用方法
+
 ### 路由跳转
+
 ```ts
 const { routerPush } = useRouterPush();
 import { useRouterPush } from '@/composables';
 routerPush({ name: 'some-url' });
 ```
+
 ### 主题配置
 
 ```json
@@ -56,7 +59,8 @@ routerPush({ name: 'some-url' });
 
 #### themeStore 的 themeOverrides
 
-通过 themeColor，info，success，warning，error 五种颜色，`''` | `'Suppl'` | `'Hover'` | `'Pressed'` | `'Active'` 五种颜色场景， 在函数 **getThemeColors** 的作用下产生了 25 种不同的颜色注入到了 NConfigProvider 组件的 themeOverrids 中
+通过 themeColor，info，success，warning，error 五种颜色，`''` | `'Suppl'` | `'Hover'` | `'Pressed'` | `'Active'` 五种颜色场景， 在函数 **
+getThemeColors** 的作用下产生了 25 种不同的颜色注入到了 NConfigProvider 组件的 themeOverrids 中
 
 #### 结合 windicss
 

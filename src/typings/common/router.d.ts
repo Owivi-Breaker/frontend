@@ -1,7 +1,7 @@
 import 'vue-router';
 
 declare module 'vue-router' {
-  interface RouteMeta extends AuthRoute.RouteMeta {
-    title: string;
-  }
+    interface RouteMeta extends AuthRoute.RouteMeta {
+        title: string;
+    }
 }

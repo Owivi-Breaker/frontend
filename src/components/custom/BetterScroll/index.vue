@@ -1,20 +1,20 @@
 <template>
-  <div ref="bsWrap" class="h-full text-left">
-    <div ref="bsContent" class="inline-block" :class="{ 'h-full': !isScrollY }">
-      <slot></slot>
+    <div ref="bsWrap" class="h-full text-left">
+        <div ref="bsContent" :class="{ 'h-full': !isScrollY }" class="inline-block">
+            <slot></slot>
+        </div>
     </div>
-  </div>
 </template>
 
-<script setup lang="ts">
-import { ref, computed, watch, onMounted } from 'vue';
-import { useElementSize } from '@vueuse/core';
+<script lang="ts" setup>
+import {computed, onMounted, ref, watch} from 'vue';
+import {useElementSize} from '@vueuse/core';
+import type {Options} from '@better-scroll/core';
 import BScroll from '@better-scroll/core';
-import type { Options } from '@better-scroll/core';
 
 interface Props {
-  /** better-scroll的配置: https://better-scroll.github.io/docs/zh-CN/guide/base-scroll-options.html */
-  options: Options;
+    /** better-scroll的配置: https://better-scroll.github.io/docs/zh-CN/guide/base-scroll-options.html */
+    options: Options;
 }
 
 const props = defineProps<Props>();
@@ -25,23 +25,23 @@ const bsContent = ref<HTMLElement>();
 const isScrollY = computed(() => Boolean(props.options.scrollY));
 
 function initBetterScroll() {
-  if (!bsWrap.value) return;
-  instance.value = new BScroll(bsWrap.value, props.options);
+    if (!bsWrap.value) return;
+    instance.value = new BScroll(bsWrap.value, props.options);
 }
 
 // 滚动元素发生变化，刷新BS
-const { width: wrapWidth } = useElementSize(bsWrap);
-const { width, height } = useElementSize(bsContent);
+const {width: wrapWidth} = useElementSize(bsWrap);
+const {width, height} = useElementSize(bsContent);
 watch([() => wrapWidth.value, () => width.value, () => height.value], () => {
-  if (instance.value) {
-    instance.value.refresh();
-  }
+    if (instance.value) {
+        instance.value.refresh();
+    }
 });
 
 onMounted(() => {
-  initBetterScroll();
+    initBetterScroll();
 });
 
-defineExpose({ instance });
+defineExpose({instance});
 </script>
 <style scoped></style>

@@ -1,3 +1,3 @@
 import GradientBg from './GradientBg.vue';
 
-export { GradientBg };
+export {GradientBg};

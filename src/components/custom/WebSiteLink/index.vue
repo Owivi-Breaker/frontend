@@ -1,18 +1,18 @@
 <template>
-  <p>
-    <span>{{ label }}</span>
-    <a class="text-blue-500" :href="link" target="_blank">
-      {{ link }}
-    </a>
-  </p>
+    <p>
+        <span>{{ label }}</span>
+        <a :href="link" class="text-blue-500" target="_blank">
+            {{ link }}
+        </a>
+    </p>
 </template>
 
-<script setup lang="ts">
+<script lang="ts" setup>
 interface Props {
-  /** 网址名称 */
-  label: string;
-  /** 网址链接 */
-  link: string;
+    /** 网址名称 */
+    label: string;
+    /** 网址链接 */
+    link: string;
 }
 
 defineProps<Props>();
