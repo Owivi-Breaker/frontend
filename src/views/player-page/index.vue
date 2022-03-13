@@ -2,17 +2,18 @@
     <div>
         <div :class="{ showDiv: !loadFinished }">
             <div class="flex gap-10 p-10">
+                <!-- 瀑布流 -->
                 <div class="w-3/5 space-y-10">
                     <!-- 球员介绍卡片 -->
-                    <div class>
-                        <div class="rounded-lg shadow-md bg-white p-10">
+                    <div>
+                        <div class="s-card p-10">
                             <div class="flex items-center">
                                 <!-- 头像和tag -->
                                 <div class="w-1/3">
                                     <div class="flex flex-col gap-5">
                                         <Avataaars
                                             :is-circle="false"
-                                            class="w-30 h-30"
+                                            class="w-30 h-30 border-6 border-primary rounded-full"
                                             v-bind="playerData.avatar"
                                         />
                                         <div class="flex flex-wrap gap-3 p-3">
@@ -26,10 +27,9 @@
                                 <!-- 描述 -->
                                 <div class="w-2/3">
                                     <div class="flex gap-5 items-center">
-                                        <div
-                                            class="text-2xl text-primary font-bold mb-4"
-                                        >{{ playerData.translated_name }}</div>
-
+                                        <span
+                                            class="text-2xl text-primary font-bold mb-6 s-underline"
+                                        >{{ playerData.translated_name }}</span>
                                         <div class="p-0">
                                             <n-rate
                                                 :value="Math.round(playerData.top_capa / 10) / 2"
@@ -40,7 +40,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="grid grid-cols-3 gap-4">
+                                    <div class="grid grid-cols-3 gap-6">
                                         <div>
                                             <div class="text text-gray-500">国籍</div>
                                             <div>{{ playerData.translated_nationality }}</div>
@@ -73,7 +73,12 @@
                                 </div>
                             </div>
 
-                            <n-divider title-placement="left">赛季数据</n-divider>
+                            <!-- <n-divider title-placement="left">赛季数据</n-divider> -->
+                            <div class="relative flex py-5 items-center">
+                                <div class="flex-grow border-t border-4 border-primary-active"></div>
+                                <span class="text-md flex-shrink mx-4 text-primary">赛季数据</span>
+                                <div class="flex-grow border-t border-4 border-primary-active"></div>
+                            </div>
                             <n-space justify="space-between">
                                 <n-statistic label="出场">{{ gameData.appearance }}</n-statistic>
                                 <n-statistic label="进球">{{ gameData.goals }}</n-statistic>
@@ -92,21 +97,21 @@
                     </div>
                     <!-- 比赛评分折线图 -->
                     <div class>
-                        <div class="rounded-lg shadow-md bg-white p-6">
+                        <div class="s-card p-6 3xl:p-10">
                             <div
-                                class="text-lg font-semibold text-primary mb-3"
+                                class="text-lg font-semibold text-primary mb-3 s-underline"
                             >{{ '近' + ratings.length + '场比赛评分' }}</div>
                             <div :id="ratingChart" style="width: 100%; height: 300%"></div>
                         </div>
                     </div>
                     <!-- 奖杯陈列室 -->
                     <div class>
-                        <div class="rounded-lg shadow-md bg-white p-6">
-                            <div class="text-lg font-semibold text-primary mb-3">奖杯陈列室</div>
+                        <div class="s-card p-6">
+                            <div class="text-lg font-semibold text-primary mb-3 s-underline">奖杯陈列室</div>
                             <n-list>
                                 <n-list-item>
                                     <n-thing title="个人荣誉">
-                                    <!-- <div class="bg-primary-active w-full py-0.5 mb-2"></div> -->
+                                        <!-- <div class="bg-primary-active w-full py-0.5 mb-2"></div> -->
                                         2019 金球奖
                                         <br />2018 英超年度最佳球员
                                         <br />2020 西甲最佳射手
@@ -134,8 +139,8 @@
                 <div class="w-2/5 space-y-10">
                     <!-- 能力卡片 -->
                     <div class>
-                        <div class="rounded-lg shadow-md bg-white p-6">
-                            <div class="text-lg font-semibold text-primary mb-3">能力</div>
+                        <div class="s-card p-10">
+                            <div class="s-title mb-3 s-underline">能力</div>
                             <CapaProgress
                                 :capa-rating="Math.round(playerData.capa.shooting * 100) / 100"
                                 capa-name="射门"
@@ -176,8 +181,8 @@
                     </div>
                     <!-- 各位置出场数饼图 -->
                     <div>
-                        <div class="rounded-lg shadow-md bg-white p-6">
-                            <div class="text-lg font-semibold text-primary mb-3">各位置出场数</div>
+                        <div class="s-card p-6">
+                            <div class="text-lg font-semibold text-primary mb-3 s-underline">各位置出场数</div>
                             <div :id="loNumChart" style="width: 100%; height: 300%"></div>
                         </div>
                     </div>

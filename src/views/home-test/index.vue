@@ -4,16 +4,16 @@
             <!-- 左边 -->
             <div class="w-2/3">
                 <!-- 下一场比赛卡片 -->
-                <div class="bg-white relative flex flex-col gap-y-6 rounded-lg shadow-md">
+                <div class="relative flex flex-col gap-y-6 s-card">
                     <div class="flex items-center space-x-16 p-10">
                         <!-- 左球队 -->
-                        <div class="w-1/3 flex items-center space-x-1 flex-1">
+                        <div class="w-1/3 flex items-center space-x-1 flex">
                             <img
-                                class="h-20"
+                                class="h-25"
                                 src="http://s1.s100.vip:13127/Public/%E6%89%98%E7%89%B9%E7%BA%B3%E5%A7%86%E7%83%AD%E5%88%BA.png"
                             />
                             <div class="flex flex-col items-start space-y-2">
-                                <div class="text-lg font-semibold">托特纳姆热刺</div>
+                                <div class="text-lg font-semibold s-underline">托特纳姆热刺</div>
                                 <div class="text-gray-500">排名 6</div>
                             </div>
                         </div>
@@ -44,13 +44,13 @@
                             <div class="text-gray-500">Aug 08</div>
                         </div>
                         <!-- 右球队 -->
-                        <div class="w-1/3 flex items-center space-x-1 flex-1">
+                        <div class="w-1/3 flex items-center space-x-1 flex">
                             <div class="flex flex-col items-end space-y-2">
-                                <div class="text-lg font-semibold">AC 米兰</div>
+                                <div class="text-lg font-semibold s-underline">AC 米兰</div>
                                 <div class="text-gray-500">排名 12</div>
                             </div>
                             <img
-                                class="h-20"
+                                class="h-25"
                                 src="http://s1.s100.vip:13127/Public/AC%E7%B1%B3%E5%85%B0.png"
                             />
                         </div>

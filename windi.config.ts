@@ -7,6 +7,14 @@ export default defineConfig({
   },
   darkMode: 'class',
   shortcuts: {
+    // 普通标题
+    's-title': 'text-lg font-semibold text-primary',
+    // 下划线
+    's-underline': 'underline decoration-primary-active decoration-4 underline-offset-3',
+    // 分隔线
+    's-divide': 'bg-primary-active w-full py-0.5',
+    // 卡片样式
+    's-card': 'rounded-lg 3xl:rounded-xl shadow-md bg-white',
     'wh-full': 'w-full h-full',
     'flex-center': 'flex justify-center items-center',
     'flex-col-center': 'flex-center flex-col',
@@ -49,8 +57,7 @@ export default defineConfig({
       lg: '1024px',
       xl: '1280px',
       '2xl': '1536px',
-      '3xl': '1080px',
-      laptop: '1536px'
+      '3xl': '1920px'
     },
     extend: {
       colors: {

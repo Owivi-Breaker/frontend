@@ -15,8 +15,8 @@
                 />
             </n-gi>
         </n-grid>-->
-        <div class="flex">
-            <div class="text-gray-500 w-1/4">{{ capaName }}</div>
+        <div class="flex items-center gap-3">
+            <div class="text-gray-500 w-1/5">{{ capaName }}</div>
 
             <n-progress
                 :color="getColor(capaRating)"
@@ -26,7 +26,9 @@
                 :height="10"
                 type="line"
                 unit=""
+                :show-indicator="false"
             />
+            <div class="text-gray-500">{{Math.round(capaRating)}}</div>
         </div>
     </div>
 </template>

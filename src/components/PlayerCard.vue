@@ -13,7 +13,10 @@
         <n-space vertical>
             <div class="flex items-start gap-10">
                 <div class="">
-                    <Avataaars  v-bind="playerData.avatar" class="w-25 h-25 p-0" />
+                    <Avataaars
+                    :is-circle="false"
+                    v-bind="playerData.avatar"
+                    class="w-25 h-25 border-6 border-primary-active rounded-full" />
                 </div>
                 <div class="">
                     <div class="flex flex-col gap-3">
