@@ -1,6 +1,6 @@
 <template>
     <div>
-        <n-grid cols="5">
+        <!-- <n-grid cols="5">
             <n-gi span="1">
                 <n-h5>{{ capaName }}</n-h5>
             </n-gi>
@@ -14,11 +14,24 @@
                     unit
                 />
             </n-gi>
-        </n-grid>
+        </n-grid>-->
+        <div class="flex">
+            <div class="text-gray-500 w-1/4">{{ capaName }}</div>
+
+            <n-progress
+                :color="getColor(capaRating)"
+                :percentage="Math.round(capaRating)"
+                fill-border-radius="12px 0px 12px 12px"
+
+                :height="10"
+                type="line"
+                unit=""
+            />
+        </div>
     </div>
 </template>
 <script lang="ts" setup>
-import {getColor} from '@/utils/colorMap';
+import { getColor } from '@/utils/colorMap';
 
 interface Props {
     capaName: string;

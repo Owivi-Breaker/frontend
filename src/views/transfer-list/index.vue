@@ -181,11 +181,11 @@ const playerData: ComputedRef = computed(() =>
             value['射门'] = Math.round(value.capa.shooting * 100) / 100;
             value['传球'] = Math.round(value.capa.passing * 100) / 100;
             value['过人'] = Math.round(value.capa.dribbling * 100) / 100;
-            value['抢断'] = Math.round(value.capa.dribbling * 100) / 100;
+            value['抢断'] = Math.round(value.capa.interception * 100) / 100;
             value['速度'] = Math.round(value.capa.pace * 100) / 100;
             value['力量'] = Math.round(value.capa.strength * 100) / 100;
             value['侵略'] = Math.round(value.capa.aggression * 100) / 100;
-            value['预判'] = Math.round(value.capa.interception * 100) / 100;
+            value['预判'] = Math.round(value.capa.anticipation * 100) / 100;
             value['任意球'] = Math.round(value.capa.free_kick * 100) / 100;
             value['体能'] = Math.round(value.capa.stamina * 100) / 100;
             value['守门'] = Math.round(value.capa.goalkeeping * 100) / 100;
@@ -212,6 +212,17 @@ function resort(sorter: DataTableSorter): void {
         '周薪': 'wages',
         '身价': 'values',
         '位置': 'top_location',
+        '射门':'shooting',
+        '传球':'passing',
+        '过人':'dribbling',
+        '抢断':'interception',
+        '速度':'pace',
+        '力量':'strength',
+        '侵略':'aggression',
+        '预判':'anticipation',
+        '任意球':'free_kick',
+        '体能':'stamina',
+        '守门':'goalkeeping',
     };
     let attri: string = trans[sorter.columnKey];
     let order: number;
