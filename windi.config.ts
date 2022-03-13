@@ -43,6 +43,15 @@ export default defineConfig({
     'transition-base': 'transition-all duration-300 ease-in-out'
   },
   theme: {
+    screens: {
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px',
+      '2xl': '1536px',
+      '3xl': '1080px',
+      laptop: '1536px'
+    },
     extend: {
       colors: {
         primary: 'var(--primary-color)',

@@ -1,23 +1,13 @@
 <template>
     <div>
-        <!-- navbar -->
-        <!--<nav class="flex items-center px-6 py-5 justify-between bg-white shadow-md">-->
-        <!--    <div class="flex items-center space-x-4">-->
-        <!--        &lt;!&ndash; logo &ndash;&gt;-->
-        <!--        <div class="font-bold italic text-2xl">-->
-        <!--            <span class="underline decoration-teal-500  decoration-4">TieB</span>reaker-->
-        <!--        </div>-->
-        <!--    </div>-->
-        <!--</nav>-->
-
         <div class="flex space-x-10 mt-10 ml-14 mr-16">
             <!-- 左边 -->
             <div class="w-2/3">
                 <!-- 下一场比赛卡片 -->
-                <div class="bg-white relative flex flex-col space-y-6 rounded-lg shadow-md">
+                <div class="bg-white relative flex flex-col gap-y-6 rounded-lg shadow-md">
                     <div class="flex items-center space-x-16 p-10">
                         <!-- 左球队 -->
-                        <div class="flex items-center space-x-1 flex-1">
+                        <div class="w-1/3 flex items-center space-x-1 flex-1">
                             <img
                                 class="h-20"
                                 src="http://s1.s100.vip:13127/Public/%E6%89%98%E7%89%B9%E7%BA%B3%E5%A7%86%E7%83%AD%E5%88%BA.png"
@@ -28,10 +18,10 @@
                             </div>
                         </div>
                         <!-- 比赛信息 -->
-                        <div class="flex flex-col items-center space-y-1 flex">
+                        <div class="w-1/3 flex flex-col items-center space-y-1 flex">
                             <!-- 倒计时 -->
                             <div
-                                class=" flex mb-1 py-2 px-3 items-center rounded-full bg-primary-active text-primary shadow-sm"
+                                class="flex mb-1 py-2 px-3 items-center rounded-full bg-primary-active text-primary shadow-sm"
                             >
                                 <svg
                                     class="w-6 h-6 mr-2"
@@ -54,7 +44,7 @@
                             <div class="text-gray-500">Aug 08</div>
                         </div>
                         <!-- 右球队 -->
-                        <div class="flex items-center space-x-1 flex-1">
+                        <div class="w-1/3 flex items-center space-x-1 flex-1">
                             <div class="flex flex-col items-end space-y-2">
                                 <div class="text-lg font-semibold">AC 米兰</div>
                                 <div class="text-gray-500">排名 12</div>
@@ -69,7 +59,7 @@
 
                 <!-- 球员表现统计 -->
                 <div>
-                    <n-scrollbar x-scrollable class>
+                    <n-scrollbar x-scrollable>
                         <div class="flex justify-around gap-5 py-10">
                             <!-- 最佳射手 -->
                             <div class="flex flex-col items-center min-w-40">
@@ -174,9 +164,9 @@
                 </div>
 
                 <!-- 杂项统计 -->
-                <div class="flex items-start gap-5">
+                <div class="flex items-start gap-10 mt-5">
                     <!-- 财政 -->
-                    <div class="rounded-lg shadow-md bg-white p-5 mt-10 w-2/5">
+                    <div class="rounded-lg shadow-md bg-white p-5 w-2/5">
                         <div class="text-lg font-semibold text-primary mb-3">财政</div>
 
                         <div class="flex flex-col">
@@ -221,7 +211,7 @@
                         </div>
                     </div>
                     <!-- 球员统计 -->
-                    <div class="rounded-lg shadow-md bg-white p-5 mt-10 w-3/5">
+                    <div class="rounded-lg shadow-md bg-white p-5 w-3/5">
                         <div class="text-lg font-semibold text-primary mb-3">统计</div>
                         <div class="flex flex-col">
                             <!-- 球员 -->
@@ -295,8 +285,8 @@
                     <!-- 描述 -->
                     <div class="flex items-center justify-between mb-5">
                         <div>
-                            <h3 class="text-xl font-semibold text-gray-900">积分榜</h3>
-                            <span class="font-semibold text-primary mt-2">英格兰超级联赛</span>
+                            <div class="text-xl font-semibold">积分榜</div>
+                            <div class="font-semibold text-primary mt-2">英格兰超级联赛</div>
                         </div>
                         <div>
                             <a

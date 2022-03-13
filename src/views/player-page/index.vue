@@ -1,58 +1,85 @@
 <template>
     <div>
         <div :class="{ showDiv: !loadFinished }">
-            <n-grid cols="2" x-gap="20" y-gap="20">
-                <n-gi>
-                    <n-card>
-                        <n-grid cols="3" x-gap="9">
-                            <n-gi span="1">
-                                <n-space justify="start">
-                                    <n-rate :value="Math.round(playerData.top_capa / 10) / 2" allow-half readonly
-                                            size="small"/>
-                                    <Avataaars :is-circle="false" height="80%" v-bind="playerData.avatar" width="80%"/>
-                                    <n-space>
-                                        <n-tag v-for="item in playerData.style_tag"
-                                               :type="getTagColor(playerData.style_tag.indexOf(item))">
-                                            {{ item }}
-                                        </n-tag>
-                                    </n-space>
-                                </n-space>
-                            </n-gi>
-                            <n-gi span="2">
-                                <n-h2>{{ playerData.translated_name }}</n-h2>
-                                <n-descriptions :column="3" label-placement="top">
-                                    <n-descriptions-item label="国籍" label-style="color: grey;">
-                                        <n-h4>{{ playerData.translated_nationality }}</n-h4>
-                                    </n-descriptions-item>
-                                    <n-descriptions-item label="年龄" label-style="color: grey;">
-                                        <n-h4>{{ playerData.age }}</n-h4>
-                                    </n-descriptions-item>
-                                    <n-descriptions-item label="号码" label-style="color: grey;">
-                                        <n-h4>{{ playerData.number }}</n-h4>
-                                    </n-descriptions-item>
-                                    <n-descriptions-item label="位置" label-style="color: grey;">
-                                        <n-h4>{{ playerData.superior_location.join('、') }}</n-h4>
-                                    </n-descriptions-item>
-                                    <n-descriptions-item label="身价" label-style="color: grey;">
-                                        <n-h4>
-                                            {{
-                                                playerData.values >= 10000 ? playerData.values / 10000 + '亿' : playerData.values + '万'
-                                            }}
-                                        </n-h4>
-                                    </n-descriptions-item>
-                                    <n-descriptions-item label="周薪" label-style="color: grey;">
-                                        <n-h4>{{ playerData.wages }}万</n-h4>
-                                    </n-descriptions-item>
-                                </n-descriptions>
-                            </n-gi>
-                        </n-grid>
-                        <template #footer>
+            <div class="flex gap-10 p-10">
+                <div class="w-3/5 space-y-10">
+                    <!-- 球员介绍卡片 -->
+                    <div class>
+                        <div class="rounded-lg shadow-md bg-white p-10">
+                            <div class="flex items-center">
+                                <!-- 头像和tag -->
+                                <div class="w-1/3">
+                                    <div class="flex flex-col gap-5">
+                                        <Avataaars
+                                            :is-circle="false"
+                                            class="w-30 h-30"
+                                            v-bind="playerData.avatar"
+                                        />
+                                        <div class="flex flex-wrap gap-3 p-3">
+                                            <n-tag
+                                                v-for="item in playerData.style_tag"
+                                                :type="getTagColor(playerData.style_tag.indexOf(item))"
+                                            >{{ item }}</n-tag>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 描述 -->
+                                <div class="w-2/3">
+                                    <div class="flex gap-5 items-center">
+                                        <div
+                                            class="text-2xl text-primary font-bold mb-4"
+                                        >{{ playerData.translated_name }}</div>
+
+                                        <div class="p-0">
+                                            <n-rate
+                                                :value="Math.round(playerData.top_capa / 10) / 2"
+                                                allow-half
+                                                readonly
+                                                size="small"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-3 gap-4">
+                                        <div>
+                                            <div class="text text-gray-500">国籍</div>
+                                            <div>{{ playerData.translated_nationality }}</div>
+                                        </div>
+                                        <div>
+                                            <div class="text text-gray-500">年龄</div>
+                                            <div>{{ playerData.age }}</div>
+                                        </div>
+                                        <div>
+                                            <div class="text text-gray-500">号码</div>
+                                            <div>{{ playerData.number }}</div>
+                                        </div>
+                                        <div>
+                                            <div class="text text-gray-500">位置</div>
+                                            <div>{{ playerData.superior_location.join('、') }}</div>
+                                        </div>
+                                        <div>
+                                            <div class="text text-gray-500">身价</div>
+                                            <div>
+                                                {{
+                                                    playerData.values >= 10000 ? playerData.values / 10000 + '亿' : playerData.values + '万'
+                                                }}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="text text-gray-500">周薪</div>
+                                            <div>{{ playerData.wages }}万</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <n-divider title-placement="left">赛季数据</n-divider>
                             <n-space justify="space-between">
                                 <n-statistic label="出场">{{ gameData.appearance }}</n-statistic>
                                 <n-statistic label="进球">{{ gameData.goals }}</n-statistic>
                                 <n-statistic label="助攻">{{ gameData.assists }}</n-statistic>
-                                <n-statistic label="平均评分">{{
+                                <n-statistic label="平均评分">
+                                    {{
                                         Math.round(gameData.final_rating * 100) / 100
                                     }}
                                 </n-statistic>
@@ -61,112 +88,119 @@
                                 <n-statistic label="过人成功率">{{ computeDribbleRate }}</n-statistic>
                                 <n-statistic label="争顶成功率">{{ computeAerialRate }}</n-statistic>
                             </n-space>
-                        </template>
-                    </n-card>
-                </n-gi>
-                <n-gi>
-                    <n-card title="能力">
-                        <CapaProgress
-                            :capa-rating="Math.round(playerData.capa.shooting * 100) / 100"
-                            capa-name="射门"
-                        ></CapaProgress>
-                        <CapaProgress
-                            :capa-rating="Math.round(playerData.capa.passing * 100) / 100"
-                            capa-name="传球"
-                        ></CapaProgress>
-                        <CapaProgress
-                            :capa-rating="Math.round(playerData.capa.dribbling * 100) / 100"
-                            capa-name="过人"
-                        ></CapaProgress>
-                        <CapaProgress :capa-rating="Math.round(playerData.capa.pace * 100) / 100"
-                                      capa-name="速度"></CapaProgress>
-                        <CapaProgress
-                            :capa-rating="Math.round(playerData.capa.strength * 100) / 100"
-                            capa-name="力量"
-                        ></CapaProgress>
-                        <CapaProgress
-                            :capa-rating="Math.round(playerData.capa.interception * 100) / 100"
-                            capa-name="拦截"
-                        ></CapaProgress>
-                        <CapaProgress
-                            :capa-rating="Math.round(playerData.capa.anticipation * 100) / 100"
-                            capa-name="预判"
-                        ></CapaProgress>
-                        <CapaProgress
-                            :capa-rating="Math.round(playerData.capa.stamina * 100) / 100"
-                            capa-name="体力"
-                        ></CapaProgress>
-                        <CapaProgress
-                            :capa-rating="Math.round(playerData.capa.goalkeeping * 100) / 100"
-                            capa-name="守门"
-                        ></CapaProgress>
-                    </n-card>
-                </n-gi>
-                <n-gi>
-                    <n-card :title="'近' + ratings.length + '场比赛评分'">
-                        <div :id="ratingChart" style="width: 100%; height: 300%"></div>
-                    </n-card>
-                </n-gi>
-                <n-gi>
-                    <n-card title="各位置出场数">
-                        <div :id="loNumChart" style="width: 100%; height: 300%"></div>
-                    </n-card>
-                </n-gi>
+                        </div>
+                    </div>
+                    <!-- 比赛评分折线图 -->
+                    <div class>
+                        <div class="rounded-lg shadow-md bg-white p-6">
+                            <div
+                                class="text-lg font-semibold text-primary mb-3"
+                            >{{ '近' + ratings.length + '场比赛评分' }}</div>
+                            <div :id="ratingChart" style="width: 100%; height: 300%"></div>
+                        </div>
+                    </div>
+                    <!-- 奖杯陈列室 -->
+                    <div class>
+                        <div class="rounded-lg shadow-md bg-white p-6">
+                            <div class="text-lg font-semibold text-primary mb-3">奖杯陈列室</div>
+                            <n-list>
+                                <n-list-item>
+                                    <n-thing title="个人荣誉">
+                                    <!-- <div class="bg-primary-active w-full py-0.5 mb-2"></div> -->
+                                        2019 金球奖
+                                        <br />2018 英超年度最佳球员
+                                        <br />2020 西甲最佳射手
+                                        <br />2018 英超最佳射手
+                                        <br />2017 英超最佳射手
+                                        <br />2015 英冠最佳射手
+                                        <br />2013 金童奖
+                                        <br />
+                                    </n-thing>
+                                </n-list-item>
+                                <n-list-item>
+                                    <n-thing title="俱乐部荣誉">
+                                        2018 曼彻斯特联 欧冠冠军
+                                        <br />2021 巴塞罗那 西甲冠军
+                                        <br />2017 曼彻斯特联 英超冠军
+                                        <br />2019 巴塞罗那 国王杯冠军
+                                        <br />
+                                    </n-thing>
+                                </n-list-item>
+                            </n-list>
+                        </div>
+                    </div>
+                </div>
 
-                <n-gi>
-                    <n-card title="奖杯陈列室">
-                        <n-list>
-                            <n-list-item>
-                                <n-thing title="个人荣誉">
-                                    2019 金球奖
-                                    <br/>
-                                    2018 英超年度最佳球员
-                                    <br/>
-                                    2020 西甲最佳射手
-                                    <br/>
-                                    2018 英超最佳射手
-                                    <br/>
-                                    2017 英超最佳射手
-                                    <br/>
-                                    2015 英冠最佳射手
-                                    <br/>
-                                    2013 金童奖
-                                    <br/>
-                                </n-thing>
-                            </n-list-item>
-                            <n-list-item>
-                                <n-thing title="俱乐部荣誉">
-                                    2018 曼彻斯特联 欧冠冠军
-                                    <br/>
-                                    2021 巴塞罗那 西甲冠军
-                                    <br/>
-                                    2017 曼彻斯特联 英超冠军
-                                    <br/>
-                                    2019 巴塞罗那 国王杯冠军
-                                    <br/>
-                                </n-thing>
-                            </n-list-item>
-                        </n-list>
-                    </n-card>
-                </n-gi>
-                <n-gi>
+                <div class="w-2/5 space-y-10">
+                    <!-- 能力卡片 -->
+                    <div class>
+                        <div class="rounded-lg shadow-md bg-white p-6">
+                            <div class="text-lg font-semibold text-primary mb-3">能力</div>
+                            <CapaProgress
+                                :capa-rating="Math.round(playerData.capa.shooting * 100) / 100"
+                                capa-name="射门"
+                            ></CapaProgress>
+                            <CapaProgress
+                                :capa-rating="Math.round(playerData.capa.passing * 100) / 100"
+                                capa-name="传球"
+                            ></CapaProgress>
+                            <CapaProgress
+                                :capa-rating="Math.round(playerData.capa.dribbling * 100) / 100"
+                                capa-name="过人"
+                            ></CapaProgress>
+                            <CapaProgress
+                                :capa-rating="Math.round(playerData.capa.pace * 100) / 100"
+                                capa-name="速度"
+                            ></CapaProgress>
+                            <CapaProgress
+                                :capa-rating="Math.round(playerData.capa.strength * 100) / 100"
+                                capa-name="力量"
+                            ></CapaProgress>
+                            <CapaProgress
+                                :capa-rating="Math.round(playerData.capa.interception * 100) / 100"
+                                capa-name="拦截"
+                            ></CapaProgress>
+                            <CapaProgress
+                                :capa-rating="Math.round(playerData.capa.anticipation * 100) / 100"
+                                capa-name="预判"
+                            ></CapaProgress>
+                            <CapaProgress
+                                :capa-rating="Math.round(playerData.capa.stamina * 100) / 100"
+                                capa-name="体力"
+                            ></CapaProgress>
+                            <CapaProgress
+                                :capa-rating="Math.round(playerData.capa.goalkeeping * 100) / 100"
+                                capa-name="守门"
+                            ></CapaProgress>
+                        </div>
+                    </div>
+                    <!-- 各位置出场数饼图 -->
+                    <div>
+                        <div class="rounded-lg shadow-md bg-white p-6">
+                            <div class="text-lg font-semibold text-primary mb-3">各位置出场数</div>
+                            <div :id="loNumChart" style="width: 100%; height: 300%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div>
                     <n-card title="球场">
                         <PlayGround></PlayGround>
                     </n-card>
-                </n-gi>
-            </n-grid>
+                </div>-->
+            </div>
         </div>
     </div>
 </template>
 <script lang="ts" setup>
-import {computed, ComputedRef, onMounted, Ref, ref} from 'vue';
-import {RouteLocationNormalizedLoaded, useRoute} from 'vue-router';
+import { computed, ComputedRef, onMounted, Ref, ref } from 'vue';
+import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router';
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue';
 import * as echarts from 'echarts';
 import CapaProgress from '@/components/CapaProgress.vue';
 import PlayGround from '@/components/PlayGround.vue';
-import {getPlayerByIdAPI, getPlayerTotalGameDataAPI} from '@/apis/player';
-import {getSaveMeAPI} from '@/apis/save';
+import { getPlayerByIdAPI, getPlayerTotalGameDataAPI } from '@/apis/player';
+import { getSaveMeAPI } from '@/apis/save';
 
 const loadFinished: Ref<boolean> = ref(false);
 const route: RouteLocationNormalizedLoaded = useRoute();
@@ -245,24 +279,20 @@ function getTagColor(index: number): string {
 }
 
 const computePassRate: ComputedRef<string> = computed(() => {
-    return `${
-        gameData.value.passes === 0 ? 0 : Math.round((gameData.value.pass_success / gameData.value.passes) * 100)
-    }%`;
+    return `${gameData.value.passes === 0 ? 0 : Math.round((gameData.value.pass_success / gameData.value.passes) * 100)
+        }%`;
 });
 const computeTackleRate: ComputedRef<string> = computed(() => {
-    return `${
-        gameData.value.tackles === 0 ? 0 : Math.round((gameData.value.tackle_success / gameData.value.tackles) * 100)
-    }%`;
+    return `${gameData.value.tackles === 0 ? 0 : Math.round((gameData.value.tackle_success / gameData.value.tackles) * 100)
+        }%`;
 });
 const computeDribbleRate: ComputedRef<string> = computed(() => {
-    return `${
-        gameData.value.dribbles === 0 ? 0 : Math.round((gameData.value.dribble_success / gameData.value.dribbles) * 100)
-    }%`;
+    return `${gameData.value.dribbles === 0 ? 0 : Math.round((gameData.value.dribble_success / gameData.value.dribbles) * 100)
+        }%`;
 });
 const computeAerialRate: ComputedRef<string> = computed(() => {
-    return `${
-        gameData.value.aerials === 0 ? 0 : Math.round((gameData.value.aerial_success / gameData.value.aerials) * 100)
-    }%`;
+    return `${gameData.value.aerials === 0 ? 0 : Math.round((gameData.value.aerial_success / gameData.value.aerials) * 100)
+        }%`;
 });
 
 const getLocationNum = () => {
@@ -270,7 +300,7 @@ const getLocationNum = () => {
     const loNum = [];
     for (const i of Object.entries(playerData.value.location_num)) {
         if (i[1] != 0) {
-            loNum.push({value: i[1], name: i[0].split('_num')[0]});
+            loNum.push({ value: i[1], name: i[0].split('_num')[0] });
         }
     }
     return loNum;
@@ -323,12 +353,12 @@ const ratingOption = computed(() => {
                 type: 'line',
                 markPoint: {
                     data: [
-                        {type: 'max', name: 'Max'},
-                        {type: 'min', name: 'Min'}
+                        { type: 'max', name: 'Max' },
+                        { type: 'min', name: 'Min' }
                     ]
                 },
                 markLine: {
-                    data: [{type: 'average', name: 'Avg'}]
+                    data: [{ type: 'average', name: 'Avg' }]
                 }
             }
         ]
@@ -359,10 +389,10 @@ onMounted(() => {
     getSaveMeAPI()
         .then(response => {
             const gameSeason: number = response.season; // TODO 以后写到全局变量里去
-            getPlayerTotalGameDataAPI({player_id: playerId, start_season: gameSeason, end_season: gameSeason})
+            getPlayerTotalGameDataAPI({ player_id: playerId, start_season: gameSeason, end_season: gameSeason })
                 .then(response => {
                     gameData.value = response;
-                    getPlayerByIdAPI({player_id: playerId})
+                    getPlayerByIdAPI({ player_id: playerId })
                         .then(response => {
                             playerData.value = response;
                             // 初始化图表
@@ -397,12 +427,6 @@ onMounted(() => {
 });
 </script>
 <style scoped>
-.flex {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
 .showDiv {
     visibility: hidden;
 }

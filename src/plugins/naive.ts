@@ -54,7 +54,8 @@ import {
     NThing,
     NTimeline,
     NTimelineItem,
-    NTooltip
+    NTooltip,
+    NRate
 } from 'naive-ui';
 
 /** 按需引入naiveUI */
@@ -114,7 +115,8 @@ export default function setupNaiveUI(app: App) {
             NProgress,
             NSlider,
             NLayoutSider,
-            NLayout
+            NLayout,
+            NRate
         ]
     });
     app.use(naive);
