@@ -1,5 +1,6 @@
 <template>
     <div>
+        <div class="s-card w-32 h-32 p-6 m-6">jgfhjfjfg</div>
         <n-card v-if="gameResult">
             <n-space justify="space-around" style="text-align: center">
                 <img

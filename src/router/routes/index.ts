@@ -77,8 +77,8 @@ export const sidebarRoutes: AuthRoute.Route[] = [
         }
     },
     {
-        name: 'game-result-test',
-        path: '/game-result-test',
+        name: 'game-result',
+        path: '/game-result',
         component: 'self',
         meta: {
             title: '比赛结果',
