@@ -1,172 +1,192 @@
 <template>
-    <div>
-        <n-grid cols="3" x-gap="10">
-            <n-gi>
-                <n-card class="field">
-                    <!--阵容块-->
-                    <div v-for="(value, key) in posInfo" :key="key" :style="value.fieldStyle">
-                        <n-space justify="center">
-                            <!--阵容槽-->
-                            <div
-                                v-for="(pos, key) in activePos(key)"
-                                :key="key"
-                                :draggable="true"
-                                @dragend="dragend"
-                                @dragstart="positionDragstart($event, pos)"
-                                @drop="positionDrop($event, pos)"
-                                @dragover.prevent
-                            >
-                                <div v-if="position[pos]">
-                                    <n-popover raw trigger="click">
-                                        <template #trigger>
-                                            <n-space align="center" vertical>
-                                                <div style="height: 50px; width: 50px">
-                                                    <Avataaars :is-circle="false" v-bind="getAvatar(position[pos])"/>
-                                                </div>
-                                                <n-h4>{{ getPlayerDataById(position[pos]).translated_name }}</n-h4>
-                                            </n-space>
-                                        </template>
-                                        <n-card :title="getPlayerDataById(position[pos]).translated_name">
-                                            <template #header-extra>
-                                                <n-progress
-                                                    :circle-gap="5"
-                                                    :percentage="[20, 50]"
-                                                    :stroke-width="10"
-                                                    status="success"
-                                                    style="width: 40px; margin: 0 10px 0 40px"
-                                                    type="multiple-circle"
-                                                ></n-progress>
-                                            </template>
-                                            <n-descriptions :column="3" label-placement="top">
-                                                <n-descriptions-item label="能力">
-                                                    {{ getPlayerDataById(position[pos]).location_capa[key] }}
-                                                </n-descriptions-item>
-                                                <n-descriptions-item label="位置">{{ key }}</n-descriptions-item>
-                                                <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                                <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                                <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                                <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                            </n-descriptions>
-                                        </n-card>
-                                    </n-popover>
-                                </div>
-                            </div>
-                        </n-space>
-                    </div>
-
-                    <!--遮罩层-->
-                    <template v-for="(value, key) in posInfo" :key="key">
+    <div class="p-6">
+        <div class="grid grid-cols-2 gap-10">
+            <!-- 球场 -->
+            <div class="relative h-128 3xl:h-160 w-full bg-primary-active rounded-lg shadow-md">
+                <!--阵容块-->
+                <div v-for="(value, key) in posInfo" :key="key" :style="value.fieldStyle">
+                    <div class="flex items-center justify-center gap-4">
+                        <!--阵容槽-->
                         <div
-                            v-show="value.isMasked"
-                            :style="value.maskStyle"
-                            class="mask"
-                            @drop="fieldDrop($event, key)"
+                            v-for="(pos, key) in activePos(key)"
+                            :key="key"
+                            :draggable="true"
+                            @dragend="dragend"
+                            @dragstart="positionDragstart($event, pos)"
+                            @drop="positionDrop($event, pos)"
                             @dragover.prevent
                         >
-                            <n-h4>{{ key }}</n-h4>
-                        </div>
-                    </template>
-                </n-card>
-            </n-gi>
-            <n-gi>
-                <!--选项栏-->
-                <n-card>
-                    <n-scrollbar style="max-height: 800px" x-scrollable>
-                        <n-space justify="space-around">
-                            <n-popover v-for="(elem, key) in store.playerData" :key="key" raw trigger="click">
-                                <template #trigger>
-                                    <n-card
-                                        :bordered="false"
-                                        :draggable="true"
-                                        :embedded="isChosen(elem.id)"
-                                        size="small"
-                                        @dragend="dragend"
-                                        @dragstart="selectionDragstart($event, elem)"
-                                        @drop="selectionDrop($event, elem)"
-                                        @dragover.prevent
-                                    >
-                                        <n-space align="center" vertical>
+                            <div v-if="position[pos]">
+                                <!-- 阵容槽弹出框 -->
+                                <n-popover raw trigger="click">
+                                    <!-- 在阵容槽中的人物头像 -->
+                                    <template #trigger>
+                                        <div class="flex flex-col items-center gap-2">
                                             <div style="height: 50px; width: 50px">
-                                                <Avataaars :is-circle="false" v-bind="elem.avatar"></Avataaars>
+                                                <Avataaars
+                                                    :is-circle="false"
+                                                    v-bind="getAvatar(position[pos])"
+                                                />
                                             </div>
-                                            <n-h4>{{ elem.translated_name }}</n-h4>
-                                        </n-space>
-                                    </n-card>
-                                </template>
-                                <n-card>
-                                    <template #header>
-                                        <n-h2>{{ elem.translated_name }}</n-h2>
-                                    </template>
-                                    <template #header-extra>
-                                        <n-progress
-                                            :circle-gap="5"
-                                            :percentage="[20, 50]"
-                                            :stroke-width="10"
-                                            status="success"
-                                            style="width: 40px"
-                                            type="multiple-circle"
-                                        ></n-progress>
-                                    </template>
-                                    <n-grid cols="3">
-                                        <n-gi span="1">
                                             <div
-                                                style="display: flex; height: 120px; width: 120px; margin: 0 30px 30px 0">
-                                                <Avataaars :is-circle="false" v-bind="elem.avatar"></Avataaars>
-                                            </div>
-                                        </n-gi>
-                                        <n-gi span="2">
-                                            <n-descriptions :column="3" label-placement="top">
-                                                <n-descriptions-item label="能力">
-                                                    {{ elem.top_capa }}
-                                                </n-descriptions-item>
-                                                <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                                <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                                <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                                <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                                <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                            </n-descriptions>
-                                        </n-gi>
-                                    </n-grid>
-                                </n-card>
-                            </n-popover>
-                        </n-space>
-                    </n-scrollbar>
-                </n-card>
-            </n-gi>
-            <n-gi>
-                <n-grid cols="1" y-gap="10">
-                    <n-gi>
-                        <n-card title="战术配置">
-                            <n-statistic v-for="(item, key) in tactics" :key="key">
-                                <template #label>{{ item['label'] }}</template>
-                                <template #default>
-                                    <n-slider v-model:value="item.weight"/>
+                                                class="text-primary font-semibold"
+                                            >{{ getPlayerDataById(position[pos]).translated_name }}</div>
+                                        </div>
+                                    </template>
+                                    <n-card
+                                        :title="getPlayerDataById(position[pos]).translated_name"
+                                    >
+                                        <template #header-extra>
+                                            <n-progress
+                                                :circle-gap="5"
+                                                :percentage="[20, 50]"
+                                                :stroke-width="10"
+                                                status="success"
+                                                style="width: 40px; margin: 0 10px 0 40px"
+                                                type="multiple-circle"
+                                            ></n-progress>
+                                        </template>
+                                        <n-descriptions :column="3" label-placement="top">
+                                            <n-descriptions-item
+                                                label="能力"
+                                            >{{ getPlayerDataById(position[pos]).location_capa[key] }}</n-descriptions-item>
+                                            <n-descriptions-item label="位置">{{ key }}</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                        </n-descriptions>
+                                    </n-card>
+                                </n-popover>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--遮罩层-->
+                <template v-for="(value, key) in posInfo" :key="key">
+                    <div
+                        v-show="value.isMasked"
+                        :style="value.maskStyle"
+                        class="opacity-40 bg-primary rounded-lg shadow-md"
+                        @drop="fieldDrop($event, key)"
+                        @dragover.prevent
+                    >
+                        <div class="p-3 text-primary-hover font-semibold text-lg">{{ key }}</div>
+                    </div>
+                </template>
+            </div>
+
+            <!--选项栏-->
+            <div class="s-card p-6">
+                <div class="s-title s-underline">球员</div>
+                <n-scrollbar class="max-h-100 3xl:max-h-150" x-scrollable>
+                    <div class="flex flex-wrap gap-5 p-5">
+                        <!-- 选项栏弹出框 -->
+                        <n-popover
+                            v-for="(elem, key) in store.playerData"
+                            :key="key"
+                            raw
+                            trigger="click"
+                        >
+                            <template #trigger>
+                                <!-- 球员 -->
+                                <div
+                                    :draggable="true"
+                                    @dragend="dragend"
+                                    @dragstart="selectionDragstart($event, elem)"
+                                    @drop="selectionDrop($event, elem)"
+                                    @dragover.prevent
+                                >
+                                    <div class="flex flex-col items-center gap-2">
+                                        <div class="w-15 h-15">
+                                            <Avataaars
+                                                :is-circle="false"
+                                                v-bind="elem.avatar"
+                                                class="rounded-lg"
+                                                :class="{ 'bg-primary-active border-primary-active border-4 ': isChosen(elem.id) }"
+                                            ></Avataaars>
+                                        </div>
+                                        <div
+                                            class="text-primary font-semibold"
+                                        >{{ elem.translated_name }}</div>
+                                    </div>
+                                </div>
+                            </template>
+                            <n-card>
+                                <template #header>
+                                    <div class="s-title s-underline">{{ elem.translated_name }}</div>
                                 </template>
-                            </n-statistic>
-                            <n-space align="center" item-style="display: flex; align-item: center;" justify="end">
-                                <n-button type="primary" @click="startGame">开始比赛</n-button>
-                                <p style="margin: 0">或</p>
-                                <n-button @click="skipGame">跳过比赛</n-button>
-                            </n-space>
-                        </n-card>
-                    </n-gi>
-                </n-grid>
-            </n-gi>
-        </n-grid>
+                                <template #header-extra>
+                                    <n-progress
+                                        :circle-gap="5"
+                                        :percentage="[20, 50]"
+                                        :stroke-width="10"
+                                        status="success"
+                                        style="width: 40px"
+                                        type="multiple-circle"
+                                    ></n-progress>
+                                </template>
+                                <n-grid cols="3">
+                                    <n-gi span="1">
+                                        <div
+                                            style="display: flex; height: 120px; width: 120px; margin: 0 30px 30px 0"
+                                        >
+                                            <Avataaars :is-circle="false" v-bind="elem.avatar"></Avataaars>
+                                        </div>
+                                    </n-gi>
+                                    <n-gi span="2">
+                                        <n-descriptions :column="3" label-placement="top">
+                                            <n-descriptions-item label="能力">{{ elem.top_capa }}</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
+                                        </n-descriptions>
+                                    </n-gi>
+                                </n-grid>
+                            </n-card>
+                        </n-popover>
+                    </div>
+                </n-scrollbar>
+            </div>
+
+            <!-- 战术栏 -->
+            <div class="s-card p-10 place-self-start">
+                <div class="s-title s-underline mb-4">战术配置</div>
+                <div class="flex flex-col gap-2">
+                    <div class="flex flex-col" v-for="(item, key) in tactics" :key="key">
+                        <div class="font-semibold">{{ item.label }}</div>
+                        <n-slider class tooltip v-model:value="item.weight" />
+                    </div>
+                </div>
+
+                <div class="flex item-center gap-3 justify-end mt-5">
+                    <n-button type="primary" @click="startGame">
+                        <div class>开始比赛</div>
+                    </n-button>
+
+                    <n-button @click="skipGame">
+                        <div class="text-primary">跳过比赛</div>
+                    </n-button>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import {computed, defineComponent, reactive, Ref, ref} from 'vue';
-import {Router} from 'vue-router';
+import { computed, defineComponent, reactive, Ref, ref } from 'vue';
+import { Router } from 'vue-router';
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue';
-import {useRouterPush} from '@/composables';
-import {gamePveSkipAPI, gamePveStartAPI} from '@/apis/gamePve';
-import {useStore} from '@/stores/store';
+import { useRouterPush } from '@/composables';
+import { gamePveSkipAPI, gamePveStartAPI } from '@/apis/gamePve';
+import { useStore } from '@/stores/store';
 
-const {routerPush} = useRouterPush();
+const { routerPush } = useRouterPush();
 
-defineComponent({Avataaars});
+defineComponent({ Avataaars });
 const store = useStore();
 // region 拖曳功能
 const posInfo = reactive({
@@ -217,17 +237,19 @@ const posInfo = reactive({
         maxNum: 1,
         fieldStyle: {
             position: 'absolute',
-            left: '71%',
+            // left: '70%',
+            right: '0',
             top: '8%',
             height: '15%',
-            width: '30%'
+            width: '29%'
         },
         maskStyle: {
             position: 'absolute',
-            left: '71%',
+            // left: '70%',
+            right: '0',
             top: '8%',
             height: '15%',
-            width: '30%'
+            width: '29%'
         }
     },
     CAM: {
@@ -714,10 +736,10 @@ function skipGame(): void {
     for (const item in tactics.value) {
         tactic[tactics.value[item].value] = tactics.value[item].weight;
     }
-    gamePveSkipAPI({lineup, tactic_weight: tactic})
+    gamePveSkipAPI({ lineup, tactic_weight: tactic })
         .then((_response: any) => {
             // TODO 加id
-            routerPush({name: 'game-result'});
+            routerPush({ name: 'game-result' });
         })
         .catch((_error: any) => {
         });
@@ -733,9 +755,9 @@ function startGame(): void {
     for (const item in tactics.value) {
         tactic[tactics.value[item].value] = tactics.value[item].weight;
     }
-    gamePveStartAPI({lineup, tactic_weight: tactic})
+    gamePveStartAPI({ lineup, tactic_weight: tactic })
         .then((_response: any) => {
-            routerPush({name: 'game-on'});
+            routerPush({ name: 'game-on' });
         })
         .catch((_error: any) => {
         });

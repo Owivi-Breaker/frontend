@@ -2,7 +2,7 @@
     <div class="p-5">
         <div class="text-xl font-bold text-primary mb-3">球员列表</div>
         <n-spin v-if="!store.playerData.length" class="loading" size="medium" />
-        <div class="gap-10 grid grid-cols-2  2xl:grid-cols-3 3xl:grid-cols-4 ">
+        <div class="gap-10 grid grid-cols-2 2xl:grid-cols-3 3xl:grid-cols-4">
             <div v-for="(item, key) in store.playerData.slice(start, end)" :key="key">
                 <PlayerCard :player-data="item"></PlayerCard>
             </div>
