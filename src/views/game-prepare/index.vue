@@ -8,8 +8,8 @@
                     <div class="flex items-center justify-center gap-4">
                         <!--阵容槽-->
                         <div
-                            v-for="(pos, key) in activePos(key)"
-                            :key="key"
+                            v-for="(pos, key2) in activePos(key)"
+                            :key="key2"
                             :draggable="true"
                             @dragend="dragend"
                             @dragstart="positionDragstart($event, pos)"
