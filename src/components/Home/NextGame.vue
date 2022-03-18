@@ -52,7 +52,7 @@ watch(
         store.nextGame.distance = distance.value;
         if (distance.value == 0) {
             getIncomingGamesAPI()
-                .then(response => {
+                .then((response: any) => {
                     nextGameName.value = response[0].game_name;
                     nextGameDate.value = response[0].date;
                     teams.value[0] = response[0].club1_name;
@@ -67,7 +67,7 @@ watch(
     }
 );
 getIncomingGamesAPI()
-    .then(response => {
+    .then((response: any) => {
         nextGameName.value = response[0].game_name;
         nextGameDate.value = response[0].date;
         teams.value[0] = response[0].club1_name;
