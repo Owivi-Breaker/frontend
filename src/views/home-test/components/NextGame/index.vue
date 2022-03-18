@@ -2,9 +2,13 @@
     <div class="relative flex flex-col gap-y-6 s-card">
         <div class="flex items-center space-x-16 p-10">
             <!-- 左球队 -->
-            <div class="w-1/3 flex items-center space-x-1 flex">
-                <img class="h-25" :src="'http://s1.s100.vip:13127/Public/' + teams[0] + '.png'" alt="图片"/>
-                <div class="flex flex-col items-start space-y-2">
+            <div class="w-1/3 flex items-center gap-5">
+                <img
+                    class="h-25"
+                    :src="'http://s1.s100.vip:13127/Public/' + teams[0] + '.png'"
+                    alt="图片"
+                />
+                <div class="flex flex-col items-start gap-2">
                     <div class="text-lg font-semibold s-underline">{{ teams[0] }}</div>
                     <div class="text-gray-500">排名 6</div>
                 </div>
@@ -35,21 +39,25 @@
                 <div class="text-gray-500">{{ nextGameDate }}</div>
             </div>
             <!-- 右球队 -->
-            <div class="w-1/3 flex items-center space-x-1 flex">
-                <div class="flex flex-col items-end space-y-2">
+            <div class="w-1/3 flex items-center gap-5">
+                <div class="flex flex-col items-end gap-2">
                     <div class="text-lg font-semibold s-underline">{{ teams[1] }}</div>
                     <div class="text-gray-500">排名 12</div>
                 </div>
-                <img class="h-25" :src="'http://s1.s100.vip:13127/Public/' + teams[1] + '.png'" alt="图片"/>
+                <img
+                    class="h-25"
+                    :src="'http://s1.s100.vip:13127/Public/' + teams[1] + '.png'"
+                    alt="图片"
+                />
             </div>
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-import {ref, Ref, watch} from 'vue';
-import {getIncomingGamesAPI} from '@/apis/club';
-import {useStore} from '@/stores/store';
+import { ref, Ref, watch } from 'vue';
+import { getIncomingGamesAPI } from '@/apis/club';
+import { useStore } from '@/stores/store';
 
 const store = useStore();
 const isLoading: Ref<boolean> = ref(true);
@@ -98,5 +106,4 @@ getIncomingGamesAPI()
 </script>
 
 <style scoped>
-
 </style>
