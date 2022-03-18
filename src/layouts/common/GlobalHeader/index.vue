@@ -166,7 +166,6 @@ function ExitLogin(): void {
 const showGameModal: Ref<boolean> = ref(false);
 
 function nextDay(): void {
-    console.log(store.nextGame.distance);
     if (store.nextGame.distance === 1 && showGameModal.value === false) {
         showGameModal.value = true;
         return;
