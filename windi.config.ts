@@ -103,5 +103,5 @@ export default defineConfig({
     }
   },
   variants: {},
-  plugins: []
+  plugins: [require('@windicss/plugin-question-mark')]
 });

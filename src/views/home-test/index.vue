@@ -59,7 +59,7 @@
 
                 <!-- 球员表现统计 -->
                 <div>
-                    <n-scrollbar x-scrollable>
+                    <n-scrollbar x-scrollable >
                         <div class="flex justify-around gap-5 py-10">
                             <!-- 最佳射手 -->
                             <div class="flex flex-col items-center min-w-40">

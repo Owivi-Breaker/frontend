@@ -30,6 +30,8 @@ specifiers:
   '@vue/eslint-config-prettier': ^7.0.0
   '@vue/eslint-config-typescript': ^10.0.0
   '@vueuse/core': ^7.7.0
+  '@windicss/plugin-question-mark': ^0.1.1
+  '@windicss/plugin-scrollbar': ^1.2.3
   autoprefixer: ^10.4.2
   axios: ^0.26.0
   clipboard: ^2.0.10
@@ -104,6 +106,7 @@ dependencies:
   '@vitejs/plugin-vue': 1.10.2_vite@2.8.6
   '@vue/compiler-sfc': 3.2.31
   '@vueuse/core': 7.7.0_vue@3.2.31
+  '@windicss/plugin-question-mark': 0.1.1
   autoprefixer: 10.4.2_postcss@8.4.6
   axios: registry.npmmirror.com/axios/0.26.0
   clipboard: registry.npmmirror.com/clipboard/2.0.10
@@ -148,6 +151,7 @@ devDependencies:
   '@typescript-eslint/parser': 5.13.0_eslint@8.10.0+typescript@4.6.2
   '@vue/eslint-config-prettier': registry.npmmirror.com/@vue/eslint-config-prettier/7.0.0_eslint@8.10.0+prettier@2.5.1
   '@vue/eslint-config-typescript': registry.npmmirror.com/@vue/eslint-config-typescript/10.0.0_4999eaf7519b793a6f98f832632fec6e
+  '@windicss/plugin-scrollbar': 1.2.3
   commitizen: registry.npmmirror.com/commitizen/4.2.4
   cross-env: registry.nlark.com/cross-env/7.0.3
   cz-conventional-changelog: registry.nlark.com/cz-conventional-changelog/3.3.0
@@ -965,6 +969,14 @@ packages:
       windicss: 3.5.1
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /@windicss/plugin-question-mark/0.1.1:
+    resolution: {integrity: sha512-LTnySh28mFncJqCw7VjZzYD3HkJynjHQ8wAIgsZUPTi8WzDJtUeYyFc8/ImXGL/jon55zzg9yy9y/lUyCvvrmA==}
+    dev: false
+
+  /@windicss/plugin-scrollbar/1.2.3:
+    resolution: {integrity: sha512-+cqv1pEmaNPITeBJ/lO6tc8IjBzRhQ+V9G8r249MMXivYoxUO4DtModBrRGHVvBgsYZgPXDsIv2jqtxc4NqYEg==}
     dev: true
 
   /@windicss/plugin-utils/1.8.2:

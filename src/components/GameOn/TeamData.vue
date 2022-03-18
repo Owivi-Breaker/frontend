@@ -1,13 +1,13 @@
 <template>
-    <n-card title=" ">
-        <template #header-extra>
+    <div class="s-card p-6">
+        <div class="pb-4">
             <img
                 v-if="props.club"
                 :src="'http://s1.s100.vip:13127/Public/' + props.club.name + '.png'"
                 alt="图片"
                 class="teamAvatar"
             />
-        </template>
+        </div>
         <n-scrollbar style="max-height: 280px">
             <n-space align="center" class="itemSpace" justify="space-between">
                 <div class="name">姓名</div>
@@ -22,7 +22,7 @@
             </n-space>
             <PlayerItem v-for="(item, key) in perfData" :key="key" :player="item"></PlayerItem>
         </n-scrollbar>
-    </n-card>
+    </div>
 </template>
 
 <script lang="ts" setup>
@@ -37,6 +37,7 @@ const props: any = defineProps({
     club: Object,
     playerInfo: Array
 });
+
 const isGetting: Array<boolean> = [false, false, false, false, false, false, false, false, false, false, false];
 const perfData: ComputedRef = computed(() => {
     if (!props.playerInfo) {

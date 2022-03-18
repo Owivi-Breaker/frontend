@@ -1,13 +1,15 @@
 <template>
-    <div>
-        <n-grid cols="10" x-gap="20">
-            <n-gi span="3">
-                <div class="s-card p-6" style="min-height: 822px">
-                    <n-scrollbar ref="nScrollBarRef" style="max-height: 780px">
+    <div class="p-6">
+        <div class="flex gap-6">
+            <div class="w-1/3 flex flex-col gap-6">
+                <!-- 左球场 -->
+                <Field pos="left"></Field>
+                <!-- 解说 -->
+                <div class="s-card p-6 h-128 3xl:h-160">
+                    <n-scrollbar ref="nScrollBarRef">
                         <n-timeline>
                             <n-timeline-item
                                 v-for="(item, key) in commentaryList"
-                                :key="key"
                                 :color="getColor(item.level, '', 1, 5)"
                                 :time="item.time"
                                 :title="item.content"
@@ -15,130 +17,223 @@
                         </n-timeline>
                     </n-scrollbar>
                 </div>
-            </n-gi>
-            <n-gi span="3">
+            </div>
+
+            <div class="w-1/3">
                 <div class="flex flex-col gap-6">
-                    <div>
-                        <!-- 比分组件 -->
-                        <GameStatus
-                            v-if="totalData['game_info']"
-                            :computer-team-info="totalData['computer_team_info']"
-                            :home-club-id="totalData['game_info']['home_club_id']"
-                            :player-team-info="totalData['player_team_info']"
-                            :turns="totalData['game_info']['turns']"
-                            :curAttacker="totalData['game_info']['cur_attacker']"
-                        ></GameStatus>
-                    </div>
-                    <div>
-                        <TacticalSelector></TacticalSelector>
-                    </div>
-                    <div>
-                        <TacticalStatistic
-                            :computer-team-info="totalData['computer_team_info']"
-                            :player-team-info="totalData['player_team_info']"
-                        ></TacticalStatistic>
-                    </div>
+                    <!-- 比分 -->
+                    <GameStatus
+                        v-if="totalData['game_info']"
+                        :computer-team-info="totalData['computer_team_info']"
+                        :home-club-id="totalData['game_info']['home_club_id']"
+                        :player-team-info="totalData['player_team_info']"
+                        :turns="totalData['game_info']['turns']"
+                        :cur-attacker="totalData['game_info']['cur_attacker']"
+                    ></GameStatus>
+                    <!-- 战术选择 -->
+                    <TacticalSelector :is-self-turn="isSelfTurn" v-if="!isLoading"></TacticalSelector>
+                    <!-- 战术统计 -->
+                    <TacticalStatistic
+                        :computer-team-info="totalData['computer_team_info']"
+                        :player-team-info="totalData['player_team_info']"
+                    ></TacticalStatistic>
                 </div>
-            </n-gi>
-            <n-gi span="4">
-                <n-grid cols="1" y-gap="10">
-                    <n-gi>
+            </div>
+
+            <div class="w-1/3">
+                <div class="flex flex-col gap-10">
+                    <!-- 右球场 -->
+                    <Field pos="right"></Field>
+                    <div>
                         <TeamData
                             :club="homeTeam"
                             :player-info="homePlayerInfo"
                             style="height: 406px"
                         ></TeamData>
-                    </n-gi>
-                    <n-gi>
+                    </div>
+                    <div>
                         <TeamData
                             :club="foreignTeam"
                             :player-info="foreignPlayerInfo"
                             style="height: 406px"
                         ></TeamData>
-                    </n-gi>
-                </n-grid>
-            </n-gi>
-        </n-grid>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
-<script lang="ts" setup>
-import { computed, ComputedRef, defineComponent, nextTick, ref, Ref, watch } from 'vue';
-import { ScrollbarInst } from 'naive-ui';
-import { GameStatus, TacticalSelector, TacticalStatistic, TeamData } from '@/components/GameOn';
-import { getColor } from '@/utils/colorMap';
-import { useStore } from '@/stores/store';
 
+
+<script lang="ts" setup>
+import { computed, ComputedRef, defineComponent, nextTick, ref, Ref, watch, onMounted } from "vue";
+import { ScrollbarInst } from "naive-ui";
+import {
+    GameStatus,
+    TacticalSelector,
+    TacticalStatistic,
+    TeamData,
+    Field
+} from "@/components/GameOn";
+import { getColor } from "@/utils/colorMap";
+import { useStore } from "@/stores/store";
+import Avataaars from "vuejs-avataaars/src/Avataaars.vue";
+import { gamePveNextTurnAPI, gamePveShowGameInfoAPI } from '@/apis/gamePve';
+import { getClubByIdAPI } from '@/apis/club';
+import { useRouterPush } from '@/composables';
+
+
+const { routerPush } = useRouterPush();
 const store = useStore();
-defineComponent({ GameStatus, TeamData, TacticalStatistic, TacticalSelector });
+
+
+const isLoading: Ref<boolean> = ref(true);
+
+
+let timer: NodeJS.Timeout | null = null;
+onMounted(() => {
+    gamePveShowGameInfoAPI()
+        .then((response: any) => {
+            if (response.game_info.turns > 51) {
+                if (timer) {
+                    clearInterval(timer);
+                }
+                routerPush({ name: 'game-result' });
+                return;
+            }
+            const temp = response;
+            if (store.clubNameId[temp.player_team_info.club_id]) {
+                temp.player_team_info.name = store.clubNameId[temp.player_team_info.club_id];
+                if (store.clubNameId[temp.computer_team_info.club_id]) {
+                    temp.computer_team_info.name = store.clubNameId[temp.computer_team_info.club_id];
+                    store.gamePveData = temp;
+                } else {
+                    getClubByIdAPI({ club_id: temp.computer_team_info.club_id })
+                        .then((response: any) => {
+                            temp.computer_team_info.name = response.name;
+                            store.clubNameId[temp.computer_team_info.club_id] = response.name;
+                            store.gamePveData = temp;
+                        })
+                        .catch((_error: any) => {
+                        });
+                }
+            } else {
+                getClubByIdAPI({ club_id: temp.player_team_info.club_id })
+                    .then((response: any) => {
+                        temp.player_team_info.name = response.name;
+                        store.clubNameId[temp.player_team_info.club_id] = response.name;
+                        if (store.clubNameId[temp.computer_team_info.club_id]) {
+                            temp.computer_team_info.name = store.clubNameId[temp.computer_team_info.club_id];
+                            store.gamePveData = temp;
+                        } else {
+                            getClubByIdAPI({ club_id: temp.computer_team_info.club_id })
+                                .then((response: any) => {
+                                    temp.computer_team_info.name = response.name;
+                                    store.clubNameId[temp.computer_team_info.club_id] = response.name;
+                                    store.gamePveData = temp;
+                                })
+                                .catch((_error: any) => {
+                                });
+                        }
+                    })
+                    .catch((_error: any) => {
+                    });
+            }
+            isLoading.value = false
+        })
+        .catch((_error: any) => {
+        });
+})
+
 
 const totalData: ComputedRef = computed(() => {
     return store.gamePveData;
 });
 
+const isSelfTurn: ComputedRef = computed(() => {
+    return store.gamePveData.game_info.cur_attacker === store.gamePveData.game_info.player_club_id
+});
+
+
+// 主场队伍比赛信息
 const homeTeam: ComputedRef = computed(() => {
     if (!totalData.value.game_info) {
         return null;
     }
-    if (totalData.value.game_info.home_club_id === totalData.value.player_team_info.club_id) {
+    if (
+        totalData.value.game_info.home_club_id === totalData.value.player_team_info.club_id
+    ) {
         return totalData.value.player_team_info;
     }
     return totalData.value.computer_team_info;
 });
 
+// 客场队伍比赛信息
 const foreignTeam: ComputedRef = computed(() => {
     if (!totalData.value.game_info) {
         return null;
     }
-    if (totalData.value.game_info.home_club_id !== totalData.value.player_team_info.club_id) {
+    if (
+        totalData.value.game_info.home_club_id !== totalData.value.player_team_info.club_id
+    ) {
         return totalData.value.player_team_info;
     }
     return totalData.value.computer_team_info;
 });
 
+// 主场球员比赛信息
 const homePlayerInfo: ComputedRef = computed(() => {
     if (!totalData.value.game_info) {
         return null;
     }
-    if (totalData.value.game_info.home_club_id === totalData.value.player_team_info.club_id) {
+    if (
+        totalData.value.game_info.home_club_id === totalData.value.player_team_info.club_id
+    ) {
         return totalData.value.player_players_info;
     }
     return totalData.value.computer_players_info;
 });
 
+// 客场球员比赛信息
 const foreignPlayerInfo: ComputedRef = computed(() => {
     if (!totalData.value.game_info) {
         return null;
     }
-    if (totalData.value.game_info.home_club_id !== totalData.value.player_team_info.club_id) {
+    if (
+        totalData.value.game_info.home_club_id !== totalData.value.player_team_info.club_id
+    ) {
         return totalData.value.player_players_info;
     }
     return totalData.value.computer_players_info;
 });
+
+
+
 
 const nScrollBarRef: Ref<ScrollbarInst | null> = ref(null);
 const commentaryList: ComputedRef = computed(() => {
     const result = new Array<any>();
     if (totalData.value.game_info) {
-        const scriptList: Array<string> = totalData.value.game_info.script.split('\n\n');
+        const scriptList: Array<string> = totalData.value.game_info.script.split("\n\n");
         for (let i: number = 0; i < scriptList.length; i++) {
-            const subScriptList: Array<string> = scriptList[i].split('\n');
+            const subScriptList: Array<string> = scriptList[i].split("\n");
             if (i === scriptList.length - 1) {
                 subScriptList.pop();
                 continue;
             }
             for (let j: number = 0; j <= subScriptList.length - 1; j++) {
-                const item: Array<string> = subScriptList[j].split('@');
+                const item: Array<string> = subScriptList[j].split("@");
                 if (item[1].length <= 2) {
                     result.push({
                         content: item[0],
-                        time: '',
-                        level: item[1]
+                        time: "",
+                        level: item[1],
                     });
                 } else {
                     result.push({
                         content: item[0],
                         time: item[1],
-                        level: item[2]
+                        level: item[2],
                     });
                 }
             }
@@ -146,6 +241,8 @@ const commentaryList: ComputedRef = computed(() => {
     }
     return result;
 });
+
+
 watch(
     () => commentaryList.value,
     () => {
@@ -157,5 +254,16 @@ watch(
     },
     { immediate: true }
 );
-defineExpose({ getColor, homeTeam, foreignTeam, homePlayerInfo, foreignPlayerInfo, commentaryList, totalData });
+
+// 球场相关函数
+
+defineExpose({
+    getColor,
+    homeTeam,
+    foreignTeam,
+    homePlayerInfo,
+    foreignPlayerInfo,
+    commentaryList,
+    totalData,
+});
 </script>
