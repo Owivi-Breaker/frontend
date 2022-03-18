@@ -4,14 +4,14 @@ import router from '@/router';
 import {storage} from '../utils';
 
 // 新建一个axios实例service
-const service = axios.create({
+const service = (axios as any).create({
     baseURL: import.meta.env.VITE_APP_INTERFACE_URL,
     timeout: 600 * 1000
 });
 
 // 请求拦截器
 service.interceptors.request.use(
-    config => {
+    (config: any) => {
         // 发送请求前做的一些处理,数据转化,配置请求头,设置token,设置loading等,根据需求去添加
         // 设置token
         const token = storage.get('token');
@@ -38,7 +38,7 @@ service.interceptors.request.use(
         }
         return config;
     },
-    error => {
+    (error: any) => {
         console.log(error);
         return Promise.reject(error);
     }
@@ -48,7 +48,7 @@ declare const window: Window & { $message: any; $loadingBar: LoadingBarApi };
 // 响应拦截器
 service.interceptors.response.use(
     // 对响应数据做处理
-    response => {
+    (response: any) => {
         const res: object = response.data;
         console.log(`请求${response.config.baseURL}${response.config.url} 成功，返回：`);
         console.log(res);
@@ -57,7 +57,7 @@ service.interceptors.response.use(
         }
         return Promise.resolve(res); // 只将数据返回
     },
-    error => {
+    (error: any) => {
         /* 异常处理开始 */
         if (error && error.response) {
             // 1.公共错误处理
@@ -129,7 +129,7 @@ service.interceptors.response.use(
         } else {
             // 超时处理
             if (JSON.stringify(error).includes('timeout')) {
-                console.log('服务器响应超时，请刷新当前页');
+                window.$message.error('连接服务器失败');
             }
             // error.message = '连接服务器失败';
         }

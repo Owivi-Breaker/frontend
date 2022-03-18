@@ -1,17 +1,27 @@
 <template>
     <div>
         <div class="searchPanel">
-            <n-input class="searchInput" v-model:value="playerName" type="text" placeholder="球员信息">
+            <n-input class="searchInput" v-model:value="searchValue" type="text" placeholder="球员信息">
                 <template #prefix>
                     <n-icon size="20">
                         <search-outline></search-outline>
                     </n-icon>
                 </template>
             </n-input>
-            <n-button class="searchButton" type="primary" @click="search">
+            <n-button class="searchButton" type="primary" @click="search" v-bind:disabled="chosenAttri===''">
                 搜索
             </n-button>
         </div>
+        <n-radio-group class="searchRadio" v-model:value="chosenAttri" name="radiogroup">
+            <n-space align="center">
+                <n-radio v-for="item in searchAttri" :key="item.value" :value="item.value">
+                    {{ item.label }}
+                </n-radio>
+                <n-button type="primary" @click="clearSearch" v-bind:disabled="chosenAttri===''">
+                    清空
+                </n-button>
+            </n-space>
+        </n-radio-group>
         <div class="listTable">
             <n-data-table :columns="playerColumns" :data="playerData" :pagination="paginationReactive"
                           :loading="dataLoading" :row-props="rowProps" @update:sorter="resort">
@@ -69,17 +79,58 @@ import {computed, ComputedRef, defineComponent, h, nextTick, onMounted, reactive
 import {DropdownOption, MessageApi, NButton, NTag} from "naive-ui";
 import {getColor} from "@/utils/colorMap";
 import {useStore} from '@/stores/store';
-import {getOnSalePlayersAPI, makeOfferByUserAPI} from "@/apis/transfer";
+import {getOnSalePlayersAPI, getPlayersByAttriAPI, makeOfferByUserAPI} from "@/apis/transfer";
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue';
 
 defineComponent({Search, SearchOutline, Avataaars});
 let store: any = useStore();
-let playerName: Ref<String> = ref("");
+let searchValue: Ref<string> = ref("");
 let pageAmount: number = 0;
 let pageSize: number = 10;
 let pagePerGet: number = 10;
 let rawData: Ref<Array<any>> = ref([]);
 let dataLoading: Ref<boolean> = ref(false);
+
+function getPlayers(offset: number, limit: number, attri: string, order: number): void {
+    getOnSalePlayersAPI({
+        offset: offset,
+        limit: limit,
+        attri: attri,
+        order: order
+    }).then((response: any) => {
+        if (rawData.value.length === 0) {
+            rawData.value = response;
+        } else {
+            for (let i = 0; i < response.length; i++) {
+                rawData.value.push(response[i]);
+            }
+        }
+        pageAmount += pagePerGet;
+        dataLoading.value = false;
+    }).catch((_error: any) => {
+    });
+}
+
+function searchPlayers(offset: number, limit: number, attri: string, value: string): void {
+    getPlayersByAttriAPI({
+        offset: offset,
+        limit: limit,
+        attri: attri,
+        value: value,
+    }).then((response: any) => {
+        if (rawData.value.length === 0) {
+            rawData.value = response;
+        } else {
+            for (let i = 0; i < response.length; i++) {
+                rawData.value.push(response[i]);
+            }
+        }
+        pageAmount += pagePerGet;
+        dataLoading.value = false;
+    }).catch((_error: any) => {
+    });
+}
+
 const paginationReactive = reactive({
     page: 1,
     pageSize: pageSize,
@@ -87,25 +138,48 @@ const paginationReactive = reactive({
     onChange: (page: number) => {
         if (page >= pageAmount) {
             dataLoading.value = true;
-            getOnSalePlayersAPI({
-                offset: pageAmount * pageSize,
-                limit: pagePerGet * pageSize,
-                attri: "id",
-                order: 0
-            }).then((response: any) => {
-                for (let i = 0; i < response.length; i++) {
-                    rawData.value.push(response[i]);
-                }
-                pageAmount += pagePerGet;
-                dataLoading.value = false;
-            });
+            if (!isOnSearch) {
+                getPlayers(pageAmount * pageSize, pagePerGet * pageSize, "id", 0);
+            } else {
+                searchPlayers(pageAmount * pageSize, pagePerGet * pageSize, chosenAttri.value, searchValue.value);
+            }
         }
         paginationReactive.page = page;
     }
 })
+let chosenAttri: Ref<string> = ref("");
+let searchAttri: Ref<Array<{ 'label': String, 'value': String }>> = ref([
+    {'label': '姓名', 'value': 'translated_name'},
+    {'label': '国籍', 'value': 'translated_nationality'},
+    {'label': '俱乐部', 'value': 'club_name'},
+    {'label': '位置', 'value': 'location'}
+]);
+let isOnSearch: boolean = false;
 
 function search() {
-    console.log(playerName.value);
+    if (searchValue.value === '') {
+        return;
+    }
+    rawData.value = [];
+    pageAmount = 0;
+    dataLoading.value = true;
+    isOnSearch = true;
+    searchPlayers(pageAmount * pageSize, pagePerGet * pageSize, chosenAttri.value, searchValue.value);
+}
+
+function clearSearch() {
+    if (searchValue.value === '' || !isOnSearch) {
+        chosenAttri.value = '';
+        searchValue.value = '';
+        return;
+    }
+    rawData.value = [];
+    pageAmount = 0;
+    dataLoading.value = true;
+    isOnSearch = false;
+    chosenAttri.value = "";
+    searchValue.value = "";
+    getPlayers(pageAmount * pageSize, pagePerGet * pageSize, "id", 0);
 }
 
 class playerItem {
@@ -200,64 +274,48 @@ type DataTableSorter = {
 }
 
 function resort(sorter: DataTableSorter): void {
-    dataLoading.value = true;
-    pageAmount = 0;
-    paginationReactive.page = 1;
-    rawData.value = [];
-    let trans: any = {
-        '姓名': 'translated_name',
-        '年龄': 'age',
-        '国籍': 'translated_nationality',
-        '俱乐部': 'club_name',
-        '周薪': 'wages',
-        '身价': 'values',
-        '位置': 'top_location',
-        '射门':'shooting',
-        '传球':'passing',
-        '过人':'dribbling',
-        '抢断':'interception',
-        '速度':'pace',
-        '力量':'strength',
-        '侵略':'aggression',
-        '预判':'anticipation',
-        '任意球':'free_kick',
-        '体能':'stamina',
-        '守门':'goalkeeping',
-    };
-    let attri: string = trans[sorter.columnKey];
-    let order: number;
-    if (sorter.order === 'ascend' || !sorter.order) {
-        order = 0;
-        if (!sorter.order) {
-            attri = 'id';
+    if (!isOnSearch) {
+        dataLoading.value = true;
+        pageAmount = 0;
+        paginationReactive.page = 1;
+        rawData.value = [];
+        let trans: any = {
+            '姓名': 'translated_name',
+            '年龄': 'age',
+            '国籍': 'translated_nationality',
+            '俱乐部': 'club_id',
+            '周薪': 'wages',
+            '身价': 'values',
+            '位置': 'top_location',
+            '射门': 'shooting',
+            '传球': 'passing',
+            '过人': 'dribbling',
+            '抢断': 'interception',
+            '速度': 'pace',
+            '力量': 'strength',
+            '侵略': 'aggression',
+            '预判': 'anticipation',
+            '任意球': 'free_kick',
+            '体能': 'stamina',
+            '守门': 'goalkeeping',
+        };
+        let attri: string = trans[sorter.columnKey];
+        let order: number;
+        if (sorter.order === 'ascend' || !sorter.order) {
+            order = 0;
+            if (!sorter.order) {
+                attri = 'id';
+            }
+        } else {
+            order = 1;
         }
-    } else {
-        order = 1;
+        getPlayers(pageAmount * pageSize, pagePerGet * pageSize, attri, order);
     }
-    getOnSalePlayersAPI({
-        offset: pageAmount * pageSize,
-        limit: pagePerGet * pageSize,
-        attri: attri,
-        order: order
-    }).then((response: any) => {
-        rawData.value = response;
-        pageAmount += pagePerGet;
-        dataLoading.value = false;
-    });
 }
 
 onMounted(() => {
     dataLoading.value = true;
-    getOnSalePlayersAPI({
-        offset: pageAmount * pageSize,
-        limit: pagePerGet * pageSize,
-        attri: "id",
-        order: 0
-    }).then((response: any) => {
-        rawData.value = response;
-        pageAmount += pagePerGet;
-        dataLoading.value = false;
-    });
+    getPlayers(pageAmount * pageSize, pagePerGet * pageSize, "id", 0);
 });
 let tradeTarget: Ref = ref(null);
 let showModal: Ref<boolean> = ref(false);
@@ -316,7 +374,7 @@ function makeOffer(): void {
     });
 }
 
-defineExpose({playerName, playerColumns, playerData});
+defineExpose({playerName: searchValue, playerColumns, playerData});
 </script>
 <style scoped>
 .searchPanel {
@@ -331,6 +389,11 @@ defineExpose({playerName, playerColumns, playerData});
 .searchButton {
     align-self: center;
     margin-left: 10px;
+}
+
+.searchRadio {
+    margin-top: 10px;
+    align-self: center;
 }
 
 .listTable {
