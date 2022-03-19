@@ -98,7 +98,8 @@
 </template>
 
 <script lang="ts" setup>
-import {defineComponent, onBeforeUnmount, onMounted, ref, Ref} from 'vue';
+import {defineComponent, h, onBeforeUnmount, onMounted, Ref, ref} from 'vue';
+import {NotificationApi, useNotification} from 'naive-ui'
 import {Router} from 'vue-router';
 import {ExitOutline} from '@vicons/ionicons5';
 import key from 'Keymaster';
@@ -111,6 +112,7 @@ import {getDateAPI} from '@/apis/user';
 import {nextTurnAPI} from '@/apis/nextTurn';
 import {useStore} from '@/stores/store';
 import {getIncomingGamesAPI} from '@/apis/club';
+import {getNegotiateListAPI} from "@/apis/transfer";
 import GlobalSearch from '../GlobalSearch/index.vue';
 import GlobalLogo from '../GlobalLogo/index.vue';
 import {FullScreen, GithubSite, GlobalBreadcrumb, HeaderMenu, MenuCollapse, ThemeMode} from './components';
@@ -164,40 +166,67 @@ function ExitLogin(): void {
 }
 
 const showGameModal: Ref<boolean> = ref(false);
+let notification: NotificationApi = useNotification();
 
 function nextDay(): void {
-    if (store.nextGame.distance === 1 && showGameModal.value === false) {
+    if (store.nextGame.distance === 1 && !showGameModal.value) {
         showGameModal.value = true;
         return;
     }
     nextTurnAPI()
         .then((response: any) => {
-            if (response.state === 'pve') {
-                showGameModal.value = false;
-                routerPush({name: 'gamePrepare'});
-            }
-            getDateAPI()
-                .then((response: { date: any }) => {
-                    store.Date = response.date;
-                    store.nextGame.distance--;
-                    if (store.nextGame.distance == 0) {
-                        getIncomingGamesAPI()
-                            .then(response => {
-                                const nextGameDate = response[0].date;
-                                const teams = new Array<string>(2);
-                                teams[0] = response[0].club1_name;
-                                teams[1] = response[0].club2_name;
-                                store.nextGame.distance =
-                                    (new Date(nextGameDate).getTime() / 1000 - new Date(store.Date).getTime() / 1000) / 24 / 60 / 60;
-                                store.nextGame.teams = teams;
-                            })
-                            .catch((_error: {}) => {
+                if (response.state === 'pve') {
+                    showGameModal.value = false;
+                    routerPush({name: 'gamePrepare'});
+                }
+                getDateAPI()
+                    .then((response: { date: any }) => {
+                        store.Date = response.date;
+                        store.nextGame.distance--;
+                        if (store.nextGame.distance == 0) {
+                            getIncomingGamesAPI()
+                                .then((response: any) => {
+                                    const nextGameDate = response[0].date;
+                                    const teams = new Array<string>(2);
+                                    teams[0] = response[0].club1_name;
+                                    teams[1] = response[0].club2_name;
+                                    store.nextGame.distance =
+                                        (new Date(nextGameDate).getTime() / 1000 - new Date(store.Date).getTime() / 1000) / 24 / 60 / 60;
+                                    store.nextGame.teams = teams;
+                                })
+                                .catch((_error: {}) => {
+                                });
+                        }
+                    })
+                    .catch((_error: {}) => {
+                    });
+                getNegotiateListAPI()
+                    .then((response: any) => {
+                        console.log(response);
+                        for (let item in response) {
+                            console.log(item);
+                            notification.create({
+                                title: "恭喜您，您的报价被我方接受！",
+                                description: '',
+                                content: `您的报价被${response[item].player_info.club_name}接受，您的报价为${response[item].price}`,
+                                meta: store.Date,
+                                avatar: () =>
+                                    h('image', {
+                                        size: 'small',
+                                        round: true,
+                                        src: 'http://lvshuhuai.cn:13127/Public/' + response[item].player_info.club_name + ".png"
+                                    }),
+                                onAfterLeave: () => {
+                                    console.log('after leave');
+                                }
                             });
-                    }
-                })
-                .catch((_error: {}) => {
-                });
-        })
+                            console.log(item);
+                        }
+                    })
+                    .catch((_error: {}) => {
+                    });
+            }
+        )
         .catch((_error: {}) => {
         });
 }
