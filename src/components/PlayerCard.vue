@@ -1,6 +1,6 @@
 <template>
     <div
-        class="relative shadow-md rounded-lg bg-white p-5 overflow-hidden"
+        class="relative s-card p-5 overflow-hidden"
         hoverable
         size="large"
         @click="goDetail"

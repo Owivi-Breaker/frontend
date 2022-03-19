@@ -15,13 +15,26 @@
             </div>
         </div>
         <!-- TODO 对方队伍的颜色 -->
+
         <n-progress
+            v-if="IsPlayerLeft"
             :height="10"
             type="line"
             :border-radius="1"
-            :color="'primary-active'"
+            :color="isZero ? '#78838E' : '#D81B60'"
             :percentage="proNumber"
-            :rail-color="isZero ? '#78838E' : ''"
+            :rail-color="isZero ? '#78838E' : '#007AFF'"
+            :show-indicator="false"
+        ></n-progress>
+
+        <n-progress
+            v-if="!IsPlayerLeft"
+            :height="10"
+            type="line"
+            :border-radius="1"
+            :color="isZero ? '#78838E' : '#007AFF'"
+            :percentage="proNumber"
+            :rail-color="isZero ? '#78838E' : '#D81B60'"
             :show-indicator="false"
         ></n-progress>
     </div>

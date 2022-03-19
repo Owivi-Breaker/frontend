@@ -23,6 +23,63 @@ pnpm prepare
 
 ## 常用方法
 
+### iconify 用法
+
+#### 静态用法
+
+直接用图标的组件名称
+
+1. 找图标：网址 https://icones.js.org/ 或者 vscode 安装 - [Icônes](https://marketplace.visualstudio.com/items?itemName=afzalsayed96.icones)
+2. 确定图标名字：找到图标后复制名字 如：'mdi:emoticon'，则对应的 vue 的 template 为：
+
+```HTML
+<icon-mdi:emoticon />
+```
+
+> icon- 为预设的前缀
+
+3. 设置样式：同 html 标签一样直接应用 style 属性或者 class 属性; 通过设置 color 和 font-size 属性设置对应的颜色和大小
+
+#### 多个图标动态渲染
+
+1. 确定图标名字，如：'mdi:emoticon'
+
+2. 引入 Icon 组件：
+
+    ```
+    import { Icon } from '@iconify/vue';
+    ```
+
+3. 动态渲染
+
+    ```
+    <Icon icon="mdi:emoticon" />
+    ```
+
+#### 结合 naiveUI 组件动态渲染
+
+1. 确定图标名字，如：**'mdi:emoticon'**
+
+2. 引入 vue 的 h 函数：
+
+    ```ts
+    import { h } from 'vue';
+    ```
+
+3. 引入Icon组件
+
+    ```ts
+    import { Icon } from '@iconify/vue';
+    ```
+
+4. 动态渲染
+
+    ```ts
+    () => h(Icon, { icon: 'mdi:emoticon', style: { color: '#f00', fontSize: '16px' } })
+    ```
+
+> @/uitls 已封装好了函数：iconifyRender
+
 ### 路由跳转
 
 ```ts

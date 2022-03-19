@@ -1,4 +1,4 @@
-import {defineStore} from 'pinia';
+import { defineStore } from 'pinia';
 
 // useStore could be anything like useUser, useCart
 // the first argument is a unique id of the stores across your application
@@ -13,9 +13,8 @@ export const useStore = defineStore('main', {
             perfLoading: true,
             gamePveData: Object as any,
             playerNameId: [] as any[], // 用于game-on
-
             clubNameId: [] as any[],
-            nextGame: {teams: [], distance: 0} as any
+            nextGame: { teams: [], distance: 0 } as any
         };
     },
     getters: {
@@ -59,7 +58,33 @@ export const useStore = defineStore('main', {
                 }
             }
             return pos;
+        },
+
+        homePlayerInfo(state) {
+            if (!state.gamePveData.game_info) {
+                return null;
+            }
+            if (
+                state.gamePveData.game_info.home_club_id === state.gamePveData.player_team_info.club_id
+            ) {
+                return state.gamePveData.player_players_info;
+            }
+            return state.gamePveData.computer_players_info;
+        },
+
+        foreignPlayerInfo(state) {
+            if (!state.gamePveData.game_info) {
+                return null;
+            }
+            if (
+                state.gamePveData.game_info.home_club_id !== state.gamePveData.player_team_info.club_id
+            ) {
+                return state.gamePveData.player_players_info;
+            }
+            return state.gamePveData.computer_players_info;
         }
+
+
     },
     actions: {}
 });

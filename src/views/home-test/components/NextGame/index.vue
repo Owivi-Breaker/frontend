@@ -1,20 +1,21 @@
 <template>
-    <div class="relative flex flex-col gap-y-6 s-card">
-        <div class="flex items-center space-x-16 p-10">
+    <div class="s-card px-10 py-12">
+        <div class="grid grid-cols-3">
             <!-- 左球队 -->
-            <div class="w-1/3 flex items-center gap-5">
+            <div class="flex items-center gap-7 justify-self-center">
                 <img
-                    class="h-25"
+                    class="h-30"
                     :src="'http://s1.s100.vip:13127/Public/' + teams[0] + '.png'"
                     alt="图片"
                 />
-                <div class="flex flex-col items-start gap-2">
-                    <div class="text-lg font-semibold s-underline">{{ teams[0] }}</div>
-                    <div class="text-gray-500">排名 6</div>
+                <div class="flex flex-col items-start gap-3">
+                    <div class="text-xl font-bold s-underline">{{ teams[0] }}</div>
+                    <div class="text-lg text-gray-500">排名 6</div>
                 </div>
             </div>
+
             <!-- 比赛信息 -->
-            <div class="w-1/3 flex flex-col items-center space-y-1 flex">
+            <div class="flex flex-col items-center gap-2 justify-self-center">
                 <!-- 倒计时 -->
                 <div
                     class="flex mb-1 py-2 px-3 items-center rounded-full bg-primary-active text-primary shadow-sm"
@@ -38,14 +39,15 @@
                 <div class="text-lg text-gray-500">{{ nextGameName }}</div>
                 <div class="text-gray-500">{{ nextGameDate }}</div>
             </div>
+
             <!-- 右球队 -->
-            <div class="w-1/3 flex items-center gap-5">
-                <div class="flex flex-col items-end gap-2">
-                    <div class="text-lg font-semibold s-underline">{{ teams[1] }}</div>
-                    <div class="text-gray-500">排名 12</div>
+            <div class="flex items-center gap-7 justify-self-center">
+                <div class="flex flex-col items-end gap-3">
+                    <div class="text-xl font-bold s-underline">{{ teams[1] }}</div>
+                    <div class="text-lg text-gray-500">排名 12</div>
                 </div>
                 <img
-                    class="h-25"
+                    class="h-30"
                     :src="'http://s1.s100.vip:13127/Public/' + teams[1] + '.png'"
                     alt="图片"
                 />

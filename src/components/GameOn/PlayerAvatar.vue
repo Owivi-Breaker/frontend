@@ -1,10 +1,13 @@
 <template>
     <div>
-        <div class="flex flex-col items-center gap-1">
-            <div class="w-10 h-10">
+        <div class="flex flex-col items-center gap-0.5">
+            <div
+                class="w-13 h-13 border-3 rounded-full"
+                :style="{ 'border-color': getColor(props.playerGameData.final_stamina,'progress',45,100) }"
+            >
                 <Avataaars :is-circle="false" v-bind="playerInfo.avatar" />
             </div>
-            <div class="text-primary text-xs truncate">{{ playerInfo.translated_name }}</div>
+            <div class="text-xs truncate text-primary">{{ playerInfo.translated_name }}</div>
         </div>
     </div>
 </template>
@@ -14,17 +17,26 @@
 import { computed, ComputedRef, defineComponent, onMounted, reactive, ref, watch } from 'vue';
 import { getPlayerByIdAPI } from '@/apis/player';
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue';
+import { getColor } from '@/utils/colorMap';
+import { useStore } from "@/stores/store";
+const store = useStore();
 
 const props: any = defineProps({
+    playerGameData: Object,
     playerId: Number
 });
+
 
 const playerInfo: any = ref({})
 
 watch(() => props.playerId, (newVal) => {
+
     getPlayerByIdAPI({ player_id: newVal }).then((response: any) => {
         playerInfo.value = response;
     });
+}, {
+    deep: true,
+    immediate: true
 }
 )
 

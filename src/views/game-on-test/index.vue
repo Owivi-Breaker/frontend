@@ -4,18 +4,9 @@
             <div class="w-1/3 flex flex-col gap-6">
                 <!-- 左球场 -->
                 <Field pos="left"></Field>
-                <!-- 解说 -->
-                <div class="s-card p-6 h-128 3xl:h-160">
-                    <n-scrollbar ref="nScrollBarRef">
-                        <n-timeline>
-                            <n-timeline-item
-                                v-for="(item, key) in commentaryList"
-                                :color="getColor(item.level, '', 1, 5)"
-                                :time="item.time"
-                                :title="item.content"
-                            ></n-timeline-item>
-                        </n-timeline>
-                    </n-scrollbar>
+                <!-- 左表格 -->
+                <div>
+                    <TeamData :club="homeTeam" :player-info="homePlayerInfo"></TeamData>
                 </div>
             </div>
 
@@ -32,32 +23,47 @@
                     ></GameStatus>
                     <!-- 战术选择 -->
                     <TacticalSelector :is-self-turn="isSelfTurn" v-if="!isLoading"></TacticalSelector>
+                    <div class="s-card p-6">
+                        <!-- 解说 -->
+                        <div class="flex flex-col gap-3 items-start">
+                            <div v-for="script in newCommentaryList" class="flex items-center gap-2">
+                                <div
+                                    class="text-primary bg-primary-active rounded-full py-1 px-2"
+                                >{{ script.time }}</div>
+                                <div v-if="script.content.includes('球进')">
+                                    <icon-ic:sharp-sports-soccer class="text-primary" />
+                                </div>
+                                <div class>{{ script.content }}</div>
+                            </div>
+                        </div>
+                    </div>
                     <!-- 战术统计 -->
                     <TacticalStatistic
                         :computer-team-info="totalData['computer_team_info']"
                         :player-team-info="totalData['player_team_info']"
                     ></TacticalStatistic>
+                    <!-- 解说 -->
+                    <div class="s-card p-6 h-128 3xl:h-160">
+                        <n-scrollbar ref="nScrollBarRef">
+                            <n-timeline>
+                                <n-timeline-item
+                                    v-for="(item, key) in commentaryList"
+                                    :color="getColor(item.level, '', 1, 5)"
+                                    :time="item.time"
+                                    :title="item.content"
+                                ></n-timeline-item>
+                            </n-timeline>
+                        </n-scrollbar>
+                    </div>
                 </div>
             </div>
 
-            <div class="w-1/3">
-                <div class="flex flex-col gap-10">
-                    <!-- 右球场 -->
-                    <Field pos="right"></Field>
-                    <div>
-                        <TeamData
-                            :club="homeTeam"
-                            :player-info="homePlayerInfo"
-                            style="height: 406px"
-                        ></TeamData>
-                    </div>
-                    <div>
-                        <TeamData
-                            :club="foreignTeam"
-                            :player-info="foreignPlayerInfo"
-                            style="height: 406px"
-                        ></TeamData>
-                    </div>
+            <div class="w-1/3 flex flex-col gap-6">
+                <!-- 右球场 -->
+                <Field pos="right"></Field>
+                <!-- 右表格 -->
+                <div>
+                    <TeamData :club="foreignTeam" :player-info="foreignPlayerInfo"></TeamData>
                 </div>
             </div>
         </div>
@@ -207,9 +213,7 @@ const foreignPlayerInfo: ComputedRef = computed(() => {
     return totalData.value.computer_players_info;
 });
 
-
-
-
+// 解说
 const nScrollBarRef: Ref<ScrollbarInst | null> = ref(null);
 const commentaryList: ComputedRef = computed(() => {
     const result = new Array<any>();
@@ -220,6 +224,7 @@ const commentaryList: ComputedRef = computed(() => {
             if (i === scriptList.length - 1) {
                 subScriptList.pop();
                 continue;
+                // break???
             }
             for (let j: number = 0; j <= subScriptList.length - 1; j++) {
                 const item: Array<string> = subScriptList[j].split("@");
@@ -238,12 +243,48 @@ const commentaryList: ComputedRef = computed(() => {
                 }
             }
         }
+
     }
     return result;
 });
 
+const newCommentaryList: ComputedRef = computed(() => {
+    const result = new Array<any>();
+    if (totalData.value.game_info) {
+        const scriptList: Array<string> = totalData.value.game_info.new_script.split("\n\n");
+
+        for (let i: number = 0; i < scriptList.length; i++) {
+            const subScriptList: Array<string> = scriptList[i].split("\n");
+            for (let j: number = 0; j < subScriptList.length; j++) {
+                if (!subScriptList[j]) {
+                    // 为什么最后会有个空字符串？？？为什么script就没有？？？
+                    continue
+                }
+                const item: Array<string> = subScriptList[j].split("@");
+
+                if (item[1].length <= 2) {
+                    result.push({
+                        content: item[0],
+                        time: "",
+                        level: item[1],
+                    });
+                } else {
+                    result.push({
+                        content: item[0],
+                        time: item[1],
+                        level: item[2],
+                    });
+                }
+            }
+        }
+    }
+    console.log('11111111')
+    console.log(result)
+    return result;
+});
 
 watch(
+    // 每次解说更新后都要滚到底端
     () => commentaryList.value,
     () => {
         if (nScrollBarRef.value) {

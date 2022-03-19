@@ -39,6 +39,7 @@
                 >{{ rightTeam['name'] }}</div>
             </div>
         </div>
+
     </div>
 </template>
 
@@ -53,6 +54,12 @@ const props: any = defineProps({
     computerTeamInfo: Object,
     curAttacker: Number
 });
+
+const scripts = [
+    { "content": "尤文图斯尝试中路渗透", "time": "17:12", "level": "4" },
+    { "content": "球员们尝试争顶", "time": "17:15", "level": "2" },
+    { "content": "文肖邦将球解围", "time": "17:17", "level": "5" },
+    { "content": "进攻方仍然持球", "time": "17:19", "level": "1" }]
 
 const leftTeam: ComputedRef = computed(() => {
     // 主场队伍作为左队
