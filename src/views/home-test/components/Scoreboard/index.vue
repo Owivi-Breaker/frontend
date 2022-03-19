@@ -74,11 +74,12 @@ getSaveMeAPI()
                             getClubsByLeagueAPI({league_id: leagueID})
                                 .then((response: any) => {
                                     rawPointsData.value = response;
+                                    isLoading.value = false;
                                 })
                                 .catch((_error: {}) => {
+                                    isLoading.value = false;
                                 });
                         }
-                        isLoading.value = false;
                     })
                     .catch((_error: {}) => {
                     });
@@ -88,12 +89,16 @@ getSaveMeAPI()
     })
     .catch((_error: {}) => {
     });
-let title: Array<String> = ['俱乐部', '胜', '平', '负', '净胜球', '积分'];
+let title: Array<string> = ['俱乐部', '胜', '平', '负', '净胜球', '积分'];
 const pointsData: ComputedRef = computed(() =>
     rawPointsData.value.map((value: any) => {
         for (let item in title) {
-            if (value[item] === null) {
-                value[item] = item === '名称' ? value.name : 0;
+            if (value[title[item]] === undefined) {
+                if (title[item] === '俱乐部') {
+                    value['名称'] = value.name;
+                } else {
+                    value[title[item]] = 0;
+                }
             }
         }
         value['我的'] = value['id'] === clubId;

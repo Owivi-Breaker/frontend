@@ -1,12 +1,13 @@
 <template>
     <div class="relative flex flex-col gap-y-6 s-card">
-        <div class="flex items-center space-x-16 p-10">
+        <n-spin class="p-10" v-if="isLoading"></n-spin>
+        <div class="flex items-center space-x-16 p-10" v-if="!isLoading">
             <!-- 左球队 -->
             <div class="w-1/3 flex items-center space-x-1 flex">
                 <img class="h-25" :src="'http://s1.s100.vip:13127/Public/' + teams[0] + '.png'" alt="图片"/>
                 <div class="flex flex-col items-start space-y-2">
                     <div class="text-lg font-semibold s-underline">{{ teams[0] }}</div>
-                    <div class="text-gray-500">排名 6</div>
+                    <div class="text-gray-500">排名 {{ rankList[0] }}</div>
                 </div>
             </div>
             <!-- 比赛信息 -->
@@ -38,7 +39,7 @@
             <div class="w-1/3 flex items-center space-x-1 flex">
                 <div class="flex flex-col items-end space-y-2">
                     <div class="text-lg font-semibold s-underline">{{ teams[1] }}</div>
-                    <div class="text-gray-500">排名 12</div>
+                    <div class="text-gray-500">排名 {{ rankList[1] }}</div>
                 </div>
                 <img class="h-25" :src="'http://s1.s100.vip:13127/Public/' + teams[1] + '.png'" alt="图片"/>
             </div>
@@ -49,15 +50,18 @@
 <script lang="ts" setup>
 import {ref, Ref, watch} from 'vue';
 import {getIncomingGamesAPI} from '@/apis/club';
+import {getClubRankAPI, getLeagueMeAPI} from "@/apis/league";
 import {useStore} from '@/stores/store';
+import {getSaveMeAPI} from '@/apis/save';
 
-const store = useStore();
-const isLoading: Ref<boolean> = ref(true);
-const teams: Ref<Array<string>> = ref(['', '']);
-const nextGameName: Ref<string> = ref('');
-const nextGameDate: Ref<string> = ref('');
-const distance: Ref<number> = ref(0);
+let store = useStore();
+let isLoading: Ref<boolean> = ref(true);
+let teams: Ref<Array<string>> = ref(['', '']);
+let nextGameName: Ref<string> = ref('');
+let nextGameDate: Ref<string> = ref('');
+let distance: Ref<number> = ref(0);
 let curDate: number;
+let rankList: Ref<Array<number>> = ref([0, 0]);
 watch(
     () => store.Date,
     (_newValue, _oldValue) => {
@@ -91,7 +95,21 @@ getIncomingGamesAPI()
         distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
         store.nextGame.teams = teams.value;
         store.nextGame.distance = distance.value;
-        isLoading.value = false;
+        getSaveMeAPI().then((response: any) => {
+            let gameSeason: number = response.season;
+            getLeagueMeAPI().then((response: any) => {
+                let leagueId: number = response.id;
+                for (let i: number = 0; i < teams.value.length; i++) {
+                    isLoading.value = false;
+                    getClubRankAPI({league_id: leagueId, game_season: gameSeason, club_name: teams.value[i]})
+                        .then((response: any) => {
+                            rankList.value[i] = response;
+                        })
+                        .catch((_error: {}) => {
+                        });
+                }
+            })
+        });
     })
     .catch((_error: {}) => {
     });

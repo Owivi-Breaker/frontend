@@ -95,11 +95,11 @@
             </template>
         </n-card>
     </n-modal>
+    <Transfer v-if="needTransfer"></Transfer>
 </template>
 
 <script lang="ts" setup>
-import {defineComponent, h, onBeforeUnmount, onMounted, Ref, ref} from 'vue';
-import {NotificationApi, useNotification} from 'naive-ui'
+import {defineComponent, onBeforeUnmount, onMounted, Ref, ref} from 'vue';
 import {Router} from 'vue-router';
 import {ExitOutline} from '@vicons/ionicons5';
 import key from 'Keymaster';
@@ -112,23 +112,19 @@ import {getDateAPI} from '@/apis/user';
 import {nextTurnAPI} from '@/apis/nextTurn';
 import {useStore} from '@/stores/store';
 import {getIncomingGamesAPI} from '@/apis/club';
-import {getNegotiateListAPI} from "@/apis/transfer";
 import GlobalSearch from '../GlobalSearch/index.vue';
 import GlobalLogo from '../GlobalLogo/index.vue';
-import {FullScreen, GithubSite, GlobalBreadcrumb, HeaderMenu, MenuCollapse, ThemeMode} from './components';
+import {FullScreen, GithubSite, GlobalBreadcrumb, HeaderMenu, MenuCollapse, ThemeMode, Transfer} from './components';
 
 const {routerPush, routerBack} = useRouterPush();
 
-interface Props {
-    /** 显示logo */
+defineProps<{
     showLogo: GlobalHeaderProps['showLogo'];
     /** 显示头部菜单 */
     showHeaderMenu: GlobalHeaderProps['showHeaderMenu'];
     /** 显示菜单折叠按钮 */
     showMenuCollape: GlobalHeaderProps['showMenuCollape'];
-}
-
-defineProps<Props>();
+}>();
 
 const theme = useThemeStore();
 
@@ -156,7 +152,6 @@ declare const window: Window & { $router: Router };
 
 function goPre(): void {
     routerBack();
-    // window.$router.go(-1);
 }
 
 function ExitLogin(): void {
@@ -166,13 +161,13 @@ function ExitLogin(): void {
 }
 
 const showGameModal: Ref<boolean> = ref(false);
-let notification: NotificationApi = useNotification();
 
 function nextDay(): void {
     if (store.nextGame.distance === 1 && !showGameModal.value) {
         showGameModal.value = true;
         return;
     }
+    needTransfer.value = false;
     nextTurnAPI()
         .then((response: any) => {
                 if (response.state === 'pve') {
@@ -183,6 +178,7 @@ function nextDay(): void {
                     .then((response: { date: any }) => {
                         store.Date = response.date;
                         store.nextGame.distance--;
+                        needTransfer.value = true;
                         if (store.nextGame.distance == 0) {
                             getIncomingGamesAPI()
                                 .then((response: any) => {
@@ -200,37 +196,13 @@ function nextDay(): void {
                     })
                     .catch((_error: {}) => {
                     });
-                getNegotiateListAPI()
-                    .then((response: any) => {
-                        console.log(response);
-                        for (let item in response) {
-                            console.log(item);
-                            notification.create({
-                                title: "恭喜您，您的报价被我方接受！",
-                                description: '',
-                                content: `您的报价被${response[item].player_info.club_name}接受，您的报价为${response[item].price}`,
-                                meta: store.Date,
-                                avatar: () =>
-                                    h('image', {
-                                        size: 'small',
-                                        round: true,
-                                        src: 'http://lvshuhuai.cn:13127/Public/' + response[item].player_info.club_name + ".png"
-                                    }),
-                                onAfterLeave: () => {
-                                    console.log('after leave');
-                                }
-                            });
-                            console.log(item);
-                        }
-                    })
-                    .catch((_error: {}) => {
-                    });
             }
         )
         .catch((_error: {}) => {
         });
 }
 
+let needTransfer: Ref<boolean> = ref(true);
 defineExpose({ExitLogin, goPre, nextDay, showExitModal, showGameModal});
 </script>
 
