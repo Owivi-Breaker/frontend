@@ -48,16 +48,16 @@ const {mode, headerProps, siderVisible, siderWidth, siderCollapsedWidth} = useBa
 const store = useStore();
 onMounted(() => {
     getDateAPI()
-        .then(response => {
+        .then((response: any) => {
             store.Date = response.date;
         })
         .catch((_error: {}) => {
         });
     getSaveMeAPI()
-        .then(response => {
+        .then((response: any) => {
             const gameSeason: number = response.season;
             getPlayersByClubAPI({club_id: 1, is_player_club: true})
-                .then(response => {
+                .then((response: any) => {
                     store.playerData = response;
                     store.perfData = [];
                     for (let i: number = 0; i < store.playerData.length; i++) {
@@ -66,7 +66,7 @@ onMounted(() => {
                             start_season: gameSeason,
                             end_season: gameSeason
                         })
-                            .then(response => {
+                            .then((response: any) => {
                                 response['姓名'] = store.playerData[i]['姓名']
                                     ? store.playerData[i]['姓名']
                                     : store.playerData[i].translated_name;

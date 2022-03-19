@@ -5,7 +5,7 @@
                 <div class="text-xl font-semibold">积分榜</div>
                 <div class="font-semibold text-primary mt-2">{{ leagueName }}</div>
             </div>
-            <div>
+            <!-- <div>
                 <a
                     class="text-sm font-medium text-primary hover:bg-primary-active rounded-lg p-2"
                     href="#"
@@ -13,7 +13,7 @@
                     View
                     more
                 </a>
-            </div>
+            </div> -->
         </div>
         <div>
             <div class="overflow-x-auto">
@@ -65,6 +65,7 @@
                                     </td>
                                 </tr>
                             </tbody>
+                            <!-- 加载中的表格 -->
                             <tbody class="divide-y-3 divide-primary-active" v-if="isLoading">
                                 <tr>
                                     <td :colspan="title.length">
@@ -107,11 +108,12 @@ getSaveMeAPI()
                             getClubsByLeagueAPI({ league_id: leagueID })
                                 .then((response: any) => {
                                     rawPointsData.value = response;
+                                    isLoading.value = false;
                                 })
                                 .catch((_error: {}) => {
+                                    isLoading.value = false;
                                 });
                         }
-                        isLoading.value = false;
                     })
                     .catch((_error: {}) => {
                     });
@@ -121,12 +123,16 @@ getSaveMeAPI()
     })
     .catch((_error: {}) => {
     });
-let title: Array<String> = ['俱乐部', '胜', '平', '负', '净胜球', '积分'];
+let title: Array<string> = ['俱乐部', '胜', '平', '负', '净胜球', '积分'];
 const pointsData: ComputedRef = computed(() =>
     rawPointsData.value.map((value: any) => {
         for (let item in title) {
-            if (value[item] === null) {
-                value[item] = item === '名称' ? value.name : 0;
+            if (value[title[item]] === undefined) {
+                if (title[item] === '俱乐部') {
+                    value['名称'] = value.name;
+                } else {
+                    value[title[item]] = 0;
+                }
             }
         }
         value['我的'] = value['id'] === clubId;

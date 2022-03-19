@@ -95,10 +95,11 @@
             </template>
         </n-card>
     </n-modal>
+    <Transfer v-if="needTransfer"></Transfer>
 </template>
 
 <script lang="ts" setup>
-import {defineComponent, onBeforeUnmount, onMounted, ref, Ref} from 'vue';
+import {defineComponent, onBeforeUnmount, onMounted, Ref, ref} from 'vue';
 import {Router} from 'vue-router';
 import {ExitOutline} from '@vicons/ionicons5';
 import key from 'Keymaster';
@@ -113,20 +114,17 @@ import {useStore} from '@/stores/store';
 import {getIncomingGamesAPI} from '@/apis/club';
 import GlobalSearch from '../GlobalSearch/index.vue';
 import GlobalLogo from '../GlobalLogo/index.vue';
-import {FullScreen, GithubSite, GlobalBreadcrumb, HeaderMenu, MenuCollapse, ThemeMode} from './components';
+import {FullScreen, GithubSite, GlobalBreadcrumb, HeaderMenu, MenuCollapse, ThemeMode, Transfer} from './components';
 
 const {routerPush, routerBack} = useRouterPush();
 
-interface Props {
-    /** 显示logo */
+defineProps<{
     showLogo: GlobalHeaderProps['showLogo'];
     /** 显示头部菜单 */
     showHeaderMenu: GlobalHeaderProps['showHeaderMenu'];
     /** 显示菜单折叠按钮 */
     showMenuCollape: GlobalHeaderProps['showMenuCollape'];
-}
-
-defineProps<Props>();
+}>();
 
 const theme = useThemeStore();
 
@@ -154,7 +152,6 @@ declare const window: Window & { $router: Router };
 
 function goPre(): void {
     routerBack();
-    // window.$router.go(-1);
 }
 
 function ExitLogin(): void {
@@ -166,42 +163,46 @@ function ExitLogin(): void {
 const showGameModal: Ref<boolean> = ref(false);
 
 function nextDay(): void {
-    if (store.nextGame.distance === 1 && showGameModal.value === false) {
+    if (store.nextGame.distance === 1 && !showGameModal.value) {
         showGameModal.value = true;
         return;
     }
+    needTransfer.value = false;
     nextTurnAPI()
         .then((response: any) => {
-            if (response.state === 'pve') {
-                showGameModal.value = false;
-                routerPush({name: 'gamePrepare'});
+                if (response.state === 'pve') {
+                    showGameModal.value = false;
+                    routerPush({name: 'gamePrepare'});
+                }
+                getDateAPI()
+                    .then((response: { date: any }) => {
+                        store.Date = response.date;
+                        store.nextGame.distance--;
+                        needTransfer.value = true;
+                        if (store.nextGame.distance == 0) {
+                            getIncomingGamesAPI()
+                                .then((response: any) => {
+                                    const nextGameDate = response[0].date;
+                                    const teams = new Array<string>(2);
+                                    teams[0] = response[0].club1_name;
+                                    teams[1] = response[0].club2_name;
+                                    store.nextGame.distance =
+                                        (new Date(nextGameDate).getTime() / 1000 - new Date(store.Date).getTime() / 1000) / 24 / 60 / 60;
+                                    store.nextGame.teams = teams;
+                                })
+                                .catch((_error: {}) => {
+                                });
+                        }
+                    })
+                    .catch((_error: {}) => {
+                    });
             }
-            getDateAPI()
-                .then((response: { date: any }) => {
-                    store.Date = response.date;
-                    store.nextGame.distance--;
-                    if (store.nextGame.distance == 0) {
-                        getIncomingGamesAPI()
-                            .then(response => {
-                                const nextGameDate = response[0].date;
-                                const teams = new Array<string>(2);
-                                teams[0] = response[0].club1_name;
-                                teams[1] = response[0].club2_name;
-                                store.nextGame.distance =
-                                    (new Date(nextGameDate).getTime() / 1000 - new Date(store.Date).getTime() / 1000) / 24 / 60 / 60;
-                                store.nextGame.teams = teams;
-                            })
-                            .catch((_error: {}) => {
-                            });
-                    }
-                })
-                .catch((_error: {}) => {
-                });
-        })
+        )
         .catch((_error: {}) => {
         });
 }
 
+let needTransfer: Ref<boolean> = ref(true);
 defineExpose({ExitLogin, goPre, nextDay, showExitModal, showGameModal});
 </script>
 
