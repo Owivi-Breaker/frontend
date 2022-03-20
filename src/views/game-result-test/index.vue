@@ -1,66 +1,123 @@
 <template>
     <div>
-        <div class="s-card w-32 h-32 p-6 m-6">jgfhjfjfg</div>
-        <n-card v-if="gameResult">
-            <n-space justify="space-around" style="text-align: center">
-                <img
-                    :src="'http://s1.s100.vip:13127/Public/' + gameResult.teams_info[0].club_name + '.png'"
-                    alt="图片"
-                    class="avatar"
-                />
-                <div>
-                    <n-space justify="space-around">
-                        <h1 style="width: 200px">{{ gameResult.teams_info[0].club_name }}</h1>
-                        <h1>{{ gameResult.teams_info[0].score }}</h1>
-                        <h1>:</h1>
-                        <h1>{{ gameResult.teams_info[1].score }}</h1>
-                        <h1 style="width: 200px">{{ gameResult.teams_info[1].club_name }}</h1>
-                    </n-space>
-                    <p>{{ gameResult.name }} 第 {{ gameResult.season }} 赛季</p>
-                    <p>{{ gameResult.date }}</p>
-                    <p>控球率：{{ gameResult.teams_info[0].attempts }}/{{ gameResult.teams_info[1].attempts }}</p>
+       <div class="flex flex-col gap-10">
+            <div class="flex flex-row w-full h-1/3 space-x-10" >
+                <!-- 比分栏目 -->
+                <div class="s-card flex justify-around p-5 w-4/7" v-if="gameResult">
+                    <div class="flex flex-col">
+                        <img
+                            :src="'http://s1.s100.vip:13127/Public/' + gameResult.teams_info[0].club_name + '.png'"
+                            alt="图片"
+                            class="avatar"
+                        />
+                        <div class="p-2 text-lg font-semibold s-underline place-self-center">{{ gameResult.teams_info[0].club_name }}</div>
+                    </div>
+                    <div class="text-7xl font-medium text-left p-5">
+                        <div>{{ gameResult.teams_info[0].score }}</div>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="place-self-center text-7xl font-medium">-</div>
+                        <div class="text-lg text-gray-500 place-self-center">{{ gameResult.name }} 第 {{ gameResult.season }} 赛季</div>
+                        <div class="text-lg text-gray-500 place-self-center">{{ gameResult.date }}</div>
+                    </div>
+                    <div class="text-7xl font-medium text-right p-5">
+                        <div>{{ gameResult.teams_info[1].score }}</div>
+                    </div>
+                    <div class="flex flex-col">
+                        <img
+                            :src="'http://s1.s100.vip:13127/Public/' + gameResult.teams_info[1].club_name + '.png'"
+                            alt="图片"
+                            class="avatar"
+                        />
+                        <div class="p-2 text-lg font-semibold s-underline place-self-center">{{ gameResult.teams_info[1].club_name }}</div>
+                    </div>
                 </div>
-                <img
-                    :src="'http://s1.s100.vip:13127/Public/' + gameResult.teams_info[1].club_name + '.png'"
-                    alt="图片"
-                    class="avatar"
-                />
-            </n-space>
-        </n-card>
-        <n-grid v-if="gameResult" cols="3" style="text-align: center; margin: 10px auto" x-gap="10">
-            <n-gi>
-                <n-card>
-                    <p>成功率：{{ gameResult.teams_info[0].score }}/{{ gameResult.teams_info[0].attempts }}</p>
-                    <p>下底传中：{{ gameResult.teams_info[0].wing_cross_success }}/{{
-                            gameResult.teams_info[0].wing_cross
-                        }}</p>
-                    <p>
-                        边路内切：{{
-                            gameResult.teams_info[0].under_cutting_success
-                        }}/{{ gameResult.teams_info[0].under_cutting }}
-                    </p>
-                    <p>倒三角：{{ gameResult.teams_info[0].pull_back_success }}/{{ gameResult.teams_info[0].pull_back }}</p>
-                    <p>
-                        中路渗透：{{
-                            gameResult.teams_info[0].middle_attack_success
-                        }}/{{ gameResult.teams_info[0].middle_attack }}
-                    </p>
-                    <p>
-                        防守反击：{{ gameResult.teams_info[0].counter_attack_success }}/{{
-                            gameResult.teams_info[0].counter_attack
-                        }}
-                    </p>
-                </n-card>
-                <div style="margin: 10px auto">
-                    <endGameTeamData :player-info="gameResult.teams_info[0].players_info"
-                                     style="height: 406px"></endGameTeamData>
+                
+                <!-- MVP对象 -->
+                <div class="s-card flex w-1/7">
+                    MVP
                 </div>
-            </n-gi>
-            <n-gi>
-                <n-card v-if="mvpPlayer">
-                    <img alt="图片" src="../../../public/MVP.png" style="height: 40px; width: 80px"/>
+
+                <!-- 解说 -->
+                <div class="s-card flex w-2/7">
+                    解说
+                </div>
+            </div>
+
+            <!-- 柱形图 -->
+            <div class="flex flex-row w-full space-x-10">
+                <!-- 左侧队伍 -->
+                <div class="w-1/3">
+                    <div class="s-card flex flex-col">
+                        <div class="text-lg font-semibold text-primary s-underline p-4">{{ '战术详细' }}</div>
+                        <div :id="LtacticalChart" style="width:100%; height:300%"></div>
+                    </div>
+                </div>
+                <!-- 柱形图对比 -->
+                <div class="w-1/3">
+                    <div class="s-card flex flex-col">
+                        <div class="text-lg font-semibold text-primary s-underline p-4">{{ '战术对比' }}</div>
+                        <div :id="contrastChart" style="width:100%; height:300%"></div>
+                    </div>
+                </div>
+                <!-- 右侧队伍 -->
+                <div class="w-1/3">
+                    <div class="s-card flex flex-col">
+                        <div class="text-lg font-semibold text-primary s-underline p-4">{{ '战术详细' }}</div>
+                        <div :id="RtacticalChart" style="width:100%; height:300%"></div>
+                    </div>
+                </div>
+            </div>
+            
+             <!-- 数据 -->
+            <div class="flex flex-row w-full space-x-10">
+                <!-- 左侧队伍 -->
+                <div class="s-card flex w-1/3" v-if="gameResult">
                     <div>
-                        <Avataaars height="80" v-bind="mvpPlayer.avatar" width="80"/>
+                        <div style="margin: 10px auto">
+                            <endGameTeamData
+                                :player-info="gameResult.teams_info[0].players_info"
+                                style="height: 406px"
+                            ></endGameTeamData>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 雷达对比 -->
+                <div class="s-card flex w-1/3">
+                    <div class="s-card flex flex-col">
+                        <div class="text-lg font-semibold text-primary s-underline">{{ '个人能力' }}</div>
+                        <div :id="capabilityChart" style="width:300%; height:100%"></div>
+                    </div>
+                </div>
+
+                <!-- 右侧队伍 -->
+                <div class="s-card flex w-1/3" v-if="gameResult">
+                    <div>
+                        <div style="margin: 10px auto">
+                            <endGameTeamData
+                                :player-info="gameResult.teams_info[1].players_info"
+                                style="height: 406px"
+                            ></endGameTeamData>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="s-card w-2/3 p-6 mt-3">
+            <div
+                class="text-lg font-semibold text-primary mt-3 s-underline"
+            >{{ '个人能力' }}</div>
+            <div :id="capabilityChart" style="width:100%; height:400%"></div>
+        </div>
+
+        <div class="m-3 grid gap-5 grid-cols-3"  v-if="gameResult">
+            <div>
+                <n-card v-if="mvpPlayer">
+                    <img alt="图片" src="../../../public/MVP.png" style="height: 40px; width: 80px" />
+                    <div>
+                        <Avataaars height="80" v-bind="mvpPlayer.avatar" width="80" />
                         <p>{{ mvpPlayer.translated_name }}</p>
                         <p>{{ mvpPlayer.club_name }}</p>
                     </div>
@@ -90,60 +147,36 @@
                         </n-timeline>
                     </n-scrollbar>
                 </n-card>
-            </n-gi>
-            <n-gi>
-                <n-card>
-                    <p>成功率：{{ gameResult.teams_info[1].score }}/{{ gameResult.teams_info[1].attempts }}</p>
-                    <p>下底传中：{{ gameResult.teams_info[1].wing_cross_success }}/{{
-                            gameResult.teams_info[1].wing_cross
-                        }}</p>
-                    <p>
-                        边路内切：{{
-                            gameResult.teams_info[1].under_cutting_success
-                        }}/{{ gameResult.teams_info[1].under_cutting }}
-                    </p>
-                    <p>倒三角：{{ gameResult.teams_info[1].pull_back_success }}/{{ gameResult.teams_info[1].pull_back }}</p>
-                    <p>
-                        中路渗透：{{
-                            gameResult.teams_info[1].middle_attack_success
-                        }}/{{ gameResult.teams_info[1].middle_attack }}
-                    </p>
-                    <p>
-                        防守反击：{{ gameResult.teams_info[1].counter_attack_success }}/{{
-                            gameResult.teams_info[1].counter_attack
-                        }}
-                    </p>
-                </n-card>
-                <div style="margin: 10px auto">
-                    <endGameTeamData :player-info="gameResult.teams_info[1].players_info"
-                                     style="height: 406px"></endGameTeamData>
-                </div>
-            </n-gi>
-        </n-grid>
+            </div>
+        </div> 
     </div>
 </template>
 
 <script lang="ts" setup>
-import {computed, ComputedRef, defineComponent, ref, Ref} from 'vue';
-import {RouteLocationNormalizedLoaded, useRoute} from 'vue-router';
+import { computed, ComputedRef, defineComponent, onMounted, ref, Ref } from 'vue';
+import { RouteLocationNormalizedLoaded, useRoute } from 'vue-router';
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue';
-import {getGameByIdAPI} from '@/apis/game';
-import {endGameTeamData} from '@/components/GameEnd';
-import {getPlayerByIdAPI} from '@/apis/player';
-import {getColor} from '@/utils/colorMap';
+import { getGameByIdAPI } from '@/apis/game';
+import { endGameTeamData } from '@/components/GameEnd';
+import { getPlayerByIdAPI } from '@/apis/player';
+import { getColor } from '@/utils/colorMap';
+import * as echarts from 'echarts';
+import { right } from '@antv/g2plot/lib/plots/sankey/sankey';
+import { consoleLog } from '@/utils';
 
-defineComponent({endGameTeamData, Avataaars});
+
+defineComponent({ endGameTeamData, Avataaars });
 const route: RouteLocationNormalizedLoaded = useRoute();
 // const gameId: number = Number(route.query.id);
 const gameId: number = 4;
 const gameResult: Ref = ref();
 const mvpPlayer: Ref = ref();
 
-getGameByIdAPI({game_id: gameId})
-    .then(response => {
+getGameByIdAPI({ game_id: gameId })
+    .then((response:any) => {
         gameResult.value = response;
-        getPlayerByIdAPI({player_id: response.mvp})
-            .then(response => {
+        getPlayerByIdAPI({ player_id: response.mvp })
+            .then((response:any) => {
                 mvpPlayer.value = response;
             })
             .catch((_error: {}) => {
@@ -181,7 +214,251 @@ const commentaryList: ComputedRef = computed(() => {
     }
     return result;
 });
-defineExpose({gameResult, mvpPlayer});
+defineExpose({ gameResult, mvpPlayer });
+
+const tacticalOption = computed(() => {
+    return {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+            // Use axis to trigger tooltip
+            type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+            }
+        },
+        legend: {},
+        grid: {
+            left: '5%',
+            right: '5%',
+            bottom: '5%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value'
+        },
+        yAxis: {
+            type: 'category',
+            data: ['成功率', '下底传中', '边路内切', '倒三角', '中路渗透', '防守反击']
+        },
+        series: [
+            {
+            name: '成功次数',
+            type: 'bar',
+            stack: 'total',
+            label: {
+                show: true
+            },
+            emphasis: {
+                focus: 'series'
+            },
+            data: [2, 0, 2, 0, 0, 0]
+            },
+            {
+            name: '总次数',
+            type: 'bar',
+            stack: 'total',
+            label: {
+                show: true
+            },
+            emphasis: {
+                focus: 'series'
+            },
+            data: [24, 3, 11, 4, 6, 0]
+            }
+        ]
+    }
+});
+
+const tacticalOption2 = computed(() => {
+    return {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+            // Use axis to trigger tooltip
+            type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
+            }
+        },
+        legend: {},
+        grid: {
+            left: '5%',
+            right: '5%',
+            bottom: '5%',
+            containLabel: true
+        },
+        xAxis: {
+            type: 'value',
+            inverse: true
+        },
+        yAxis: {
+            position: 'right',
+            type: 'category',
+            data: ['成功率', '下底传中', '边路内切', '倒三角', '中路渗透', '防守反击']
+        },
+        series: [
+            {
+            name: '成功次数',
+            type: 'bar',
+            stack: 'total',
+            label: {
+                show: true
+            },
+            emphasis: {
+                focus: 'series'
+            },
+            data: [5, 4, 1, 0, 0, 0]
+            },
+            {
+            name: '总次数',
+            type: 'bar',
+            stack: 'total',
+            label: {
+                show: true
+            },
+            emphasis: {
+                focus: 'series'
+            },
+            data: [26, 13, 4, 6, 0, 3]
+            }
+        ]
+    }
+});
+
+const contrastOption = computed(() => {
+    return {
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: {
+            type: 'shadow'
+            }
+        },
+        legend: {
+            data: ['西汉姆联', '曼彻斯特联', '差值']
+        },
+        grid: {
+            left: '5%',
+            right: '5%',
+            bottom: '5%',
+            containLabel: true
+        },
+        xAxis: [
+            {
+            type: 'value'
+            }
+        ],
+        yAxis: [
+            {
+            type: 'category',
+            axisTick: {
+                show: false
+            },
+            data: ['成功率', '下底传中', '边路内切', '倒三角', '中路渗透', '防守反击']
+            }
+        ],
+        series: [
+            {
+            name: '差值',
+            type: 'bar',
+            label: {
+                show: true,
+                position: 'inside'
+            },
+            emphasis: {
+                focus: 'series'
+            },
+            data: [2, 10, -7, 2, -2, 3]
+            },
+            {
+            name: '西汉姆联',
+            type: 'bar',
+            stack: 'Total',
+            label: {
+                show: true,
+                position: 'left'
+            },
+            emphasis: {
+                focus: 'series'
+            },
+            data: [-24, -3, -11, -4, -6, 0]
+            },
+            {
+            name: '曼彻斯特联',
+            type: 'bar',
+            stack: 'Total',
+            label: {
+                show: true,
+                position: 'right'
+            },
+            emphasis: {
+                focus: 'series'
+            },
+            data: [26, 13, 4, 6, 4, 3]
+            }
+        ]
+    }
+});
+
+const capabilityOption = computed(() => {
+    return {
+        legend: {
+            data: ['布拉乔利尼', '多伊贝尔']
+        },
+        radar: {
+            // shape: 'circle',
+            indicator: [
+            { name: '评分', max: 10 },
+            { name: '传球', max: 22 },
+            { name: '抢断', max: 12 },
+            { name: '过人', max: 8 },
+            { name: '争顶', max: 17 }
+            ]
+        },
+        series: [
+            {
+            name: '个人能力',
+            type: 'radar',
+            data: [
+                {
+                value: [9.2, 12, 0, 3, 0],
+                name: '布拉乔利尼'
+                },
+                {
+                value: [8.9, 16, 0, 4, 0],
+                name: '多伊贝尔'
+                }
+            ]
+            }
+        ]
+    }
+});
+
+
+const LtacticalChart: Ref<string> = ref(`Chart${Date.now()}${Math.random()}`);
+const RtacticalChart: Ref<string> = ref(`Chart${Date.now()}${Math.random()}`);
+const contrastChart: Ref<string> = ref(`Chart${Date.now()}${Math.random()}`);
+const capabilityChart: Ref<string> = ref(`Chart${Date.now()}${Math.random()}`);
+onMounted(() => {
+    setTimeout(()=>{
+        const LtacticalDiv: HTMLElement | null = document.getElementById(LtacticalChart.value);
+        const RtacticalDiv: HTMLElement | null = document.getElementById(RtacticalChart.value);
+        const contrastDiv: HTMLElement | null = document.getElementById(contrastChart.value);
+        const capabilityDiv: HTMLElement | null = document.getElementById(capabilityChart.value);
+            if (LtacticalDiv && RtacticalDiv && contrastDiv && capabilityDiv != null) {
+                const LtacticalChart = echarts.init(LtacticalDiv);
+                const RtacticalChart = echarts.init(RtacticalDiv);
+                const contrastChart = echarts.init(contrastDiv);
+                const capabilityChart = echarts.init(capabilityDiv);
+                LtacticalChart.setOption(tacticalOption.value);
+                RtacticalChart.setOption(tacticalOption2.value);
+                contrastChart.setOption(contrastOption.value);
+                capabilityChart.setOption(capabilityOption.value);
+                window.onresize = function () {
+                    LtacticalChart.resize();
+                    RtacticalChart.resize();
+                    contrastChart.resize();
+                    capabilityChart.resize();
+                };
+            }
+    });
+});
 </script>
 
 <style scoped>

@@ -139,10 +139,10 @@ const gameResult: Ref = ref();
 const mvpPlayer: Ref = ref();
 
 getGameByIdAPI({game_id: gameId})
-    .then(response => {
+    .then((response:any) => {
         gameResult.value = response;
         getPlayerByIdAPI({player_id: response.mvp})
-            .then(response => {
+            .then((response:any) => {
                 mvpPlayer.value = response;
             })
             .catch((_error: {}) => {
