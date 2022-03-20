@@ -1,7 +1,7 @@
 <template>
     <hover-container class="w-40px h-full" tooltip-content="github">
-        <a class="flex-center" href="https://github.com/honghuangdc/soybean-admin" target="_blank">
-            <icon-mdi-github class="text-20px text-[#666]"/>
+        <a class="flex-center" href="https://github.com/OwiviOsa/backend" target="_blank">
+            <icon-uil:github-alt class="text-20px text-[#666]"/>
         </a>
     </hover-container>
 </template>

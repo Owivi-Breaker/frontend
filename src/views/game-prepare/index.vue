@@ -33,30 +33,79 @@
                                             >{{ getPlayerDataById(position[pos]).translated_name }}</div>
                                         </div>
                                     </template>
-                                    <n-card
-                                        :title="getPlayerDataById(position[pos]).translated_name"
-                                    >
-                                        <template #header-extra>
-                                            <n-progress
-                                                :circle-gap="5"
-                                                :percentage="[20, 50]"
-                                                :stroke-width="10"
-                                                status="success"
-                                                style="width: 40px; margin: 0 10px 0 40px"
-                                                type="multiple-circle"
-                                            ></n-progress>
-                                        </template>
-                                        <n-descriptions :column="3" label-placement="top">
-                                            <n-descriptions-item
-                                                label="能力"
-                                            >{{ getPlayerDataById(position[pos]).location_capa[key] }}</n-descriptions-item>
-                                            <n-descriptions-item label="位置">{{ key }}</n-descriptions-item>
-                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                        </n-descriptions>
-                                    </n-card>
+                                    <!-- 阵容槽弹出框 -->
+                                    <!-- 选项栏弹出框 -->
+                                    <div class="s-card p-6">
+                                        <div class="flex flex-col gap-4">
+                                            <!-- 体力条 -->
+                                            <div class="flex flex-col gap-4">
+                                                <div class="text-gray-600 s-underline">体力</div>
+                                                <div class>
+                                                    <n-progress
+                                                        :show-indicator="false"
+                                                        :percentage="[getPlayerDataById(position[pos]).real_stamina]"
+                                                        :color="getColor(getPlayerDataById(position[pos]).real_stamina)"
+                                                    ></n-progress>
+                                                </div>
+                                            </div>
+                                            <!-- 简介 -->
+
+                                            <div class="flex flex-col gap-2">
+                                                <div class="text-gray-600 s-underline">当前位置能力</div>
+                                                <div
+                                                    class
+                                                >{{ Math.round(getPlayerDataById(position[pos]).location_capa[key]) }}</div>
+                                            </div>
+
+                                            <div class="flex flex-col gap-2 col-span-2">
+                                                <div class="text-gray-600 s-underline">擅长位置</div>
+                                                <div
+                                                    class
+                                                >{{ getPlayerDataById(position[pos]).superior_location.join('、') }}</div>
+                                            </div>
+
+                                            <!-- 能力条
+                                    <div class="p-2">
+                                        <div class="s-title mb-3 s-underline">能力</div>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.shooting * 100) / 100"
+                                            capa-name="射门"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.passing * 100) / 100"
+                                            capa-name="传球"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.dribbling * 100) / 100"
+                                            capa-name="过人"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.pace * 100) / 100"
+                                            capa-name="速度"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.strength * 100) / 100"
+                                            capa-name="力量"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.interception * 100) / 100"
+                                            capa-name="拦截"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.anticipation * 100) / 100"
+                                            capa-name="预判"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.stamina * 100) / 100"
+                                            capa-name="体力"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.goalkeeping * 100) / 100"
+                                            capa-name="守门"
+                                        ></CapaProgress>
+                                            </div>-->
+                                        </div>
+                                    </div>
                                 </n-popover>
                             </div>
                         </div>
@@ -88,6 +137,7 @@
                             :key="key"
                             raw
                             trigger="click"
+                            flip
                         >
                             <template #trigger>
                                 <!-- 球员 -->
@@ -113,40 +163,95 @@
                                     </div>
                                 </div>
                             </template>
-                            <n-card>
-                                <template #header>
+                            <!-- 选项栏弹出框 -->
+                            <div class="s-card p-6">
+                                <div class="flex flex-col gap-6">
+                                    <!-- 名字 -->
                                     <div class="s-title s-underline">{{ elem.translated_name }}</div>
-                                </template>
-                                <template #header-extra>
-                                    <n-progress
-                                        :circle-gap="5"
-                                        :percentage="[20, 50]"
-                                        :stroke-width="10"
-                                        status="success"
-                                        style="width: 40px"
-                                        type="multiple-circle"
-                                    ></n-progress>
-                                </template>
-                                <n-grid cols="3">
-                                    <n-gi span="1">
-                                        <div
-                                            style="display: flex; height: 120px; width: 120px; margin: 0 30px 30px 0"
-                                        >
-                                            <Avataaars :is-circle="false" v-bind="elem.avatar"></Avataaars>
+                                    <!-- 头像和简介 -->
+                                    <div class="flex gap-10 items-center">
+                                        <!-- 头像 -->
+                                        <div class="flex flex-col w-20 h-20 gap-2">
+                                            <div class="w-full h-full">
+                                                <Avataaars :is-circle="false" v-bind="elem.avatar"></Avataaars>
+                                            </div>
+                                            <div class="w-full h-full">
+                                                <n-progress
+                                                    :show-indicator="false"
+                                                    :percentage="[elem.real_stamina]"
+
+                                                ></n-progress>
+                                            </div>
                                         </div>
-                                    </n-gi>
-                                    <n-gi span="2">
-                                        <n-descriptions :column="3" label-placement="top">
-                                            <n-descriptions-item label="能力">{{ elem.top_capa }}</n-descriptions-item>
-                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                            <n-descriptions-item label="占位">bar</n-descriptions-item>
-                                        </n-descriptions>
-                                    </n-gi>
-                                </n-grid>
-                            </n-card>
+                                        <!-- 简介 -->
+                                        <div class="grid grid-cols-3 gap-3">
+                                            <div class="flex flex-col gap-2">
+                                                <div class="text-gray-600">能力</div>
+                                                <div class>{{ Math.round(elem.top_capa) }}</div>
+                                            </div>
+
+                                            <div class="flex flex-col gap-2 col-span-2">
+                                                <div class="text-gray-600">擅长位置</div>
+                                                <div class>{{ elem.superior_location.join('、') }}</div>
+                                            </div>
+
+                                            <div class="flex flex-col gap-2">
+                                                <div class="text-gray-600">年龄</div>
+                                                <div class>{{ elem.age }}</div>
+                                            </div>
+
+                                            <div class="flex flex-col gap-2">
+                                                <div class="text-gray-600">国籍</div>
+                                                <div class>{{ elem.translated_nationality }}</div>
+                                            </div>
+                                            <div class="flex flex-col gap-2">
+                                                <div class="text-gray-600">号码</div>
+                                                <div class>{{ elem.number }}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- 能力条 -->
+                                    <div class="p-2">
+                                        <div class="s-title mb-3 s-underline">能力</div>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.shooting * 100) / 100"
+                                            capa-name="射门"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.passing * 100) / 100"
+                                            capa-name="传球"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.dribbling * 100) / 100"
+                                            capa-name="过人"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.pace * 100) / 100"
+                                            capa-name="速度"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.strength * 100) / 100"
+                                            capa-name="力量"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.interception * 100) / 100"
+                                            capa-name="拦截"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.anticipation * 100) / 100"
+                                            capa-name="预判"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.stamina * 100) / 100"
+                                            capa-name="体力"
+                                        ></CapaProgress>
+                                        <CapaProgress
+                                            :capa-rating="Math.round(elem.capa.goalkeeping * 100) / 100"
+                                            capa-name="守门"
+                                        ></CapaProgress>
+                                    </div>
+                                </div>
+                            </div>
                         </n-popover>
                     </div>
                 </n-scrollbar>
@@ -183,6 +288,8 @@ import Avataaars from 'vuejs-avataaars/src/Avataaars.vue';
 import { useRouterPush } from '@/composables';
 import { gamePveSkipAPI, gamePveStartAPI } from '@/apis/gamePve';
 import { useStore } from '@/stores/store';
+import CapaProgress from '@/components/CapaProgress.vue';
+import { getColor } from '@/utils/colorMap';
 
 const { routerPush } = useRouterPush();
 
@@ -476,6 +583,7 @@ const isChosen = (id: number) => {
     }
     return false;
 };
+
 // 将所有未满位置的遮罩层打开
 const openMaskNotEmpty = (oriPos: string | null) => {
     for (const key in posInfo) {

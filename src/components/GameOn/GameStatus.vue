@@ -12,6 +12,7 @@
                 <div
                     class="font-semibold text-lg"
                     :class="{ 'underline decoration-primary decoration-4 underline-offset-3': isTurn(leftTeam['club_id']) }"
+                    :style="{ 'text-decoration-color': getClubColor(leftTeam['name'], -0.3) }"
                 >{{ leftTeam['name'] }}</div>
             </div>
             <!-- 比分和时间 -->
@@ -22,7 +23,7 @@
                     <div class="font-bold text-2xl">{{ rightTeam['score'] }}</div>
                 </div>
                 <div
-                    class="s-title bg-primary-active rounded-full py-2 px-3"
+                    class="s-title rounded-full py-2 px-3 bg-primary-active text-primary"
                 >{{ nowTimeMinute }}:{{ nowTimeSecond }}</div>
             </div>
 
@@ -36,16 +37,19 @@
                 <div
                     class="font-semibold text-lg"
                     :class="{ 'underline decoration-primary decoration-4 underline-offset-3': isTurn(rightTeam['club_id']) }"
+                    :style="{ 'text-decoration-color': getClubColor(rightTeam['name'], -0.3) }"
                 >{{ rightTeam['name'] }}</div>
             </div>
         </div>
-
     </div>
 </template>
 
 
 <script lang="ts" setup>
 import { computed, ComputedRef } from 'vue';
+import { useStore } from "@/stores/store";
+import { getColor, getClubColor, clubBg, clubTx, clubBd } from "@/utils/colorMap";
+const store = useStore();
 
 const props: any = defineProps({
     turns: Number,

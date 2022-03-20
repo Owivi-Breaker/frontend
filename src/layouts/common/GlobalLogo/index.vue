@@ -5,14 +5,14 @@
             v-show="!showTitle"
             class="text-2xl font-bold italic text-primary transition duration-300 ease-in-out"
         >
-                <span class="underline decoration-teal-500 decoration-4">T</span>
+            <span class="underline decoration-teal-500 decoration-4">T</span>
         </div>
+        <!-- {{ title }} -->
         <div
             v-show="showTitle"
             class="text-2xl font-bold italic text-primary transition duration-300 ease-in-out"
         >
-            <!-- {{ title }} -->
-                <span class="underline decoration-teal-500 decoration-4">TieB</span>reaker
+            <span class="underline decoration-teal-500 decoration-4">TieB</span>reaker
         </div>
     </router-link>
 </template>
