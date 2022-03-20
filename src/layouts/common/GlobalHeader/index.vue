@@ -60,7 +60,7 @@
         <div class="s-card py-7 px-10">
             <div class="s-title s-underline mb-7">即将进行比赛</div>
 
-            <div class="flex items-center gap-8">
+            <div class="flex items-center gap-12">
                 <div class="flex flex-col items-center gap-2">
                     <img
                         :src="'http://s1.s100.vip:13127/Public/' + store.nextGame.teams[0] + '.png'"

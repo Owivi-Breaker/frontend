@@ -1,6 +1,7 @@
 <template>
-    <div class="p-6">
-        <div class="grid grid-cols-2 gap-10">
+    <div >
+        <div class="s-title text-xl s-underline mx-6 mt-6">赛前准备</div>
+        <div class="grid grid-cols-2 gap-10 p-6">
             <!-- 球场 -->
             <div class="relative h-128 3xl:h-160 w-full bg-primary-active rounded-lg shadow-md">
                 <!--阵容块-->
@@ -179,7 +180,6 @@
                                                 <n-progress
                                                     :show-indicator="false"
                                                     :percentage="[elem.real_stamina]"
-
                                                 ></n-progress>
                                             </div>
                                         </div>

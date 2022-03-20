@@ -66,17 +66,6 @@ export const sidebarRoutes: AuthRoute.Route[] = [
     //     }
     // },
     {
-        name: 'home-test',
-        path: '/home-test',
-        component: 'self',
-        meta: {
-            title: '主页测试页',
-            icon: 'mdi:hand-coin-outline',
-            requiresAuth: true,
-            singleLayout: 'basic'
-        }
-    },
-    {
         name: 'transfer-list',
         path: '/transfer-list',
         component: 'self',

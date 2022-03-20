@@ -1,28 +1,30 @@
 <template>
-    <div class="s-title text-xl s-underline m-6">球员数据总览</div>
-    <div class="s-card px-6 pb-6 pt-3 m-6">
-        <n-tabs default-value="capa" size="large">
-            <n-tab-pane name="capa" tab="能力">
-                <n-data-table
-                    :columns="capaColumns"
-                    :data="capaData"
-                    :loading="store.capaLoading"
-                    striped
-                    :bordered="false"
-                    single-column
-                />
-            </n-tab-pane>
-            <n-tab-pane name="perf" tab="表现">
-                <n-data-table
-                    :columns="perfColumns"
-                    :data="perfData"
-                    :loading="store.perfLoading"
-                    striped
-                    :bordered="false"
-                    single-column
-                />
-            </n-tab-pane>
-        </n-tabs>
+    <div>
+        <div class="s-title text-xl s-underline m-6">球员数据总览</div>
+        <div class="s-card px-6 pb-6 pt-3 m-6">
+            <n-tabs default-value="capa" size="large">
+                <n-tab-pane name="capa" tab="能力">
+                    <n-data-table
+                        :columns="capaColumns"
+                        :data="capaData"
+                        :loading="store.capaLoading"
+                        striped
+                        :bordered="false"
+                        single-column
+                    />
+                </n-tab-pane>
+                <n-tab-pane name="perf" tab="表现">
+                    <n-data-table
+                        :columns="perfColumns"
+                        :data="perfData"
+                        :loading="store.perfLoading"
+                        striped
+                        :bordered="false"
+                        single-column
+                    />
+                </n-tab-pane>
+            </n-tabs>
+        </div>
     </div>
 </template>
 <script lang="ts" setup>
