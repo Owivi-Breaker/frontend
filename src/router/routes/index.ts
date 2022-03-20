@@ -11,28 +11,6 @@ export const sidebarRoutes: AuthRoute.Route[] = [
         }
     },
     {
-        name: 'test1',
-        path: '/test1',
-        component: 'self',
-        meta: {
-            title: 'test1',
-            icon: 'mdi:cards-spade',
-            requiresAuth: true,
-            singleLayout: 'basic' // 作为单级路由的父级路由布局组件
-        }
-    },
-    {
-        name: 'test2',
-        path: '/test2',
-        component: 'self',
-        meta: {
-            title: 'test2',
-            icon: 'mdi:cards-heart-outline',
-            requiresAuth: true,
-            singleLayout: 'basic' // 作为单级路由的父级路由布局组件
-        }
-    },
-    {
         name: 'club-player',
         path: '/club-player',
         component: 'self',
@@ -54,17 +32,17 @@ export const sidebarRoutes: AuthRoute.Route[] = [
             singleLayout: 'basic'
         }
     },
-    {
-        name: 'mail',
-        path: '/mail',
-        component: 'self',
-        meta: {
-            title: '收件箱',
-            icon: 'mdi:email',
-            requiresAuth: true,
-            singleLayout: 'basic'
-        }
-    },
+    // {
+    //     name: 'mail',
+    //     path: '/mail',
+    //     component: 'self',
+    //     meta: {
+    //         title: '收件箱',
+    //         icon: 'mdi:email',
+    //         requiresAuth: true,
+    //         singleLayout: 'basic'
+    //     }
+    // },
     {
         name: 'game-prepare',
         path: '/game-prepare',
@@ -76,17 +54,17 @@ export const sidebarRoutes: AuthRoute.Route[] = [
             singleLayout: 'basic'
         }
     },
-    {
-        name: 'game-result',
-        path: '/game-result',
-        component: 'self',
-        meta: {
-            title: '比赛结果',
-            icon: 'mdi:star-shooting',
-            requiresAuth: true,
-            singleLayout: 'basic'
-        }
-    },
+    // {
+    //     name: 'game-result',
+    //     path: '/game-result',
+    //     component: 'self',
+    //     meta: {
+    //         title: '比赛结果',
+    //         icon: 'mdi:star-shooting',
+    //         requiresAuth: true,
+    //         singleLayout: 'basic'
+    //     }
+    // },
     {
         name: 'home-test',
         path: '/home-test',
@@ -138,7 +116,7 @@ export const constantRoutes: AuthRoute.Route[] = [
     {
         name: 'root',
         path: '/',
-        redirect: '/test1',
+        redirect: '/home',
         meta: {
             title: '主页'
         }

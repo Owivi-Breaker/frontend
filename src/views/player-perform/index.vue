@@ -1,21 +1,35 @@
 <template>
-    <div>
-        <n-h1>球员数据总览</n-h1>
-        <n-tabs default-value="capa" size="large" type="card">
+    <div class="s-title text-xl s-underline m-6">球员数据总览</div>
+    <div class="s-card px-6 pb-6 pt-3 m-6">
+        <n-tabs default-value="capa" size="large">
             <n-tab-pane name="capa" tab="能力">
-                <n-data-table :columns="capaColumns" :data="capaData" :loading="store.capaLoading" striped/>
+                <n-data-table
+                    :columns="capaColumns"
+                    :data="capaData"
+                    :loading="store.capaLoading"
+                    striped
+                    :bordered="false"
+                    single-column
+                />
             </n-tab-pane>
             <n-tab-pane name="perf" tab="表现">
-                <n-data-table :columns="perfColumns" :data="perfData" :loading="store.perfLoading" striped/>
+                <n-data-table
+                    :columns="perfColumns"
+                    :data="perfData"
+                    :loading="store.perfLoading"
+                    striped
+                    :bordered="false"
+                    single-column
+                />
             </n-tab-pane>
         </n-tabs>
     </div>
 </template>
 <script lang="ts" setup>
-import {computed, ComputedRef, h} from 'vue';
-import {NTag} from 'naive-ui';
-import {getColor} from '@/utils/colorMap';
-import {useStore} from '@/stores/store';
+import { computed, ComputedRef, h } from 'vue';
+import { NTag } from 'naive-ui';
+import { getColor } from '@/utils/colorMap';
+import { useStore } from '@/stores/store';
 
 const store = useStore();
 const capaData: ComputedRef = computed(() =>
@@ -101,14 +115,14 @@ class capaItem {
         this.align = 'left';
         if (title === '年龄') {
             this.render = (row: any) => {
-                return h(NTag, {style: {marginRight: '6px'}, type: 'info'}, {default: () => row['年龄']});
+                return h(NTag, { style: { marginRight: '6px' }, type: 'info' }, { default: () => row['年龄'] });
             };
         } else {
             this.render = (row: any) => {
                 return h(
                     'p',
-                    {style: {margin: 0, color: getColor(row[this.key], 'text')}},
-                    {default: () => row[this.key]}
+                    { style: { margin: 0, color: getColor(row[this.key], 'text') } },
+                    { default: () => row[this.key] }
                 );
             };
         }
@@ -147,7 +161,7 @@ class perfItem {
                             color: getColor(row[this.key], 'text', 0, perfMax[title])
                         }
                     },
-                    {default: () => row[this.key]}
+                    { default: () => row[this.key] }
                 );
             };
             this.sorter = 'default';
@@ -172,7 +186,7 @@ class perfItem {
                                         color: getColor(row[`${sumKey}总`], 'text', 0, perfMax[`${sumKey}总`])
                                     }
                                 },
-                                {default: () => row[`${sumKey}总`]}
+                                { default: () => row[`${sumKey}总`] }
                             ),
                             ' / ',
                             h(
@@ -183,7 +197,7 @@ class perfItem {
                                         color: getColor(row[`${sumKey}成功`], 'text', 0, perfMax[`${sumKey}成功`])
                                     }
                                 },
-                                {default: () => row[`${sumKey}成功`]}
+                                { default: () => row[`${sumKey}成功`] }
                             )
                         ]
                     }
@@ -219,4 +233,6 @@ const perfColumns: Array<Object> = [
     new perfItem('争顶（总/成功）')
 ];
 </script>
+
+
 <style></style>

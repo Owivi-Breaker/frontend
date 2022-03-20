@@ -1,17 +1,9 @@
 <template>
     <div class="s-card p-5">
-        <div class="s-title s-underline">战术配置</div>
+        <!-- <div class="s-title s-underline">战术配置</div> -->
         <n-tabs type="line" class="mt-4" @before-leave="handleBeforeLeave">
             <!-- 手动比赛 -->
             <n-tab-pane name="手动" tab="手动">
-                <!-- 战术选择框 -->
-                <!-- <div>
-                    <div class="flex items-center gap-3">
-                        <div class>执行</div>
-                        <n-select v-model:value="curTactic" :options="tactics" />
-                    </div>
-                    <n-button type="primary" @click="goNextTurn">{{ nowAndEnd }}</n-button>
-                </div>-->
                 <!-- 战术选择按钮组 -->
                 <div class="flex flex-wrap gap-4 mt-4">
                     <!-- 战术按钮 -->
@@ -34,7 +26,7 @@
                             'cursor-not-allowed bg-gray-400': !isActive('wait'),
                             'hover:bg-primary-hover active:bg-primary-pressed focus:outline-none focus:ring focus:ring-primary-press': isActive('wait')
                         }"
-                        class="bg-primary rounded-full shadow-md s-underline px-3 py-2 3xl:text-lg text-white"
+                        class="bg-primary rounded-full shadow-md px-3 py-2 3xl:text-lg text-white"
                         @click="selectTactic('wait')"
                     >等待对方进攻</button>
                 </div>
@@ -70,6 +62,8 @@ import { gamePveNextTurnAPI, gamePveShowGameInfoAPI } from '@/apis/gamePve';
 import { useStore } from '@/stores/store';
 import { getClubByIdAPI } from '@/apis/club';
 import { useMessage } from 'naive-ui';
+import { getColor, getClubColor, clubBg, clubTx, clubBd } from "@/utils/colorMap";
+
 
 const message = useMessage()
 const { routerPush } = useRouterPush();
