@@ -133,8 +133,7 @@ import {getColor} from '@/utils/colorMap';
 
 defineComponent({endGameTeamData, Avataaars});
 const route: RouteLocationNormalizedLoaded = useRoute();
-// const gameId: number = Number(route.query.id);
-const gameId: number = 4;
+const gameId: number = Number(route.query.id);
 const gameResult: Ref = ref();
 const mvpPlayer: Ref = ref();
 

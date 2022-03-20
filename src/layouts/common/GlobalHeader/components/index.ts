@@ -4,6 +4,7 @@ import HeaderMenu from './HeaderMenu.vue';
 import GithubSite from './GithubSite.vue';
 import FullScreen from './FullScreen.vue';
 import ThemeMode from './ThemeMode.vue';
+import Transfer from './Transfer/index.vue';
 import UserAvatar from './UserAvatar.vue';
 
-export {MenuCollapse, GlobalBreadcrumb, HeaderMenu, GithubSite, FullScreen, ThemeMode, UserAvatar};
+export {MenuCollapse, GlobalBreadcrumb, HeaderMenu, GithubSite, FullScreen, ThemeMode, Transfer, UserAvatar};

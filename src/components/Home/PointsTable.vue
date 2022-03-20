@@ -4,8 +4,7 @@
     </n-card>
 </template>
 <script lang="ts" setup>
-import {computed, ComputedRef, h, ref} from 'vue';
-import {Ref} from '@vue/reactivity';
+import {computed, ComputedRef, h, ref, Ref} from 'vue';
 import {getLeagueMeAPI, getPointsTableByLeagueAPI} from '@/apis/league';
 import {getClubsByLeagueAPI} from '@/apis/club';
 import {getSaveMeAPI} from '@/apis/save';
@@ -14,18 +13,18 @@ const rawPointsData: Ref<Array<object>> = ref([]);
 const isLoading: Ref<boolean> = ref(true);
 let clubId: number = 0;
 getSaveMeAPI()
-    .then(response => {
+    .then((response: any) => {
         const gameSeason: number = response.season;
         clubId = response.player_club_id;
         getLeagueMeAPI()
-            .then(response => {
+            .then((response: any) => {
                 const leagueID: number = response.id;
                 getPointsTableByLeagueAPI({league_id: leagueID, game_season: gameSeason})
-                    .then(response => {
+                    .then((response: any) => {
                         rawPointsData.value = response;
                         if (rawPointsData.value.length === 0) {
                             getClubsByLeagueAPI({league_id: leagueID})
-                                .then(response => {
+                                .then((response: any) => {
                                     rawPointsData.value = response;
                                 })
                                 .catch((_error: {}) => {

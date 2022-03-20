@@ -1,3 +1,4 @@
+import { darkTheme } from 'naive-ui';
 import { defineConfig } from 'windicss/helpers';
 
 export default defineConfig({
@@ -14,7 +15,8 @@ export default defineConfig({
     // 分隔线
     's-divide': 'bg-primary-active w-full py-0.5',
     // 卡片样式
-    's-card': 'rounded-lg 3xl:rounded-xl shadow-md bg-white',
+    's-card': 'rounded-lg 3xl:rounded-xl shadow-md bg-white dark:bg-gray-800',
+
     'wh-full': 'w-full h-full',
     'flex-center': 'flex justify-center items-center',
     'flex-col-center': 'flex-center flex-col',
@@ -103,5 +105,5 @@ export default defineConfig({
     }
   },
   variants: {},
-  plugins: []
+  plugins: [require('@windicss/plugin-question-mark')]
 });

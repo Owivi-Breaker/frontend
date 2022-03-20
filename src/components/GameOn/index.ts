@@ -4,3 +4,5 @@ export {default as TacticalSelector} from './TacticalSelector.vue';
 export {default as TacticalStatistic} from './TacticalStatistic.vue';
 export {default as TacticalStatisticItem} from './TacticalStatisticItem.vue';
 export {default as TeamData} from './TeamData.vue';
+export {default as PlayerAvatar} from './PlayerAvatar.vue';
+export {default as Field} from './Field.vue';

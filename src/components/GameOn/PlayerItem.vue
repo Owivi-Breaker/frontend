@@ -1,26 +1,26 @@
 <template>
-    <n-popover placement="top-start" trigger="hover">
-        <template #trigger>
-            <n-space
-                :class="{ itemSpaceOn: mouseOn }"
-                align="center"
-                class="itemSpace"
-                justify="space-between"
-                @mouseenter="mouseOn = true"
-                @mouseleave="mouseOn = false"
-            >
-                <div class="name">{{ props.player['name'] }}</div>
-                <div class="stamina">{{ props.player['final_stamina'] }}</div>
-                <div class="rating">{{ props.player['final_rating'] }}</div>
-                <div class="goal">{{ props.player['goals'] }}</div>
-                <div class="assist">{{ props.player['assists'] }}</div>
-                <div class="pass">{{ props.player['passes'] + ' / ' + props.player['pass_success'] }}</div>
-                <div class="tackle">{{ props.player['tackles'] + ' / ' + props.player['tackle_success'] }}</div>
-                <div class="dribble">{{ props.player['dribbles'] + ' / ' + props.player['dribble_success'] }}</div>
-                <div class="aerial">{{ props.player['aerials'] + ' / ' + props.player['aerial_success'] }}</div>
-            </n-space>
-        </template>
-        <n-card :bordered="false" size="small" style="width: 350px; height: 150px">
+    <div
+        :class="{ itemSpaceOn: mouseOn }"
+        align="center"
+        class="itemSpace"
+        justify="space-between"
+        @mouseenter="mouseOn = true"
+        @mouseleave="mouseOn = false"
+    >
+        <div class="name">{{ props.player['name'] }}</div>
+        <div class="stamina">{{ props.player['final_stamina'] }}</div>
+        <div class="rating">{{ props.player['final_rating'] }}</div>
+        <div class="goal">{{ props.player['goals'] }}</div>
+        <div class="assist">{{ props.player['assists'] }}</div>
+        <div class="pass">{{ props.player['passes'] + ' / ' + props.player['pass_success'] }}</div>
+        <div class="tackle">{{ props.player['tackles'] + ' / ' + props.player['tackle_success'] }}</div>
+        <div
+            class="dribble"
+        >{{ props.player['dribbles'] + ' / ' + props.player['dribble_success'] }}</div>
+        <div class="aerial">{{ props.player['aerials'] + ' / ' + props.player['aerial_success'] }}</div>
+    </div>
+
+    <!-- <n-card :bordered="false" size="small" style="width: 350px; height: 150px">
             <div style="margin-left: -25px; margin-right: -25px">
                 <n-grid cols="3">
                     <n-gi span="1">
@@ -47,19 +47,18 @@
                     </n-gi>
                 </n-grid>
             </div>
-        </n-card>
-    </n-popover>
+    </n-card>-->
 </template>
 <script lang="ts" setup>
-import {defineComponent, Ref, ref} from 'vue';
+import { defineComponent, Ref, ref } from 'vue';
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue';
 
-defineComponent({Avataaars});
+defineComponent({ Avataaars });
 const props: any = defineProps({
     player: Object
 });
 const mouseOn: Ref<Boolean> = ref(false);
-defineExpose({mouseOn, props});
+defineExpose({ mouseOn, props });
 </script>
 <style scoped>
 .itemSpace {

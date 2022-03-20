@@ -1,43 +1,132 @@
 <template>
-    <n-card title=" ">
-        <template #header-extra>
+    <n-scrollbar x-scrollable>
+    <div class="s-card pb-3 overflow-x-auto">
+        <!-- club logo -->
+        <!-- <div class="pb-4">
             <img
                 v-if="props.club"
                 :src="'http://s1.s100.vip:13127/Public/' + props.club.name + '.png'"
                 alt="图片"
                 class="teamAvatar"
             />
-        </template>
-        <n-scrollbar style="max-height: 280px">
-            <n-space align="center" class="itemSpace" justify="space-between">
-                <div class="name">姓名</div>
-                <div class="stamina">体力</div>
-                <div class="rating">实时评分</div>
-                <div class="goal">进球</div>
-                <div class="assist">助攻</div>
-                <div class="pass">传球总 / 传球成功</div>
-                <div class="tackle">抢断总 / 抢断成功</div>
-                <div class="dribble">过人总 / 过人成功</div>
-                <div class="aerial">争顶总 / 争顶成功</div>
-            </n-space>
-            <PlayerItem v-for="(item, key) in perfData" :key="key" :player="item"></PlayerItem>
-        </n-scrollbar>
-    </n-card>
+        </div>-->
+
+        <table class="min-w-full divide-y divide-primary overflow-hidden rounded-lg">
+            <thead class="bg-primary-active">
+                <tr class="text-sm">
+                    <th class="p-3" scope="col" v-for="col in cols">{{ col }}</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y-3 divide-primary-active">
+                <tr v-for="(item, key) in perfData" :key="key" class="whitespace-nowrap text-sm">
+                    <td class="py-2 px-4">
+                        <span class="mr-1">{{ item['name'] }}</span>
+                        <span v-if="item['goals'] >= 3" class="text-primary">
+                            <icon-ion:football />
+                            <span>{{ item['goals'] }}</span>
+                        </span>
+
+                        <span
+                            v-if="item['goals'] < 3"
+                            v-for="i of item['goals']"
+                            class="text-primary"
+                        >
+                            <icon-ion:football />
+                        </span>
+
+                        <span v-if="item['assists'] >= 3" class="text-primary">
+                            <icon-mdi:shoe-cleat />
+                            <span>{{ item['assists'] }}</span>
+                        </span>
+
+                        <span
+                            v-if="item['assists'] < 3"
+                            v-for="i of item['assists']"
+                            class="text-primary"
+                        >
+                            <icon-mdi:shoe-cleat />
+                        </span>
+                    </td>
+
+                    <td>
+                        <div
+                            :style="{ 'color': getColor(item['final_stamina'], 'text', 45, 100) }"
+                        >{{ item['final_stamina'] }}</div>
+                    </td>
+                    <td>
+                        <div
+                            :style="{ 'color': getColor(item['final_rating'], 'text', 4, 10) }"
+                        >{{ item['final_rating'] }}</div>
+                    </td>
+
+                    <td>
+                        <span v-if="item['passes'] == 0 && item['pass_success'] == 0">-</span>
+                        <span v-if="item['passes'] != 0 || item['pass_success'] != 0">
+                            <span>{{ item['pass_success'] }}</span>
+                            <span class="text-primary">{{ '/' }}</span>
+                            <span>{{item['passes']}}</span>
+                        </span>
+                    </td>
+
+                    <td>
+                        <span v-if="item['tackles'] == 0 && item['tackle_success'] == 0">-</span>
+                        <span v-if="item['tackles'] != 0 || item['tackle_success'] != 0">
+                            <span>{{ item['tackle_success'] }}</span>
+                            <span class="text-primary">{{ '/' }}</span>
+                            <span>{{item['tackles']}}</span>
+                        </span>
+                    </td>
+
+                    <td>
+                        <span v-if="item['dribbles'] == 0 && item['dribble_success'] == 0">-</span>
+                        <span v-if="item['dribbles'] != 0 || item['dribble_success'] != 0">
+                            <span>{{ item['dribble_success'] }}</span>
+                            <span class="text-primary">{{ '/' }}</span>
+                            <span>{{item['dribbles']}}</span>
+                        </span>
+                    </td>
+
+                    <td>
+                        <span v-if="item['aerials'] == 0 && item['aerial_success'] == 0">-</span>
+                        <span v-if="item['aerials'] != 0 || item['aerial_success'] != 0">
+                            <span>{{ item['aerial_success'] }}</span>
+                            <span class="text-primary">{{ '/' }}</span>
+                            <span>{{item['aerials']}}</span>
+                        </span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </n-scrollbar>
 </template>
 
 <script lang="ts" setup>
-import {computed, ComputedRef, defineComponent} from 'vue';
-import {getPlayerByIdAPI} from '@/apis/player';
-import {PlayerItem} from '@/components/GameOn';
-import {useStore} from '@/stores/store';
+import { computed, ComputedRef, defineComponent, ref } from 'vue';
+import { getPlayerByIdAPI } from '@/apis/player';
+import { PlayerItem } from '@/components/GameOn';
+import { useStore } from '@/stores/store';
+import { getColor } from '@/utils/colorMap';
 
 const store = useStore();
-defineComponent({PlayerItem});
+defineComponent({ PlayerItem });
 const props: any = defineProps({
     club: Object,
     playerInfo: Array
 });
+
+
+let cols: Array<String> = ['姓名',
+    '体力',
+    '评分',
+    '传球',
+    '抢断',
+    '过人',
+    '争顶'
+];
+
 const isGetting: Array<boolean> = [false, false, false, false, false, false, false, false, false, false, false];
+// 球员数据
 const perfData: ComputedRef = computed(() => {
     if (!props.playerInfo) {
         return [];
@@ -48,7 +137,7 @@ const perfData: ComputedRef = computed(() => {
             result[i].name = store.playerNameId[result[i].player_id];
         } else {
             isGetting[i] = true;
-            getPlayerByIdAPI({player_id: props.playerInfo[i].player_id}).then((response: { translated_name: any; }) => {
+            getPlayerByIdAPI({ player_id: props.playerInfo[i].player_id }).then((response: { translated_name: any; }) => {
                 result[i].name = response.translated_name;
                 store.playerNameId[result[i].player_id] = response.translated_name;
             });
@@ -56,8 +145,9 @@ const perfData: ComputedRef = computed(() => {
     }
     return result;
 });
-defineExpose({props, perfData});
+defineExpose({ props, perfData });
 </script>
+
 
 <style scoped>
 .teamAvatar {

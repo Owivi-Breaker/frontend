@@ -399,7 +399,7 @@ const contrastOption = computed(() => {
 const capabilityOption = computed(() => {
     return {
         legend: {
-            data: ['布拉乔利尼', '多伊贝尔']
+            data: ['西汉姆联', '曼彻斯特联']
         },
         radar: {
             // shape: 'circle',
@@ -407,8 +407,8 @@ const capabilityOption = computed(() => {
             { name: '评分', max: 10 },
             { name: '传球', max: 22 },
             { name: '抢断', max: 12 },
-            { name: '过人', max: 8 },
-            { name: '争顶', max: 17 }
+            { name: '过人', max: 42 },
+            { name: '争顶', max: 90 }
             ]
         },
         series: [
@@ -417,11 +417,11 @@ const capabilityOption = computed(() => {
             type: 'radar',
             data: [
                 {
-                value: [9.2, 12, 0, 3, 0],
-                name: '布拉乔利尼'
+                value: [84.5, 185, 23, 19, 45],
+                name: '西汉姆联'
                 },
                 {
-                value: [8.9, 16, 0, 4, 0],
+                value: [64.1, 39, 19, 23, 45],
                 name: '多伊贝尔'
                 }
             ]
