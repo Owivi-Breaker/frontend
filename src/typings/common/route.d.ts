@@ -5,7 +5,7 @@ declare namespace AuthRoute {
 
     /** 路由的key */
     type RouteKey =
-    // 固定的路由
+        // 固定的路由
         | 'root' // 根路由
         | 'select-save'
         | 'login'

@@ -24,10 +24,10 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { ClubStatistic, Financial, NextGame, PlayerPerform, Scoreboard } from './components';
-import { defineComponent } from "vue";
+import {ClubStatistic, Financial, NextGame, PlayerPerform, Scoreboard} from './components';
+import {defineComponent} from "vue";
 
-defineComponent({ ClubStatistic, Financial, NextGame, PlayerPerform, Scoreboard });
+defineComponent({ClubStatistic, Financial, NextGame, PlayerPerform, Scoreboard});
 </script>
 <style scoped>
 </style>

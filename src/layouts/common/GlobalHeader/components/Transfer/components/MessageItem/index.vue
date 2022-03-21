@@ -24,7 +24,7 @@
 </template>
 <script lang="ts" setup>
 import Avataaars from "vuejs-avataaars/src/Avataaars.vue";
-import PlayerAvatar from "@/interface";
+import {PlayerAvatar} from "@/interface";
 
 const props: any = defineProps<{
     negoHistory: {

@@ -27,7 +27,7 @@ import {getNegotiateListAPI, getRejectedOffersAPI, negotiateFailedAPI, negotiate
 import {useStore} from "@/stores/store";
 import {getClubByIdAPI} from "@/apis/club";
 import {MessageItem} from './components';
-import PlayerAvatar from "@/interface";
+import {PlayerAvatar} from "@/interface";
 
 const notification: NotificationApi = useNotification();
 const store = useStore();

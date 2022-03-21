@@ -7,7 +7,7 @@ export const sidebarRoutes: AuthRoute.Route[] = [
             title: '主页',
             icon: 'mdi:clipboard-account',
             requiresAuth: true,
-            singleLayout: 'basic' // 作为单级路由的父级路由布局组件
+            singleLayout: 'basic'
         }
     },
     {

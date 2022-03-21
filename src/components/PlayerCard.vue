@@ -5,7 +5,7 @@
                 {{ playerData.top_location }}
             </div>
         </div>
-        <n-space vertical>
+        <n-space :vertical="true">
             <div class="flex items-start gap-10">
                 <div class="">
                     <Avataaars :is-circle="false" v-bind="playerData.avatar"
@@ -63,7 +63,7 @@ import {Router} from 'vue-router';
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue';
 import {useRouterPush} from '@/composables';
 import CapaProgress from '@/components/CapaProgress.vue';
-import PlayerAvatar from "@/interface";
+import {PlayerAvatar} from "@/interface";
 
 const {routerPush} = useRouterPush();
 
