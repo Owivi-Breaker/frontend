@@ -58,11 +58,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, Ref, watch } from 'vue';
-import { getIncomingGamesAPI } from '@/apis/club';
-import { getClubRankAPI, getLeagueMeAPI } from "@/apis/league";
-import { useStore } from '@/stores/store';
-import { getSaveMeAPI } from '@/apis/save';
+import {ref, Ref, watch} from 'vue';
+import {getIncomingGamesAPI} from '@/apis/club';
+import {getClubRankAPI, getLeagueMeAPI} from "@/apis/league";
+import {useStore} from '@/stores/store';
+import {getSaveMeAPI} from '@/apis/save';
+import {IncomingGamesInfoResponse, LeagueIdClubRankResponse, LeagueMeResponse, UserSaveMeResponse} from "@/interface";
 
 let store = useStore();
 let isLoading: Ref<boolean> = ref(true);
@@ -80,49 +81,52 @@ watch(
         store.nextGame.teams = teams.value;
         store.nextGame.distance = distance.value;
         if (distance.value == 0) {
-            getIncomingGamesAPI()
-                .then((response: any) => {
-                    nextGameName.value = response[0].game_name;
-                    nextGameDate.value = response[0].date;
-                    teams.value[0] = response[0].club1_name;
-                    teams.value[1] = response[0].club2_name;
-                    distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
-                    store.nextGame.teams = teams.value;
-                    store.nextGame.distance = distance.value;
-                })
+            getIncomingGamesAPI().then((response: IncomingGamesInfoResponse) => {
+                nextGameName.value = response[0].game_name;
+                nextGameDate.value = response[0].date;
+                teams.value[0] = response[0].club1_name;
+                teams.value[1] = response[0].club2_name;
+                distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
+                store.nextGame.teams = teams.value;
+                store.nextGame.distance = distance.value;
+            })
                 .catch((_error: {}) => {
                 });
         }
     }
 );
-getIncomingGamesAPI()
-    .then((response: any) => {
-        nextGameName.value = response[0].game_name;
-        nextGameDate.value = response[0].date;
-        teams.value[0] = response[0].club1_name;
-        teams.value[1] = response[0].club2_name;
-        curDate = new Date(store.Date).getTime() / 1000;
-        distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
-        store.nextGame.teams = teams.value;
-        store.nextGame.distance = distance.value;
-        getSaveMeAPI().then((response: any) => {
-            let gameSeason: number = response.season;
-            getLeagueMeAPI().then((response: any) => {
-                let leagueId: number = response.id;
-                for (let i: number = 0; i < teams.value.length; i++) {
+getIncomingGamesAPI().then((response: IncomingGamesInfoResponse) => {
+    nextGameName.value = response[0].game_name;
+    nextGameDate.value = response[0].date;
+    teams.value[0] = response[0].club1_name;
+    teams.value[1] = response[0].club2_name;
+    curDate = new Date(store.Date).getTime() / 1000;
+    distance.value = (new Date(nextGameDate.value).getTime() / 1000 - curDate) / 24 / 60 / 60;
+    store.nextGame.teams = teams.value;
+    store.nextGame.distance = distance.value;
+    getSaveMeAPI().then((response: UserSaveMeResponse) => {
+        let gameSeason: number = response.season;
+        getLeagueMeAPI().then((response: LeagueMeResponse) => {
+            let leagueId: number = response.id;
+            for (let i: number = 0; i < teams.value.length; i++) {
+                getClubRankAPI({
+                    league_id: leagueId,
+                    game_season: gameSeason,
+                    club_name: teams.value[i]
+                }).then((response: LeagueIdClubRankResponse) => {
+                    if (response.status == undefined) {
+                        rankList.value[i] = response.valueOf();
+                    } else {
+                        rankList.value[i] = 0;
+                    }
                     isLoading.value = false;
-                    getClubRankAPI({ league_id: leagueId, game_season: gameSeason, club_name: teams.value[i] })
-                        .then((response: any) => {
-                            rankList.value[i] = response;
-                        })
-                        .catch((_error: {}) => {
-                        });
-                }
-            })
-        });
-    })
-    .catch((_error: {}) => {
+                }).catch((_error: {}) => {
+                });
+            }
+        })
     });
+}).catch((_error: {}) => {
+});
 </script>
 
 <style scoped>

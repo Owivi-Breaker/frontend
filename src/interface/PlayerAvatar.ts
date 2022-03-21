@@ -1,4 +1,4 @@
-interface PlayerAvatar {
+export interface PlayerAvatar {
     topType: string;
     hairColor: string;
     accessoriesType: string;
@@ -12,4 +12,3 @@ interface PlayerAvatar {
     facialHairColor: string;
     topColor: string;
 }
-export default PlayerAvatar;
