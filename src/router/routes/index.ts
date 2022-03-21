@@ -7,7 +7,7 @@ export const sidebarRoutes: AuthRoute.Route[] = [
             title: '主页',
             icon: 'mdi:clipboard-account',
             requiresAuth: true,
-            singleLayout: 'basic' // 作为单级路由的父级路由布局组件
+            singleLayout: 'basic'
         }
     },
     {
@@ -83,17 +83,6 @@ export const sidebarRoutes: AuthRoute.Route[] = [
         meta: {
             title: '比赛结果',
             icon: 'mdi:star-shooting',
-            requiresAuth: true,
-            singleLayout: 'basic'
-        }
-    },
-    {
-        name: 'home-test',
-        path: '/home-test',
-        component: 'self',
-        meta: {
-            title: '主页测试页',
-            icon: 'mdi:hand-coin-outline',
             requiresAuth: true,
             singleLayout: 'basic'
         }
