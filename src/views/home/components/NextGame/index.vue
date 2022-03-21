@@ -1,6 +1,6 @@
 <template>
     <div class="s-card px-10 py-12">
-        <n-spin class="p-10" v-if="isLoading"></n-spin>
+        <n-spin class="p-10 flex items-center" v-if="isLoading"></n-spin>
         <div class="grid grid-cols-3" v-if="!isLoading">
             <!-- 左球队 -->
             <div class="flex items-center gap-7 justify-self-center">
