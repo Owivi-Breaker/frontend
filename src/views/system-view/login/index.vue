@@ -44,9 +44,9 @@
                     >登录</n-button>
                 </n-form-item>
             </n-form>
-            <transition name="fade-slide" mode="out-in" appear>
-                <component :is="activeModule.component" />
-            </transition>
+<!--            <transition name="fade-slide" mode="out-in" appear>-->
+<!--                <component :is="activeModule.component" />-->
+<!--            </transition>-->
             <div class="mt-2">
                 还没有账号？
                 <a id="registerLink" href="/register">点我注册</a>

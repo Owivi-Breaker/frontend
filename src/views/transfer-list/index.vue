@@ -1,82 +1,53 @@
 <template>
     <div class="p-6">
         <div class="s-title text-xl s-underline mb-6">转会大名单</div>
-
         <div class="s-card p-10">
             <div class="flex gap-4">
                 <div class="flex flex-col items-center gap-4">
-                    <n-input
-                        class=""
-                        v-model:value="searchValue"
-                        type="text"
-                        placeholder="球员信息"
-                    >
+                    <n-input class="" v-model:value="searchValue" type="text" placeholder="球员信息">
                         <template #prefix>
                             <n-icon size="20">
                                 <search-outline></search-outline>
                             </n-icon>
                         </template>
                     </n-input>
-
                     <n-radio-group class="" v-model:value="chosenAttri" name="radiogroup">
                         <div class="flex items-center gap-3">
-                            <n-radio
-                                v-for="item in searchAttri"
-                                :key="item.value"
-                                :value="item.value"
-                                size="large"
-                            >{{ item.label }}</n-radio>
+                            <n-radio v-for="item in searchAttri" :key="item.value" :value="item.value" size="large">
+                                {{ item.label }}
+                            </n-radio>
                         </div>
                     </n-radio-group>
                 </div>
-
-                <div class="flex flex-col items-center gap-4">
-                    <n-button
-                        class=""
-                        type="primary"
-                        @click="search"
-                        v-bind:disabled="chosenAttri === ''"
-                    >搜索</n-button>
-
-                    <n-button
-                        class
-                        type="primary"
-                        @click="clearSearch"
-                        v-bind:disabled="chosenAttri === ''"
-                        secondary
-                    >清空</n-button>
+                <div class="flex flex-col items-center gap-3">
+                    <n-button class="" type="primary" @click="search" v-bind:disabled="chosenAttri === ''">
+                        搜索
+                    </n-button>
+                    <n-button class type="primary" @click="clearSearch" v-bind:disabled="chosenAttri === ''" secondary>
+                        清空
+                    </n-button>
                 </div>
             </div>
-
             <div class="listTable">
-                <n-data-table
-                    :columns="playerColumns"
-                    :data="playerData"
-                    :pagination="paginationReactive"
-                    :loading="dataLoading"
-                    :row-props="rowProps"
-                    @update:sorter="resort"
-                ></n-data-table>
-                <n-dropdown
-                    placement="right"
-                    trigger="manual"
-                    :x="mouseX"
-                    :y="mouseY"
-                    :options="options"
-                    :show="showRequest"
-                    :on-clickoutside="onClickoutside"
-                />
+                <n-data-table :columns="playerColumns" :data="playerData" :pagination="paginationReactive"
+                              :loading="dataLoading" :row-props="rowProps" @update:sorter="resort">
+                    <template #empty>
+                        <div class="text-center">
+                            <n-h3 style="color: #646464">
+                                暂无挂牌球员 明天再来看看吧
+                            </n-h3>
+                        </div>
+                    </template>
+                </n-data-table>
+                <n-dropdown placement="right" trigger="manual" :x="mouseX" :y="mouseY" :options="options"
+                            :show="showRequest" :on-clickoutside="onClickoutside"/>
                 <n-modal v-model:show="showModal">
                     <n-card :bordered="false" size="huge" style="width: 400px">
                         <template #header>提交报价</template>
                         <template #default>
                             <n-grid cols="3">
                                 <n-gi span="1">
-                                    <Avataaars
-                                        height="75%"
-                                        v-bind="tradeTarget['avatar']"
-                                        width="75%"
-                                    />
+                                    <Avataaars height="75%" v-bind="tradeTarget['avatar']" width="75%"/>
                                 </n-gi>
                                 <n-gi span="2">
                                     <div style="display: flex; height: 100%; align-items: center;">
@@ -91,8 +62,12 @@
                         </template>
                         <template #footer>
                             <n-space align="center" justify="end">
-                                <n-button @click="showModal = false">关闭</n-button>
-                                <n-button type="primary" @click="makeOffer">发起报价</n-button>
+                                <n-button @click="showModal = false">
+                                    关闭
+                                </n-button>
+                                <n-button type="primary" @click="makeOffer">
+                                    发起报价
+                                </n-button>
                             </n-space>
                         </template>
                     </n-card>
@@ -102,15 +77,15 @@
     </div>
 </template>
 <script setup lang="ts">
-import { Search, SearchOutline } from '@vicons/ionicons5';
-import { computed, ComputedRef, defineComponent, h, nextTick, onMounted, reactive, ref, Ref } from "vue";
-import { DropdownOption, MessageApi, NButton, NTag } from "naive-ui";
-import { getColor } from "@/utils/colorMap";
-import { useStore } from '@/stores/store';
-import { getOnSalePlayersAPI, getPlayersByAttriAPI, makeOfferByUserAPI } from "@/apis/transfer";
+import {Search, SearchOutline} from '@vicons/ionicons5';
+import {computed, ComputedRef, defineComponent, h, nextTick, onMounted, reactive, ref, Ref} from "vue";
+import {DropdownOption, MessageApi, NButton, NTag} from "naive-ui";
+import {getColor} from "@/utils/colorMap";
+import {useStore} from '@/stores/store';
+import {getOnSalePlayersAPI, getPlayersByAttriAPI, makeOfferByUserAPI} from "@/apis/transfer";
 import Avataaars from 'vuejs-avataaars/src/Avataaars.vue';
 
-defineComponent({ Search, SearchOutline, Avataaars });
+defineComponent({Search, SearchOutline, Avataaars});
 let store: any = useStore();
 let searchValue: Ref<string> = ref("");
 let pageAmount: number = 0;
@@ -177,10 +152,10 @@ const paginationReactive = reactive({
 })
 let chosenAttri: Ref<string> = ref("");
 let searchAttri: Ref<Array<{ 'label': String, 'value': String }>> = ref([
-    { 'label': '姓名', 'value': 'translated_name' },
-    { 'label': '国籍', 'value': 'translated_nationality' },
-    { 'label': '俱乐部', 'value': 'club_name' },
-    { 'label': '位置', 'value': 'location' }
+    {'label': '姓名', 'value': 'translated_name'},
+    {'label': '国籍', 'value': 'translated_nationality'},
+    {'label': '俱乐部', 'value': 'club_name'},
+    {'label': '位置', 'value': 'location'}
 ]);
 let isOnSearch: boolean = false;
 
@@ -227,22 +202,22 @@ class playerItem {
         this.align = 'left';
         if (title === '年龄') {
             this.render = (row: any) => {
-                return h(NTag, { style: { marginRight: '6px' }, type: 'info' }, { default: () => row['年龄'] });
+                return h(NTag, {style: {marginRight: '6px'}, type: 'info'}, {default: () => row['年龄']});
             };
         } else if (title === '周薪' || title === '身价') {
             this.render = (row: any) => {
                 return h(
                     'p',
-                    { style: { margin: 0 } },
-                    { default: () => row[this.key] }
+                    {style: {margin: 0}},
+                    {default: () => row[this.key]}
                 );
             };
         } else {
             this.render = (row: any) => {
                 return h(
                     'p',
-                    { style: { margin: 0, color: getColor(row[this.key], 'text') } },
-                    { default: () => row[this.key] }
+                    {style: {margin: 0, color: getColor(row[this.key], 'text')}},
+                    {default: () => row[this.key]}
                 );
             };
         }
@@ -356,6 +331,7 @@ const options: DropdownOption[] = [
                 NButton,
                 {
                     type: 'primary',
+                    style: {margin: '-5% 0'},
                     onClick: () => {
                         showRequest.value = false;
                         showModal.value = true;
@@ -395,35 +371,26 @@ function makeOffer(): void {
     makeOfferByUserAPI({
         target_player_id: tradeTarget.value.id,
         offer_price: offerPrice.value
-    }).then((_response: any) => {
-        window.$message.success('交易请求已发送');
+    }).then((response: any) => {
+        switch (response.status) {
+            case 'succeed':
+                window.$message.success('交易请求已发送');
+                break;
+            case 'repeat offer':
+                window.$message.error('您已对该球员发起报价');
+                break;
+            case 'can not afford':
+                window.$message.error('您的资金不足');
+                break;
+        }
         showModal.value = false;
     }).catch((_error: any) => {
     });
 }
 
-defineExpose({ playerName: searchValue, playerColumns, playerData });
+defineExpose({playerName: searchValue, playerColumns, playerData});
 </script>
 <style scoped>
-.searchPanel {
-    display: flex;
-}
-
-.searchInput {
-    align-self: center;
-    width: 20%;
-}
-
-.searchButton {
-    align-self: center;
-    margin-left: 10px;
-}
-
-.searchRadio {
-    margin-top: 10px;
-    align-self: center;
-}
-
 .listTable {
     margin-top: 20px;
 }

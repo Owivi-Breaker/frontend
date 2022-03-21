@@ -6,6 +6,7 @@ import type {DropdownOption} from 'naive-ui';
 export type GlobalMenuOption = {
     key: string;
     label: string;
+    disabled?: boolean;
     routeName: string;
     routePath: string;
     icon?: () => VNodeChild;
