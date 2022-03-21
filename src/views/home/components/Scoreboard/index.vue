@@ -1,9 +1,8 @@
 <template>
+<<<<<<< HEAD
     <div class="mb-4 bg-white shadow-md rounded-lg p-3">
-        <div class="flex items-center justify-between mb-5">
-            <div>
-                <div class="text-xl font-semibold">积分榜</div>
-                <div class="font-semibold text-primary mt-2">{{ leagueName }}</div>
+        <div class="flex items-center justify-between">
+            <div class="s-title s-underline text-xl mb-6">{{ leagueName }}
             </div>
         </div>
         <div>
@@ -64,14 +63,14 @@
                             </tbody>
                             <!-- 加载中的表格 -->
                             <tbody class="divide-y-3 divide-primary-active" v-if="isLoading">
-                            <tr>
-                                <td :colspan="title.length">
-                                    <n-spin
-                                        class="p-5 flex items-center"
-                                        v-bind:show="isLoading"
-                                    ></n-spin>
-                                </td>
-                            </tr>
+                                <tr>
+                                    <td :colspan="title.length">
+                                        <n-spin
+                                            class="p-5 flex items-center"
+                                            v-bind:show="isLoading"
+                                        ></n-spin>
+                                    </td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>

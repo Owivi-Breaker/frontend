@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-lg 3xl:rounded-xl shadow-md bg-primary-active p-3 pt-10">
+    <div class="rounded-lg 3xl:rounded-xl shadow-md p-3 pt-10 bg-primary-active" >
         <n-scrollbar x-scrollable>
             <!-- 前场 -->
             <div class="flex gap-2 justify-around">
@@ -7,7 +7,11 @@
                 <div class="w-1/4 h-20">
                     <div class="flex justify-around gap-1">
                         <div v-for="(value, key) in pos['LW']">
-                            <PlayerAvatar :player-game-data="value" :player-id="value.player_id"></PlayerAvatar>
+                            <PlayerAvatar
+                                :club-name="clubName"
+                                :player-game-data="value"
+                                :player-id="value.player_id"
+                            ></PlayerAvatar>
                         </div>
                     </div>
                 </div>
@@ -17,6 +21,7 @@
                         <div class="flex justify-around gap-1">
                             <div v-for="(value, key) in pos['ST']">
                                 <PlayerAvatar
+                                    :club-name="clubName"
                                     :player-game-data="value"
                                     :player-id="value.player_id"
                                 ></PlayerAvatar>
@@ -28,7 +33,11 @@
                 <div class="w-1/4 h-20">
                     <div class="flex justify-around gap-1">
                         <div v-for="(value, key) in pos['RW']">
-                            <PlayerAvatar :player-game-data="value" :player-id="value.player_id"></PlayerAvatar>
+                            <PlayerAvatar
+                                :club-name="clubName"
+                                :player-game-data="value"
+                                :player-id="value.player_id"
+                            ></PlayerAvatar>
                         </div>
                     </div>
                 </div>
@@ -38,7 +47,11 @@
             <div class="h-20" v-if="pos['CAM']">
                 <div class="flex justify-around gap-1">
                     <div v-for="(value, key) in pos['CAM']">
-                        <PlayerAvatar :player-game-data="value" :player-id="value.player_id"></PlayerAvatar>
+                        <PlayerAvatar
+                            :club-name="clubName"
+                            :player-game-data="value"
+                            :player-id="value.player_id"
+                        ></PlayerAvatar>
                     </div>
                 </div>
             </div>
@@ -50,6 +63,7 @@
                         <div class="flex justify-around gap-1">
                             <div v-for="(value, key) in pos['LM']">
                                 <PlayerAvatar
+                                    :club-name="clubName"
                                     :player-game-data="value"
                                     :player-id="value.player_id"
                                 ></PlayerAvatar>
@@ -63,6 +77,7 @@
                         <div class="flex justify-around gap-1">
                             <div v-for="(value, key) in pos['CM']">
                                 <PlayerAvatar
+                                    :club-name="clubName"
                                     :player-game-data="value"
                                     :player-id="value.player_id"
                                 ></PlayerAvatar>
@@ -76,6 +91,7 @@
                         <div class="flex justify-around">
                             <div v-for="(value, key) in pos['RM']">
                                 <PlayerAvatar
+                                    :club-name="clubName"
                                     :player-game-data="value"
                                     :player-id="value.player_id"
                                 ></PlayerAvatar>
@@ -89,7 +105,11 @@
                 <n-scrollbar x-scrollable>
                     <div class="flex justify-around gap-1">
                         <div v-for="(value, key) in pos['CDM']">
-                            <PlayerAvatar :player-game-data="value" :player-id="value.player_id"></PlayerAvatar>
+                            <PlayerAvatar
+                                :club-name="clubName"
+                                :player-game-data="value"
+                                :player-id="value.player_id"
+                            ></PlayerAvatar>
                         </div>
                     </div>
                 </n-scrollbar>
@@ -100,7 +120,11 @@
                 <div class="w-1/5 h-20">
                     <div class="flex justify-around gap-1">
                         <div v-for="(value, key) in pos['LB']">
-                            <PlayerAvatar :player-game-data="value" :player-id="value.player_id"></PlayerAvatar>
+                            <PlayerAvatar
+                                :club-name="clubName"
+                                :player-game-data="value"
+                                :player-id="value.player_id"
+                            ></PlayerAvatar>
                         </div>
                     </div>
                 </div>
@@ -110,6 +134,7 @@
                         <div class="flex justify-around gap-1">
                             <div v-for="(value, key) in pos['CB']">
                                 <PlayerAvatar
+                                    :club-name="clubName"
                                     :player-game-data="value"
                                     :player-id="value.player_id"
                                 ></PlayerAvatar>
@@ -121,7 +146,11 @@
                 <div class="w-1/5 h-20">
                     <div class="flex justify-around gap-1">
                         <div v-for="(value, key) in pos['RB']">
-                            <PlayerAvatar :player-game-data="value" :player-id="value.player_id"></PlayerAvatar>
+                            <PlayerAvatar
+                                :club-name="clubName"
+                                :player-game-data="value"
+                                :player-id="value.player_id"
+                            ></PlayerAvatar>
                         </div>
                     </div>
                 </div>
@@ -130,7 +159,11 @@
             <div class="h-20">
                 <div class="flex justify-around overflow-x-auto">
                     <div v-for="(value, key) in pos['GK']">
-                        <PlayerAvatar :player-game-data="value" :player-id="value.player_id"></PlayerAvatar>
+                        <PlayerAvatar
+                            :club-name="clubName"
+                            :player-game-data="value"
+                            :player-id="value.player_id"
+                        ></PlayerAvatar>
                     </div>
                 </div>
             </div>
@@ -144,11 +177,15 @@ import {
     PlayerAvatar
 } from "@/components/GameOn";
 import { useStore } from "@/stores/store";
+import { getColor, getClubColor, clubBg, clubTx } from "@/utils/colorMap";
 const store = useStore();
 const props: any = defineProps({
     pos: String
 });
 
+const clubName: ComputedRef = computed(() => {
+    return props.pos == 'left' ? store.homeTeamInfo.name : store.foreignTeamInfo.name;
+});
 
 const pos: ComputedRef = computed(() => {
     return props.pos == 'left' ? store.leftPos : store.rightPos;
