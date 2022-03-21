@@ -400,6 +400,7 @@ onMounted(() => {
                     getPlayerByIdAPI({ player_id: playerId })
                         .then(response => {
                             playerData.value = response;
+
                             // 初始化图表
                             ratings.value = response.recent_ratings;
                             const number: number = ratings.value.length;

@@ -27,6 +27,7 @@ declare namespace AuthRoute {
         | 'game-on-test'
         | 'game-result-test'
         | 'player-page'
+        | 'player'
         | 'home-test'
         | 'transfer-list'
         // 样例路由

@@ -60,6 +60,20 @@ export const useStore = defineStore('main', {
             return pos;
         },
 
+
+        // 最终主场球员信息
+        homeFinalPlayerInfo(state) {
+            if (!state.gamePveData.game_info) {
+                return null;
+            }
+            if (
+                state.gamePveData.game_info.home_club_id === state.gamePveData.player_team_info.club_id
+            ) {
+                return state.gamePveData.player_players_info;
+            }
+            return state.gamePveData.computer_players_info;
+        },
+
         homePlayerInfo(state) {
             if (!state.gamePveData.game_info) {
                 return null;

@@ -46,7 +46,7 @@
                         :player-team-info="totalData['player_team_info']"
                     ></TacticalStatistic>
                     <!-- 解说 -->
-                    <div class="s-card p-6 h-128 3xl:h-160">
+                    <!-- <div class="s-card p-6 h-128 3xl:h-160">
                         <n-scrollbar ref="nScrollBarRef">
                             <n-timeline>
                                 <n-timeline-item
@@ -57,7 +57,7 @@
                                 ></n-timeline-item>
                             </n-timeline>
                         </n-scrollbar>
-                    </div>
+                    </div> -->
                 </div>
             </div>
 

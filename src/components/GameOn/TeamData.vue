@@ -12,7 +12,7 @@
             </div>-->
 
             <table class="min-w-full divide-y divide-primary overflow-hidden rounded-lg text-left">
-                <thead class="bg-primary-active">
+                <thead class="bg-primary-active" :style="clubBg(clubName, -0.7)">
                     <tr class="text-sm">
                         <th class="py-2 px-4" scope="col" v-for="col in cols">{{ col }}</th>
                     </tr>
@@ -25,7 +25,11 @@
                     >
                         <td class="py-2 px-4">
                             <span class="mr-1">{{ item['name'] }}</span>
-                            <span v-if="item['goals'] >= 3" class="text-primary">
+                            <span
+                                v-if="item['goals'] >= 3"
+                                class="text-primary"
+                                :style="clubTx(clubName)"
+                            >
                                 <icon-ion:football />
                                 <span>{{ item['goals'] }}</span>
                             </span>
@@ -34,11 +38,16 @@
                                 v-if="item['goals'] < 3"
                                 v-for="i of item['goals']"
                                 class="text-primary"
+                                :style="clubTx(clubName)"
                             >
                                 <icon-ion:football />
                             </span>
 
-                            <span v-if="item['assists'] >= 3" class="text-primary">
+                            <span
+                                v-if="item['assists'] >= 3"
+                                class="text-primary"
+                                :style="clubTx(clubName)"
+                            >
                                 <icon-mdi:shoe-cleat />
                                 <span>{{ item['assists'] }}</span>
                             </span>
@@ -47,6 +56,7 @@
                                 v-if="item['assists'] < 3"
                                 v-for="i of item['assists']"
                                 class="text-primary"
+                                :style="clubTx(clubName)"
                             >
                                 <icon-mdi:shoe-cleat />
                             </span>
@@ -110,19 +120,19 @@ import { computed, ComputedRef, defineComponent, ref } from 'vue';
 import { getPlayerByIdAPI } from '@/apis/player';
 import { PlayerItem } from '@/components/GameOn';
 import { useStore } from '@/stores/store';
-import { getColor } from '@/utils/colorMap';
+import { getColor, clubBg, clubTx } from '@/utils/colorMap';
 
 const store = useStore();
 defineComponent({ PlayerItem });
 const props: any = defineProps({
-    club: Object,
     playerInfo: Array,
-    pos:String
+    pos: String,
+    clubName: String
 });
 
 
 const clubName: ComputedRef = computed(() => {
-    return props.pos == 'left' ? store.homeTeamInfo.name : store.foreignTeamInfo.name;
+    return props.clubName
 });
 
 
