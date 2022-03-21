@@ -21,9 +21,9 @@
             :height="10"
             type="line"
             :border-radius="1"
-            :color="isZero ? '#78838E' : '#D81B60'"
+            :color="isZero ? '#78838E' : getClubColor(store.homeTeamInfo.name)"
             :percentage="proNumber"
-            :rail-color="isZero ? '#78838E' : '#007AFF'"
+            :rail-color="isZero ? '#78838E' : getClubColor(store.foreignTeamInfo.name)"
             :show-indicator="false"
         ></n-progress>
 
@@ -32,9 +32,9 @@
             :height="10"
             type="line"
             :border-radius="1"
-            :color="isZero ? '#78838E' : '#007AFF'"
+            :color="isZero ? '#78838E' : getClubColor(store.foreignTeamInfo.name)"
             :percentage="proNumber"
-            :rail-color="isZero ? '#78838E' : '#D81B60'"
+            :rail-color="isZero ? '#78838E' : getClubColor(store.homeTeamInfo.name)"
             :show-indicator="false"
         ></n-progress>
     </div>
@@ -43,6 +43,8 @@
 <script lang="ts" setup>
 import { computed, ComputedRef } from 'vue';
 import { useStore } from '@/stores/store';
+import { getColor, getClubColor, clubBg, clubTx, clubBd } from "@/utils/colorMap";
+
 
 const store = useStore();
 const totalData: ComputedRef = computed(() => {

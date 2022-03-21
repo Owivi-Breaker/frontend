@@ -1,103 +1,107 @@
 <template>
     <n-scrollbar x-scrollable>
-    <div class="s-card pb-3 overflow-x-auto">
-        <!-- club logo -->
-        <!-- <div class="pb-4">
+        <div class="s-card pb-3 overflow-x-auto">
+            <!-- club logo -->
+            <!-- <div class="pb-4">
             <img
                 v-if="props.club"
                 :src="'http://s1.s100.vip:13127/Public/' + props.club.name + '.png'"
                 alt="图片"
                 class="teamAvatar"
             />
-        </div>-->
+            </div>-->
 
-        <table class="min-w-full divide-y divide-primary overflow-hidden rounded-lg">
-            <thead class="bg-primary-active">
-                <tr class="text-sm">
-                    <th class="p-3" scope="col" v-for="col in cols">{{ col }}</th>
-                </tr>
-            </thead>
-            <tbody class="divide-y-3 divide-primary-active">
-                <tr v-for="(item, key) in perfData" :key="key" class="whitespace-nowrap text-sm">
-                    <td class="py-2 px-4">
-                        <span class="mr-1">{{ item['name'] }}</span>
-                        <span v-if="item['goals'] >= 3" class="text-primary">
-                            <icon-ion:football />
-                            <span>{{ item['goals'] }}</span>
-                        </span>
+            <table class="min-w-full divide-y divide-primary overflow-hidden rounded-lg text-left">
+                <thead class="bg-primary-active">
+                    <tr class="text-sm">
+                        <th class="py-2 px-4" scope="col" v-for="col in cols">{{ col }}</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y-3 divide-primary-active">
+                    <tr
+                        v-for="(item, key) in perfData"
+                        :key="key"
+                        class="whitespace-nowrap text-sm"
+                    >
+                        <td class="py-2 px-4">
+                            <span class="mr-1">{{ item['name'] }}</span>
+                            <span v-if="item['goals'] >= 3" class="text-primary">
+                                <icon-ion:football />
+                                <span>{{ item['goals'] }}</span>
+                            </span>
 
-                        <span
-                            v-if="item['goals'] < 3"
-                            v-for="i of item['goals']"
-                            class="text-primary"
-                        >
-                            <icon-ion:football />
-                        </span>
+                            <span
+                                v-if="item['goals'] < 3"
+                                v-for="i of item['goals']"
+                                class="text-primary"
+                            >
+                                <icon-ion:football />
+                            </span>
 
-                        <span v-if="item['assists'] >= 3" class="text-primary">
-                            <icon-mdi:shoe-cleat />
-                            <span>{{ item['assists'] }}</span>
-                        </span>
+                            <span v-if="item['assists'] >= 3" class="text-primary">
+                                <icon-mdi:shoe-cleat />
+                                <span>{{ item['assists'] }}</span>
+                            </span>
 
-                        <span
-                            v-if="item['assists'] < 3"
-                            v-for="i of item['assists']"
-                            class="text-primary"
-                        >
-                            <icon-mdi:shoe-cleat />
-                        </span>
-                    </td>
+                            <span
+                                v-if="item['assists'] < 3"
+                                v-for="i of item['assists']"
+                                class="text-primary"
+                            >
+                                <icon-mdi:shoe-cleat />
+                            </span>
+                        </td>
 
-                    <td>
-                        <div
-                            :style="{ 'color': getColor(item['final_stamina'], 'text', 45, 100) }"
-                        >{{ item['final_stamina'] }}</div>
-                    </td>
-                    <td>
-                        <div
-                            :style="{ 'color': getColor(item['final_rating'], 'text', 4, 10) }"
-                        >{{ item['final_rating'] }}</div>
-                    </td>
+                        <td>
+                            <div
+                                :style="{ 'color': getColor(item['final_stamina'], 'text', 45, 100) }"
+                            >{{ item['final_stamina'] }}</div>
+                        </td>
+                        <td>
+                            <div
+                                :style="{ 'color': getColor(item['final_rating'], 'text', 4, 10) }"
+                            >{{ item['final_rating'] }}</div>
+                        </td>
 
-                    <td>
-                        <span v-if="item['passes'] == 0 && item['pass_success'] == 0">-</span>
-                        <span v-if="item['passes'] != 0 || item['pass_success'] != 0">
-                            <span>{{ item['pass_success'] }}</span>
-                            <span class="text-primary">{{ '/' }}</span>
-                            <span>{{item['passes']}}</span>
-                        </span>
-                    </td>
+                        <td>
+                            <span v-if="item['passes'] == 0 && item['pass_success'] == 0">-</span>
+                            <span v-if="item['passes'] != 0 || item['pass_success'] != 0">
+                                <span>{{ item['pass_success'] }}</span>
+                                <span class="text-primary">{{ '/' }}</span>
+                                <span>{{ item['passes'] }}</span>
+                            </span>
+                        </td>
 
-                    <td>
-                        <span v-if="item['tackles'] == 0 && item['tackle_success'] == 0">-</span>
-                        <span v-if="item['tackles'] != 0 || item['tackle_success'] != 0">
-                            <span>{{ item['tackle_success'] }}</span>
-                            <span class="text-primary">{{ '/' }}</span>
-                            <span>{{item['tackles']}}</span>
-                        </span>
-                    </td>
+                        <td>
+                            <span v-if="item['tackles'] == 0 && item['tackle_success'] == 0">-</span>
+                            <span v-if="item['tackles'] != 0 || item['tackle_success'] != 0">
+                                <span>{{ item['tackle_success'] }}</span>
+                                <span class="text-primary">{{ '/' }}</span>
+                                <span>{{ item['tackles'] }}</span>
+                            </span>
+                        </td>
 
-                    <td>
-                        <span v-if="item['dribbles'] == 0 && item['dribble_success'] == 0">-</span>
-                        <span v-if="item['dribbles'] != 0 || item['dribble_success'] != 0">
-                            <span>{{ item['dribble_success'] }}</span>
-                            <span class="text-primary">{{ '/' }}</span>
-                            <span>{{item['dribbles']}}</span>
-                        </span>
-                    </td>
+                        <td>
+                            <span v-if="item['dribbles'] == 0 && item['dribble_success'] == 0">-</span>
+                            <span v-if="item['dribbles'] != 0 || item['dribble_success'] != 0">
+                                <span>{{ item['dribble_success'] }}</span>
+                                <span class="text-primary">{{ '/' }}</span>
+                                <span>{{ item['dribbles'] }}</span>
+                            </span>
+                        </td>
 
-                    <td>
-                        <span v-if="item['aerials'] == 0 && item['aerial_success'] == 0">-</span>
-                        <span v-if="item['aerials'] != 0 || item['aerial_success'] != 0">
-                            <span>{{ item['aerial_success'] }}</span>
-                            <span class="text-primary">{{ '/' }}</span>
-                            <span>{{item['aerials']}}</span>
-                        </span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+                        <td>
+                            <span v-if="item['aerials'] == 0 && item['aerial_success'] == 0">-</span>
+                            <span v-if="item['aerials'] != 0 || item['aerial_success'] != 0">
+                                <span>{{ item['aerial_success'] }}</span>
+                                <span class="text-primary">{{ '/' }}</span>
+                                <span>{{ item['aerials'] }}</span>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
     </n-scrollbar>
 </template>
 
@@ -112,7 +116,13 @@ const store = useStore();
 defineComponent({ PlayerItem });
 const props: any = defineProps({
     club: Object,
-    playerInfo: Array
+    playerInfo: Array,
+    pos:String
+});
+
+
+const clubName: ComputedRef = computed(() => {
+    return props.pos == 'left' ? store.homeTeamInfo.name : store.foreignTeamInfo.name;
 });
 
 

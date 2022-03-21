@@ -6,7 +6,7 @@
                 <Field pos="left"></Field>
                 <!-- 左表格 -->
                 <div>
-                    <TeamData :club="homeTeam" :player-info="homePlayerInfo"></TeamData>
+                    <TeamData pos="left" :club="homeTeam" :player-info="homePlayerInfo"></TeamData>
                 </div>
             </div>
 
@@ -26,7 +26,10 @@
                     <div class="s-card p-6">
                         <!-- 解说 -->
                         <div class="flex flex-col gap-3 items-start">
-                            <div v-for="script in newCommentaryList" class="flex items-center gap-2">
+                            <div
+                                v-for="script in newCommentaryList"
+                                class="flex items-center gap-2"
+                            >
                                 <div
                                     class="text-primary bg-primary-active rounded-full py-1 px-2"
                                 >{{ script.time }}</div>
@@ -63,7 +66,7 @@
                 <Field pos="right"></Field>
                 <!-- 右表格 -->
                 <div>
-                    <TeamData :club="foreignTeam" :player-info="foreignPlayerInfo"></TeamData>
+                    <TeamData pos="right" :club="foreignTeam" :player-info="foreignPlayerInfo"></TeamData>
                 </div>
             </div>
         </div>
@@ -81,12 +84,14 @@ import {
     TeamData,
     Field
 } from "@/components/GameOn";
-import { getColor } from "@/utils/colorMap";
+import { getColor, getClubColor } from "@/utils/colorMap";
 import { useStore } from "@/stores/store";
 import Avataaars from "vuejs-avataaars/src/Avataaars.vue";
 import { gamePveNextTurnAPI, gamePveShowGameInfoAPI } from '@/apis/gamePve';
 import { getClubByIdAPI } from '@/apis/club';
 import { useRouterPush } from '@/composables';
+
+
 
 
 const { routerPush } = useRouterPush();

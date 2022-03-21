@@ -1,10 +1,8 @@
 <template>
-    <div class="mb-4 bg-white shadow-md rounded-lg p-3">
-        <div class="flex items-center justify-between mb-5">
-            <div>
-                <div class="text-xl font-semibold">积分榜</div>
-                <div class="font-semibold text-primary mt-2">{{ leagueName }}</div>
-            </div>
+    <div class="mb-4 bg-white shadow-md rounded-lg p-6">
+        <div class="flex items-center justify-between">
+            <div class="s-title s-underline text-xl mb-6">{{ leagueName }}</div>
+
             <!-- <div>
                 <a
                     class="text-sm font-medium text-primary hover:bg-primary-active rounded-lg p-2"
@@ -13,7 +11,7 @@
                     View
                     more
                 </a>
-            </div> -->
+            </div>-->
         </div>
         <div>
             <div class="overflow-x-auto">
@@ -114,6 +112,7 @@ getSaveMeAPI()
                                     isLoading.value = false;
                                 });
                         }
+                        isLoading.value = false;
                     })
                     .catch((_error: {}) => {
                     });
@@ -123,20 +122,21 @@ getSaveMeAPI()
     })
     .catch((_error: {}) => {
     });
-let title: Array<string> = ['俱乐部', '胜', '平', '负', '净胜球', '积分'];
+const title: Array<string> = ['俱乐部', '胜', '平', '负', '净胜球', '积分'];
 const pointsData: ComputedRef = computed(() =>
-    rawPointsData.value.map((value: any) => {
+    rawPointsData.value.map((val: any) => {
         for (let item in title) {
-            if (value[title[item]] === undefined) {
+            if (val[title[item]] === undefined) {
                 if (title[item] === '俱乐部') {
-                    value['名称'] = value.name;
+                    val['俱乐部'] = val.name;
                 } else {
-                    value[title[item]] = 0;
+                    val[title[item]] = 0;
                 }
             }
         }
-        value['我的'] = value['id'] === clubId;
-        return value;
+        val['我的'] = val['id'] === clubId;
+        console.log(val)
+        return val;
     })
 );
 </script>
