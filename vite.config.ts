@@ -27,7 +27,7 @@ export default defineConfig(configEnv => {
             fs: {
                 strict: false
             },
-            host: '0.0.0.0',
+            host: '::',
             port: 19231,
             open: true
         },
