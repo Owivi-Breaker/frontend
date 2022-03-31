@@ -1,6 +1,6 @@
-import {fileURLToPath} from 'url';
-import {defineConfig, loadEnv} from 'vite';
-import {define, setupVitePlugins} from './build';
+import { fileURLToPath } from 'url';
+import { defineConfig, loadEnv } from 'vite';
+import { define, setupVitePlugins } from './build';
 
 export default defineConfig(configEnv => {
     const viteEnv = loadEnv(configEnv.mode, `.env.${configEnv.mode}`);
@@ -27,7 +27,8 @@ export default defineConfig(configEnv => {
             fs: {
                 strict: false
             },
-            host: '::',
+            host: '0.0.0.0',
+            //ipv6 host: '::',
             port: 19231,
             open: true
         },
