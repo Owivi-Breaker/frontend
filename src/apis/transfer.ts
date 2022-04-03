@@ -21,6 +21,9 @@ const getNegotiateListAPI = () => {
 const getRejectedOffersAPI = () => {
     return http.get('/transfer/get-rejected-offers', null);
 }
+const dealRejectedOffersAPI = () => {
+    return http.get('/transfer/deal-rejected-offers', null);
+}
 export {
     makeOfferByUserAPI,
     negotiateWageAPI,
@@ -28,5 +31,6 @@ export {
     getPlayersByAttriAPI,
     negotiateFailedAPI,
     getNegotiateListAPI,
-    getRejectedOffersAPI
+    getRejectedOffersAPI,
+    dealRejectedOffersAPI
 };

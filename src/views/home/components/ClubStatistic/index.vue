@@ -1,28 +1,29 @@
 <template>
     <div class="rounded-lg shadow-md bg-white p-5 w-3/5">
         <div class="text-lg font-semibold text-primary mb-3">统计</div>
-        <div class="flex flex-col">
+        <n-spin v-if="isLoading!==0" class="p-30 flex iteams-center"></n-spin>
+        <div v-if="isLoading===0" class="flex flex-col">
             <!-- 球员 -->
             <div class="font-semibold mt-4">球员</div>
             <div class="bg-primary-active w-full py-0.5 mb-2"></div>
             <div class="flex justify-between">
                 <div class>平均年龄</div>
-                <div class>25.3岁</div>
+                <div class>{{ Math.round(playerStatistics.平均年龄 * 100) / 100 }}岁</div>
             </div>
             <div class="flex justify-between">
                 <div class>最高工资</div>
                 <div>
-                    <span class>佩德里</span>
+                    <span class>{{ playerStatistics.最高工资球员 }}</span>
                     <span>-</span>
-                    <span class>€15.8万/周</span>
+                    <span class>€{{ Math.round(playerStatistics.最高工资 * 100) / 100 }}万/周</span>
                 </div>
             </div>
             <div class="flex justify-between">
                 <div class>最低工资</div>
                 <div>
-                    <span class="after:">加维</span>
+                    <span class="after:">{{ playerStatistics.最低工资球员 }}</span>
                     <span>-</span>
-                    <span class>€2.3万/周</span>
+                    <span class>€{{ Math.round(playerStatistics.最低工资 * 100) / 100 }}万/周</span>
                 </div>
             </div>
             <!-- 战术 -->
@@ -53,16 +54,36 @@
             <div class="bg-primary-active w-full py-0.5 mb-2"></div>
             <div class="flex justify-between">
                 <div class>进球</div>
-                <div class>96</div>
+                <div class>{{ seasonGoalStatistics.进球 }}</div>
             </div>
             <div class="flex justify-between">
                 <div class>失球</div>
-                <div class>32</div>
+                <div class>{{ seasonGoalStatistics.失球 }}</div>
             </div>
         </div>
     </div>
 </template>
 <script setup lang="ts">
+import {getPlayerStatisticsAPI, getSeasonGoalStatisticsAPI} from "@/apis/club";
+import {ClubMePlayerStatisticsResponse, ClubMeSeasonGoalStatisticsResponse} from "@/interface/response/club";
+import {onMounted, Ref, ref} from "vue";
+
+let isLoading: Ref<number> = ref(0);
+let playerStatistics: Ref<ClubMePlayerStatisticsResponse | null> = ref(null);
+let seasonGoalStatistics: Ref<ClubMeSeasonGoalStatisticsResponse | null> = ref(null);
+onMounted(() => {
+    isLoading.value = 2;
+    getPlayerStatisticsAPI().then((response: ClubMePlayerStatisticsResponse) => {
+        playerStatistics.value = response;
+        isLoading.value--;
+    }).catch((_error: any) => {
+    });
+    getSeasonGoalStatisticsAPI().then((response: ClubMeSeasonGoalStatisticsResponse) => {
+        seasonGoalStatistics.value = response;
+        isLoading.value--;
+    }).catch((_error: any) => {
+    });
+});
 </script>
 <style scoped>
 </style>

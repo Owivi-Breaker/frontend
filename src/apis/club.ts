@@ -15,4 +15,30 @@ const getClubsByLeagueAPI = (params: { league_id: number }) => {
 const getIncomingGamesAPI = () => {
     return http.get(`/test/incoming-games-info`, null);
 };
-export {getClubsAPI, getClubMeAPI, getClubByIdAPI, getClubsByLeagueAPI, getIncomingGamesAPI};
+const getEstimateFinanceAPI = () => {
+    return http.get(`/club/me/estimate-finance`, null);
+};
+const getBestPlayersAPI = () => {
+    return http.get(`/club/me/best-players`, null);
+};
+const getSeasonFinanceAPI = () => {
+    return http.get(`/club/me/season-finance`, null);
+};
+const getPlayerStatisticsAPI = () => {
+    return http.get(`/club/me/player-statistics`, null);
+};
+const getSeasonGoalStatisticsAPI = () => {
+    return http.get(`/club/me/season-goal-statistics`, null);
+};
+export {
+    getClubsAPI,
+    getClubMeAPI,
+    getClubByIdAPI,
+    getClubsByLeagueAPI,
+    getIncomingGamesAPI,
+    getEstimateFinanceAPI,
+    getBestPlayersAPI,
+    getSeasonFinanceAPI,
+    getPlayerStatisticsAPI,
+    getSeasonGoalStatisticsAPI,
+};

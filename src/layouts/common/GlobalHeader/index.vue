@@ -7,37 +7,37 @@
             class="h-full"
         />
         <div v-if="!showHeaderMenu" class="flex-1-hidden flex-y-center h-full">
-            <menu-collapse v-if="showMenuCollape" />
-            <global-breadcrumb v-if="theme.header.crumb.visible" />
+            <menu-collapse v-if="showMenuCollape"/>
+            <global-breadcrumb v-if="theme.header.crumb.visible"/>
         </div>
         <div
             v-else
             :style="{ justifyContent: theme.menu.horizontalPosition }"
             class="flex-1-hidden flex-y-center h-full"
         >
-            <header-menu />
+            <header-menu/>
         </div>
 
         <div class="flex items-center h-full">
             <div class="flex items-center text-semobold mr-3 gap-2">
                 <div>
-                    <icon-ri:calendar-2-fill class="text-20px" />
+                    <icon-ri:calendar-2-fill class="text-20px"/>
                 </div>
                 {{ store.Date }}
             </div>
             <hover-container class="w-40px h-full" tooltip-content="下一天">
                 <n-button :bordered="false" class="w-35px h-full" @click="nextDay">
-                    <icon-tabler:track-next class="text-20px" />
+                    <icon-tabler:track-next class="text-20px"/>
                 </n-button>
             </hover-container>
             <!-- <global-search /> -->
-            <github-site />
-            <full-screen />
-            <theme-mode />
+            <github-site/>
+            <full-screen/>
+            <theme-mode/>
             <!-- TODO 封装为组件 -->
             <hover-container class="w-40px h-full" tooltip-content="退出">
                 <n-button :bordered="false" class="w-35px h-full" @click="showExitModal = true">
-                    <icon-ri:logout-box-r-line class="text-20px" />
+                    <icon-ri:logout-box-r-line class="text-20px"/>
                 </n-button>
             </hover-container>
         </div>
@@ -73,9 +73,6 @@
 
                 <div class="flex flex-col items-center gap-4">
                     <div class="font-semibold text-lg text-primary s-underline">对阵</div>
-                    <!-- <div
-                        class="bg-primary-active text-primary rounded-full px-3 py-2"
-                    >{{ store.Date }}</div>-->
                 </div>
 
                 <div class="flex flex-col items-center gap-2">
@@ -94,27 +91,32 @@
         </div>
     </n-modal>
     <Transfer v-if="needTransfer"></Transfer>
+    <n-modal v-model:show="waiting" :mask-closable="false">
+        <n-card :bordered="true" :title="'请稍候'" class="loadModalCard" size="huge">
+            <n-spin v-if="waiting" size="large"/>
+        </n-card>
+    </n-modal>
 </template>
 
 <script lang="ts" setup>
-import { defineComponent, onBeforeUnmount, onMounted, Ref, ref } from 'vue';
-import { Router } from 'vue-router';
-import { ExitOutline } from '@vicons/ionicons5';
+import {defineComponent, nextTick, onBeforeUnmount, onMounted, Ref, ref} from 'vue';
+import {Router} from 'vue-router';
+import {ExitOutline} from '@vicons/ionicons5';
 import key from 'Keymaster';
-import { DarkModeContainer } from '@/components';
-import { useThemeStore } from '@/store';
-import { useRouterPush } from '@/composables';
-import { storage } from '@/utils';
-import type { GlobalHeaderProps } from '@/interface';
-import { getDateAPI } from '@/apis/user';
-import { nextTurnAPI } from '@/apis/nextTurn';
-import { useStore } from '@/stores/store';
-import { getIncomingGamesAPI } from '@/apis/club';
-import GlobalSearch from '../GlobalSearch/index.vue';
+import {DarkModeContainer} from '@/components';
+import {useThemeStore} from '@/store';
+import {useRouterPush} from '@/composables';
+import {storage} from '@/utils';
+import type {GlobalHeaderProps} from '@/interface';
+import {getDateAPI} from '@/apis/user';
+import {nextTurnAPI} from '@/apis/nextTurn';
+import {useStore} from '@/stores/store';
+import {getIncomingGamesAPI} from '@/apis/club';
 import GlobalLogo from '../GlobalLogo/index.vue';
-import { FullScreen, GithubSite, GlobalBreadcrumb, HeaderMenu, MenuCollapse, ThemeMode, Transfer } from './components';
+import {dealRejectedOffersAPI} from '@/apis/transfer';
+import {FullScreen, GithubSite, GlobalBreadcrumb, HeaderMenu, MenuCollapse, ThemeMode, Transfer} from './components';
 
-const { routerPush, routerBack } = useRouterPush();
+const {routerPush, routerBack} = useRouterPush();
 
 defineProps<{
     showLogo: GlobalHeaderProps['showLogo'];
@@ -155,125 +157,69 @@ function goPre(): void {
 function ExitLogin(): void {
     storage.remove('token');
     storage.remove('saveId');
-    routerPush({ name: 'login' });
+    routerPush({name: 'login'});
 }
 
 const showGameModal: Ref<boolean> = ref(false);
+let needTransfer: Ref<boolean> = ref(true);
+let waiting: Ref<boolean> = ref(false);
 
 function nextDay(): void {
+    needTransfer.value = false;
     if (store.nextGame.distance === 1 && !showGameModal.value) {
         showGameModal.value = true;
         return;
     }
-    needTransfer.value = false;
-    nextTurnAPI()
-        .then((response: any) => {
-            if (response.state === 'pve') {
-                showGameModal.value = false;
-                routerPush({ name: 'gamePrepare' });
-            }
-            getDateAPI()
-                .then((response: { date: any }) => {
-                    store.Date = response.date;
-                    store.nextGame.distance--;
-                    needTransfer.value = true;
-                    if (store.nextGame.distance == 0) {
-                        getIncomingGamesAPI()
-                            .then((response: any) => {
-                                const nextGameDate = response[0].date;
-                                const teams = new Array<string>(2);
-                                teams[0] = response[0].club1_name;
-                                teams[1] = response[0].club2_name;
-                                store.nextGame.distance =
-                                    (new Date(nextGameDate).getTime() / 1000 - new Date(store.Date).getTime() / 1000) / 24 / 60 / 60;
-                                store.nextGame.teams = teams;
+    dealRejectedOffersAPI().then((_response: any) => {
+        nextTurnAPI()
+            .then((response: any) => {
+                    waiting.value = true;
+                    setTimeout(() => {
+                        if (response.state === 'pve') {
+                            showGameModal.value = false;
+                            routerPush({name: 'game-prepare'});
+                        }
+                        getDateAPI()
+                            .then((response: { date: any }) => {
+                                store.Date = response.date;
+                                store.nextGame.distance--;
+                                if (store.nextGame.distance == 0) {
+                                    getIncomingGamesAPI()
+                                        .then((response: any) => {
+                                            const nextGameDate = response[0].date;
+                                            const teams = new Array<string>(2);
+                                            teams[0] = response[0].club1_name;
+                                            teams[1] = response[0].club2_name;
+                                            store.nextGame.distance =
+                                                (new Date(nextGameDate).getTime() / 1000 - new Date(store.Date).getTime() / 1000) / 24 / 60 / 60;
+                                            store.nextGame.teams = teams;
+                                        })
+                                        .catch((_error: {}) => {
+                                        });
+                                }
+                                nextTick(() => {
+                                    needTransfer.value = true;
+                                });
+                                console.log(needTransfer.value);
                             })
                             .catch((_error: {}) => {
                             });
-                    }
-                })
-                .catch((_error: {}) => {
-                });
-        }
-        )
-        .catch((_error: {}) => {
-        });
+                        waiting.value = false;
+                    }, 5000);
+                }
+            )
+            .catch((_error: {}) => {
+            });
+    }).catch((_error: {}) => {
+    });
 }
 
-let needTransfer: Ref<boolean> = ref(true);
-defineExpose({ ExitLogin, goPre, nextDay, showExitModal, showGameModal });
+defineExpose({ExitLogin, goPre, nextDay, showExitModal, showGameModal});
 </script>
-
 <style scoped>
-.bigSpace {
-    height: 60px;
-}
-
-.returnButton {
-    margin-left: 10px;
-}
-
-.curDate {
-    font-size: 15px;
-}
-
-.exitModalCard {
-    width: 300px;
+.loadModalCard {
+    width: 320px;
+    height: 180px;
     text-align: center;
-}
-
-.exitModalContent {
-    font-size: medium;
-}
-
-.willGameCard {
-    width: 800px;
-}
-
-.confirmButton {
-    margin-top: 15px;
-}
-
-.returnButton {
-    margin-left: 15px;
-}
-
-.firstTeam {
-    display: flex;
-    justify-content: end;
-    align-items: Center;
-}
-
-.secondTeam {
-    display: flex;
-    justify-content: start;
-    align-items: Center;
-}
-
-.teamName {
-    font-size: 30px;
-}
-
-.gamePoint {
-    font-size: 40px;
-}
-
-.colon {
-    font-size: 40px;
-    text-align: center;
-}
-
-.tenSpan {
-    width: 10%;
-}
-
-.fiveSpan {
-    width: 5%;
-}
-
-.teamAvatar {
-    width: 60px;
-    height: 60px;
-    padding: 5px;
 }
 </style>

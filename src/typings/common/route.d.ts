@@ -24,11 +24,8 @@ declare namespace AuthRoute {
         | 'mail'
         | 'game-prepare'
         | 'game-on'
-        | 'game-on-test'
-        | 'game-result-test'
         | 'player-page'
         | 'player'
-        | 'home-test'
         | 'transfer-list'
         // 样例路由
         | 'dashboard'

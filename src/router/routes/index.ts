@@ -76,28 +76,6 @@ export const sidebarRoutes: AuthRoute.Route[] = [
             singleLayout: 'basic'
         }
     },
-    {
-        name: 'game-result-test',
-        path: '/game-result-test',
-        component: 'self',
-        meta: {
-            title: '比赛结束测试页',
-            icon: 'mdi:hand-coin-outline',
-            requiresAuth: true,
-            singleLayout: 'basic'
-        }
-    },
-     {
-        name: 'game-on-test',
-        path: '/game-on-test',
-        component: 'self',
-        meta: {
-            title: '比赛进行测试页',
-            icon: 'mdi:hand-coin-outline',
-            requiresAuth: true,
-            singleLayout: 'basic'
-        }
-    },
 ];
 
 /** 固定的路由 */
