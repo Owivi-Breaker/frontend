@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="p-6 flex gap-6" :class="{ showDiv: !loadFinished }">
+        <div v-if="loadFinished" class="p-6 flex gap-6" :class="{ showDiv: !loadFinished }">
             <!-- 左 -->
             <div class="w-1/3 flex flex-col gap-6">
                 <!-- 左球场 -->
@@ -378,7 +378,6 @@ const commentaryList: ComputedRef = computed(() => {
 
 const { routerPush } = useRouterPush();
 const store = useStore();
-
 
 onMounted(() => {
     getGameByIdAPI({ game_id: gameId })

@@ -32,9 +32,10 @@
                             >
                                 <div
                                     class="text-primary bg-primary-active rounded-full py-1 px-2"
-                                >{{ script.time }}</div>
+                                >{{ script.time }}
+                                </div>
                                 <div v-if="script.content.includes('球进')">
-                                    <icon-ic:sharp-sports-soccer class="text-primary" />
+                                    <icon-ic:sharp-sports-soccer class="text-primary"/>
                                 </div>
                                 <div class>{{ script.content }}</div>
                             </div>
@@ -75,26 +76,17 @@
 
 
 <script lang="ts" setup>
-import { computed, ComputedRef, defineComponent, nextTick, ref, Ref, watch, onMounted } from "vue";
-import { ScrollbarInst } from "naive-ui";
-import {
-    GameStatus,
-    TacticalSelector,
-    TacticalStatistic,
-    TeamData,
-    Field
-} from "@/components/GameOn";
-import { getColor, getClubColor } from "@/utils/colorMap";
-import { useStore } from "@/stores/store";
-import Avataaars from "vuejs-avataaars/src/Avataaars.vue";
-import { gamePveNextTurnAPI, gamePveShowGameInfoAPI } from '@/apis/gamePve';
-import { getClubByIdAPI } from '@/apis/club';
-import { useRouterPush } from '@/composables';
+import {computed, ComputedRef, nextTick, onMounted, Ref, ref, watch} from "vue";
+import {ScrollbarInst} from "naive-ui";
+import {Field, GameStatus, TacticalSelector, TacticalStatistic, TeamData} from "@/components/GameOn";
+import {getColor} from "@/utils/colorMap";
+import {useStore} from "@/stores/store";
+import {gamePveShowGameInfoAPI} from '@/apis/gamePve';
+import {getClubByIdAPI} from '@/apis/club';
+import {useRouterPush} from '@/composables';
 
 
-
-
-const { routerPush } = useRouterPush();
+const {routerPush} = useRouterPush();
 const store = useStore();
 
 
@@ -109,7 +101,7 @@ onMounted(() => {
                 if (timer) {
                     clearInterval(timer);
                 }
-                routerPush({ name: 'game-result' });
+                routerPush({name: 'game-result'});
                 return;
             }
             const temp = response;
@@ -119,7 +111,7 @@ onMounted(() => {
                     temp.computer_team_info.name = store.clubNameId[temp.computer_team_info.club_id];
                     store.gamePveData = temp;
                 } else {
-                    getClubByIdAPI({ club_id: temp.computer_team_info.club_id })
+                    getClubByIdAPI({club_id: temp.computer_team_info.club_id})
                         .then((response: any) => {
                             temp.computer_team_info.name = response.name;
                             store.clubNameId[temp.computer_team_info.club_id] = response.name;
@@ -129,7 +121,7 @@ onMounted(() => {
                         });
                 }
             } else {
-                getClubByIdAPI({ club_id: temp.player_team_info.club_id })
+                getClubByIdAPI({club_id: temp.player_team_info.club_id})
                     .then((response: any) => {
                         temp.player_team_info.name = response.name;
                         store.clubNameId[temp.player_team_info.club_id] = response.name;
@@ -137,7 +129,7 @@ onMounted(() => {
                             temp.computer_team_info.name = store.clubNameId[temp.computer_team_info.club_id];
                             store.gamePveData = temp;
                         } else {
-                            getClubByIdAPI({ club_id: temp.computer_team_info.club_id })
+                            getClubByIdAPI({club_id: temp.computer_team_info.club_id})
                                 .then((response: any) => {
                                     temp.computer_team_info.name = response.name;
                                     store.clubNameId[temp.computer_team_info.club_id] = response.name;
@@ -162,7 +154,9 @@ const totalData: ComputedRef = computed(() => {
 });
 
 const isSelfTurn: ComputedRef = computed(() => {
-    return store.gamePveData.game_info.cur_attacker === store.gamePveData.game_info.player_club_id
+    if (store.gamePveData.game_info) {
+        return store.gamePveData.game_info.cur_attacker === store.gamePveData.game_info.player_club_id
+    }
 });
 
 
@@ -298,7 +292,7 @@ watch(
             });
         }
     },
-    { immediate: true }
+    {immediate: true}
 );
 
 // 球场相关函数
