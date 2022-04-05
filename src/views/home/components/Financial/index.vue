@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-lg shadow-md bg-white p-5 w-2/5">
+    <div class="s-card rounded-lg shadow-md bg-white p-5 w-2/5">
         <div class="text-lg font-semibold text-primary mb-3">财政</div>
         <n-spin v-if="isLoading" class="p-10 flex iteams-center"></n-spin>
         <div v-if="!isLoading" class="flex flex-col">

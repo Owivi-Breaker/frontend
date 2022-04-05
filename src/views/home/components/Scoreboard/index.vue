@@ -1,5 +1,5 @@
 <template>
-    <div class="mb-4 bg-white shadow-md rounded-lg p-3">
+    <div class="s-card mb-4 bg-white shadow-md rounded-lg p-3">
         <div class="flex items-center justify-between">
             <div class="s-title s-underline text-xl mb-6">{{ leagueName }}
             </div>

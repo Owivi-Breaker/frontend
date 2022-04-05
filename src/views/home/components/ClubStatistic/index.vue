@@ -1,5 +1,5 @@
 <template>
-    <div class="rounded-lg shadow-md bg-white p-5 w-3/5">
+    <div class="s-card rounded-lg shadow-md bg-white p-5 w-3/5">
         <div class="text-lg font-semibold text-primary mb-3">统计</div>
         <n-spin v-if="isLoading!==0" class="p-30 flex iteams-center"></n-spin>
         <div v-if="isLoading===0" class="flex flex-col">
