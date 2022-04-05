@@ -84,7 +84,10 @@
                             />
                             <div class="s-card px-4 pb-4 pt-18">
                                 <div class="flex flex-col item-center gap-4">
-                                    <div class="s-title s-underline px-5 text-center">{{ teamList[index].name }}</div>
+                                    <div class="s-title s-underline px-5 text-center">{{
+                                            teamList[index].name
+                                        }}
+                                    </div>
                                     <div class="flex flex-col gap-4 items-center">
                                         资金：{{ teamList[index].finance }}
                                         <br/>
@@ -97,21 +100,15 @@
                         </div>
                     </div>
                 </n-scrollbar>
-                <div class="flex gap-4">
-                    <n-button
-                        class="bottomButton"
-                        style="right: 120px"
-                        @click="clubShowModal = false; leagueShowModal = true;"
-                    >返回
-                    </n-button>
-                    <n-button
-                        class="bottomButton"
-                        style="right: 50px"
-                        @click="clubShowModal = false"
-                    >关闭
-                    </n-button>
-                </div>
             </div>
+            <n-space style="margin-top: 1%" justify="end">
+                <n-button @click="clubShowModal = false; leagueShowModal = true;">
+                    返回
+                </n-button>
+                <n-button @click="clubShowModal = false">
+                    关闭
+                </n-button>
+            </n-space>
         </div>
     </n-modal>
     <n-modal v-model:show="loadShowModal" :mask-closable="false">
@@ -187,11 +184,10 @@ onMounted(() => {
 
 declare const window: Window & { $router: Router };
 // 存储存档id
-const choseSave: Ref<any> = ref(null);
+const choseSave: Ref = ref(null);
 const Enter = (): void => {
     if (choseSave.value) {
         storage.set('saveId', choseSave.value);
-        // window.$router.push({ name: 'home' });
         routerPush('home');
     }
 };

@@ -11,7 +11,7 @@
             <n-pagination
                 v-model:page="pageIndex"
                 :on-update:page="setPage"
-                :page-count="store.playerData.length / pageSize"
+                :page-count="Math.ceil(store.playerData.length / pageSize)"
             />
         </n-space>
     </div>

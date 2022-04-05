@@ -28,10 +28,10 @@
     </div>
 </template>
 <script lang="ts" setup>
-import { computed, ComputedRef, h } from 'vue';
-import { NTag } from 'naive-ui';
-import { getColor } from '@/utils/colorMap';
-import { useStore } from '@/stores/store';
+import {computed, ComputedRef, h} from 'vue';
+import {NTag} from 'naive-ui';
+import {getColor} from '@/utils/colorMap';
+import {useStore} from '@/stores/store';
 
 const store = useStore();
 const capaData: ComputedRef = computed(() =>
@@ -96,17 +96,11 @@ let perfMax: any = {
 
 class capaItem {
     title: string;
-
     key: string;
-
     fixed: string | null;
-
     width: number | null;
-
     align: string;
-
     render: Function | null;
-
     sorter: string;
 
     constructor(title: string) {
@@ -117,14 +111,14 @@ class capaItem {
         this.align = 'left';
         if (title === '年龄') {
             this.render = (row: any) => {
-                return h(NTag, { style: { marginRight: '6px' }, type: 'info' }, { default: () => row['年龄'] });
+                return h(NTag, {style: {marginRight: '6px'}, type: 'info'}, {default: () => row['年龄']});
             };
         } else {
             this.render = (row: any) => {
                 return h(
                     'p',
-                    { style: { margin: 0, color: getColor(row[this.key], 'text') } },
-                    { default: () => row[this.key] }
+                    {style: {margin: 0, color: getColor(row[this.key], 'text')}},
+                    {default: () => row[this.key]}
                 );
             };
         }
@@ -163,7 +157,7 @@ class perfItem {
                             color: getColor(row[this.key], 'text', 0, perfMax[title])
                         }
                     },
-                    { default: () => row[this.key] }
+                    {default: () => row[this.key]}
                 );
             };
             this.sorter = 'default';
@@ -188,7 +182,7 @@ class perfItem {
                                         color: getColor(row[`${sumKey}总`], 'text', 0, perfMax[`${sumKey}总`])
                                     }
                                 },
-                                { default: () => row[`${sumKey}总`] }
+                                {default: () => row[`${sumKey}总`]}
                             ),
                             ' / ',
                             h(
@@ -199,7 +193,7 @@ class perfItem {
                                         color: getColor(row[`${sumKey}成功`], 'text', 0, perfMax[`${sumKey}成功`])
                                     }
                                 },
-                                { default: () => row[`${sumKey}成功`] }
+                                {default: () => row[`${sumKey}成功`]}
                             )
                         ]
                     }

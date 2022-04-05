@@ -209,7 +209,7 @@ class playerItem {
                 return h(
                     'p',
                     {style: {margin: 0}},
-                    {default: () => row[this.key]}
+                    {default: () => [row[this.key], '万']}
                 );
             };
         } else {

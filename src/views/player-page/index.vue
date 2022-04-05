@@ -105,35 +105,35 @@
                         </div>
                     </div>
                     <!-- 奖杯陈列室 -->
-                    <div class>
-                        <div class="s-card p-6">
-                            <div class="text-lg font-semibold text-primary mb-3 s-underline">奖杯陈列室</div>
-                            <n-list>
-                                <n-list-item>
-                                    <n-thing title="个人荣誉">
-                                        <!-- <div class="bg-primary-active w-full py-0.5 mb-2"></div> -->
-                                        2019 金球奖
-                                        <br />2018 英超年度最佳球员
-                                        <br />2020 西甲最佳射手
-                                        <br />2018 英超最佳射手
-                                        <br />2017 英超最佳射手
-                                        <br />2015 英冠最佳射手
-                                        <br />2013 金童奖
-                                        <br />
-                                    </n-thing>
-                                </n-list-item>
-                                <n-list-item>
-                                    <n-thing title="俱乐部荣誉">
-                                        2018 曼彻斯特联 欧冠冠军
-                                        <br />2021 巴塞罗那 西甲冠军
-                                        <br />2017 曼彻斯特联 英超冠军
-                                        <br />2019 巴塞罗那 国王杯冠军
-                                        <br />
-                                    </n-thing>
-                                </n-list-item>
-                            </n-list>
-                        </div>
-                    </div>
+<!--                    <div class>-->
+<!--                        <div class="s-card p-6">-->
+<!--                            <div class="text-lg font-semibold text-primary mb-3 s-underline">奖杯陈列室</div>-->
+<!--                            <n-list>-->
+<!--                                <n-list-item>-->
+<!--                                    <n-thing title="个人荣誉">-->
+<!--                                        &lt;!&ndash; <div class="bg-primary-active w-full py-0.5 mb-2"></div> &ndash;&gt;-->
+<!--                                        2019 金球奖-->
+<!--                                        <br />2018 英超年度最佳球员-->
+<!--                                        <br />2020 西甲最佳射手-->
+<!--                                        <br />2018 英超最佳射手-->
+<!--                                        <br />2017 英超最佳射手-->
+<!--                                        <br />2015 英冠最佳射手-->
+<!--                                        <br />2013 金童奖-->
+<!--                                        <br />-->
+<!--                                    </n-thing>-->
+<!--                                </n-list-item>-->
+<!--                                <n-list-item>-->
+<!--                                    <n-thing title="俱乐部荣誉">-->
+<!--                                        2018 曼彻斯特联 欧冠冠军-->
+<!--                                        <br />2021 巴塞罗那 西甲冠军-->
+<!--                                        <br />2017 曼彻斯特联 英超冠军-->
+<!--                                        <br />2019 巴塞罗那 国王杯冠军-->
+<!--                                        <br />-->
+<!--                                    </n-thing>-->
+<!--                                </n-list-item>-->
+<!--                            </n-list>-->
+<!--                        </div>-->
+<!--                    </div>-->
                 </div>
 
                 <div class="w-2/5 space-y-10">

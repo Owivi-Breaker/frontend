@@ -162,7 +162,7 @@ function postRegister(): void {
                 is_active: true,
                 password: formValue.value.password
             })
-                .then(_response => {
+                .then((_response: any) => {
                     window.$message.success('注册成功');
                     // setTimeout(() => {
                     routerPush({ name: 'login' });
@@ -182,7 +182,7 @@ function clearPasswordAgain(): void {
 
 /* 展示协议 */
 function showProtocol(): void {
-    getProtocolAPI().then(response => {
+    getProtocolAPI().then((response: any) => {
         protocol.value = response;
     });
     showModal.value = true;
@@ -201,32 +201,6 @@ defineExpose({
 });
 </script>
 <style>
-body {
-    background-image: url("http://s1.s100.vip:13127/Public/background.png");
-}
-
-.registerDiv {
-    text-align: center;
-    width: 300px;
-    height: 610px;
-    margin: auto;
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-}
-
-#logo {
-    width: 100px;
-    margin: auto;
-}
-
-#title {
-    color: white;
-    font-size: 20px;
-}
-
 #form {
     display: inline-block;
     width: 300px;
@@ -239,22 +213,11 @@ body {
     border-radius: 20px;
 }
 
-.roundButton {
-    padding: 20px;
-    color: white;
-    width: 300px;
-    border-radius: 20px;
-}
-
 label {
     color: white;
 }
 
 #registerLink {
     color: #246ace;
-}
-
-.n-checkbox {
-    margin-left: 15px;
 }
 </style>

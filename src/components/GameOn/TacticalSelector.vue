@@ -17,7 +17,8 @@
                             'hover:bg-primary-hover active:bg-primary-pressed focus:outline-none focus:ring focus:ring-primary-press': isActive(item['value'])
                         }"
                         @click="selectTactic(item)"
-                    >{{ item['label'] }}</button>
+                    >{{ item['label'] }}
+                    </button>
                     <!-- 等待进攻按钮 -->
                     <button
                         :disabled="!isActive('wait')"
@@ -28,7 +29,8 @@
                         }"
                         class="bg-primary rounded-full shadow-md px-3 py-2 3xl:text-lg text-white"
                         @click="selectTactic('wait')"
-                    >等待对方进攻</button>
+                    >等待对方进攻
+                    </button>
                 </div>
             </n-tab-pane>
 
@@ -38,7 +40,7 @@
                     <!-- 战术概率滑条 -->
                     <div class="flex flex-col" v-for="(item, key) in tactics" :key="key">
                         <div class="font-semibold">{{ item.label }}</div>
-                        <n-slider class tooltip v-model:value="item.weight" />
+                        <n-slider class tooltip v-model:value="item.weight"/>
                     </div>
 
                     <div class="mt-6 ml-65">
@@ -55,18 +57,16 @@
 
 
 <script lang="ts" setup>
-import { computed, ComputedRef, Ref, ref, watch, onMounted, defineComponent } from 'vue';
-import { Router } from 'vue-router';
-import { useRouterPush } from '@/composables';
-import { gamePveNextTurnAPI, gamePveShowGameInfoAPI } from '@/apis/gamePve';
-import { useStore } from '@/stores/store';
-import { getClubByIdAPI } from '@/apis/club';
-import { useMessage } from 'naive-ui';
-import { getColor, getClubColor, clubBg, clubTx, clubBd } from "@/utils/colorMap";
+import {computed, ComputedRef, Ref, ref, watch} from 'vue';
+import {Router} from 'vue-router';
+import {useRouterPush} from '@/composables';
+import {gamePveNextTurnAPI} from '@/apis/gamePve';
+import {useStore} from '@/stores/store';
+import {useMessage} from 'naive-ui';
 
 
 const message = useMessage()
-const { routerPush } = useRouterPush();
+const {routerPush} = useRouterPush();
 const store = useStore();
 
 declare const window: Window & { $router: Router };
@@ -107,25 +107,23 @@ const tactics: Ref<Array<any>> = ref([
 ]);
 
 
-
-
 const gameEndId: Ref<number> = ref(0);
 const nowAndEnd: ComputedRef = computed(() => {
     return gameEndId.value === 0 ? 'NOW' : '结束比赛';
 });
 
 let timer: NodeJS.Timeout | null = null;
+
 function goNextTurn(): void {
     if (gameEndId.value !== 0) {
         if (timer) {
             clearInterval(timer);
         }
-        routerPush({ name: 'game-result', query: { id: gameEndId.value } });
+        routerPush({path: 'game-result', query: {id: gameEndId.value}});
         store.gamePveData = {} as any;
         return;
     }
     if (isAuto.value) {
-        // 按概率选战术
         const possibleList: Array<number> = [tactics.value[0].weight, 0, 0, 0, 0];
         for (let i: number = 1; i < tactics.value.length; i++) {
             possibleList[i] = possibleList[i - 1] + tactics.value[i].weight;
@@ -138,7 +136,7 @@ function goNextTurn(): void {
             }
         }
     }
-    gamePveNextTurnAPI({ tactic: curTactic.value })
+    gamePveNextTurnAPI({tactic: curTactic.value})
         .then((response: any) => {
             if (response.game_id !== 0) {
                 gameEndId.value = response.game_id;
@@ -168,7 +166,7 @@ watch(
         }
     }
 );
-defineExpose({ isAuto, curTactic, tactics });
+defineExpose({isAuto, curTactic, tactics});
 
 // 选项框选择到手动比赛时，将isAuto设否
 const handleBeforeLeave = (tabName: string) => {
@@ -207,11 +205,8 @@ const isActive = (tacticName: String) => {
         if (tacticName == 'wait') {
             return false
         }
-        if (tacticName == 'counter_attack' && !store.gamePveData.game_info.counter_attack_permitted) {
-            // 不允许使用防守反击
-            return false
-        }
-        return true
+        return !(tacticName == 'counter_attack' && !store.gamePveData.game_info.counter_attack_permitted);
+
     }
 }
 </script>

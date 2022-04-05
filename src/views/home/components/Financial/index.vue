@@ -51,7 +51,7 @@ onMounted(() => {
 let finance: ComputedRef<string> = computed(() => {
     let finance = Math.round(rowFinance.value * 100) / 100;
     if (finance > 10000) {
-        return `€${finance / 10000}亿`;
+        return `€${Math.round(finance / 100) / 100}亿`;
     } else {
         return `€${finance}万`;
     }
@@ -59,7 +59,7 @@ let finance: ComputedRef<string> = computed(() => {
 let seasonFinance: ComputedRef<string> = computed(() => {
     let finance = Math.round(rowSeasonFinance.value * 100) / 100;
     if (finance > 10000) {
-        return `€${finance / 10000}亿`;
+        return `€${Math.round(finance / 100) / 100}亿`;
     } else {
         return `€${finance}万`;
     }
