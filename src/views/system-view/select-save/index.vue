@@ -78,7 +78,7 @@
                     <div class="grid grid-cols-5 gap-10 p-4">
                         <div class="min-w-50" v-for="(item, index) in teamList" :key="index">
                             <img
-                                :src="'https://s1.s100.vip:13127/Public/' + teamList[index].name + '.png'"
+                                :src="'http://shu-huai.cn:13127/Public/' + teamList[index].name + '.png'"
                                 alt="图片"
                                 class="w-25 h-25 -mb-14 mx-auto"
                             />

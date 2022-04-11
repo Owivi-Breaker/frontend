@@ -5,7 +5,7 @@
             <!-- 左队 -->
             <div class="w-1/3 flex flex-col items-center gap-2">
                 <img
-                    :src="'https://s1.s100.vip:13127/Public/' + leftTeam['name'] + '.png'"
+                    :src="'http://shu-huai.cn:13127/Public/' + leftTeam['name'] + '.png'"
                     alt="图片"
                     class="w-15 h-15"
                 />
@@ -30,7 +30,7 @@
             <!-- 右队 -->
             <div class="w-1/3 flex flex-col items-center gap-2">
                 <img
-                    :src="'httpw://s1.s100.vip:13127/Public/' + rightTeam['name'] + '.png'"
+                    :src="'http://shu-huai.cn:13127/Public/' + rightTeam['name'] + '.png'"
                     alt="图片"
                     class="w-15 h-15"
                 />

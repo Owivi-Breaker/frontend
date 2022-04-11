@@ -100,7 +100,7 @@ onMounted(() => {
                     meta: store.Date,
                     avatar: () =>
                         h('img', {
-                            src: 'https://s1.s100.vip:13127/Public/' + response[item].player_info.club_name + ".png"
+                            src: 'http://shu-huai.cn:13127/Public/' + response[item].player_info.club_name + ".png"
                         })
                 });
             }
@@ -142,7 +142,7 @@ onMounted(() => {
                     meta: store.Date,
                     avatar: () =>
                         h('img', {
-                            src: 'https://s1.s100.vip:13127/Public/' + response[item].player_info.club_name + ".png"
+                            src: 'http://shu-huai.cn:13127/Public/' + response[item].player_info.club_name + ".png"
                         })
                 });
             }
