@@ -68,7 +68,7 @@ import {getPlayerStatisticsAPI, getSeasonGoalStatisticsAPI} from "@/apis/club";
 import {ClubMePlayerStatisticsResponse, ClubMeSeasonGoalStatisticsResponse} from "@/interface/response/club";
 import {onMounted, Ref, ref} from "vue";
 
-let isLoading: Ref<number> = ref(0);
+let isLoading: Ref<number> = ref(2);
 let playerStatistics: Ref<ClubMePlayerStatisticsResponse | null> = ref(null);
 let seasonGoalStatistics: Ref<ClubMeSeasonGoalStatisticsResponse | null> = ref(null);
 onMounted(() => {
