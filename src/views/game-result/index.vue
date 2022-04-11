@@ -24,7 +24,7 @@
                         <!-- 左队 -->
                         <div class="w-1/3 flex flex-col items-center gap-2">
                             <img
-                                :src="'http://s1.s100.vip:13127/Public/' + gameResult.teams_info[0].club_name + '.png'"
+                                :src="'http://shu-huai.cn:13127/Public/' + gameResult.teams_info[0].club_name + '.png'"
                                 alt="图片"
                                 class="w-15 h-15"
                             />
@@ -65,7 +65,7 @@
                         <!-- 右队 -->
                         <div class="w-1/3 flex flex-col items-center gap-2">
                             <img
-                                :src="'http://s1.s100.vip:13127/Public/' + gameResult.teams_info[1].club_name + '.png'"
+                                :src="'http://shu-huai.cn:13127/Public/' + gameResult.teams_info[1].club_name + '.png'"
                                 alt="图片"
                                 class="w-15 h-15"
                             />
