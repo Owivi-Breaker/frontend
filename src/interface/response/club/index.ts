@@ -4,3 +4,4 @@ export * from './ClubMeResponse';
 export * from './ClubMeSeasonFinanceResponse';
 export * from './ClubMePlayerStatisticsResponse';
 export * from './ClubMeSeasonGoalStatisticsResponse';
+export * from './ClubMeSeasonTacticsStatisticsResponse';

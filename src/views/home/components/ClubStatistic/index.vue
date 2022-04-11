@@ -31,23 +31,33 @@
             <div class="bg-primary-active w-full py-0.5 mb-2"></div>
             <div class="flex justify-between">
                 <div class>下底传中</div>
-                <div class>58/122 - 47.5%</div>
+                <div class>{{ seasonTacticsStatistics.下底传中成功 }}/{{ seasonTacticsStatistics.下底传中 }} -
+                    {{ Math.round(seasonTacticsStatistics.下底传中成功率 * 100) / 100 }}%
+                </div>
             </div>
             <div class="flex justify-between">
                 <div class>倒三角</div>
-                <div class>1/24 - 4.2%</div>
+                <div class>{{ seasonTacticsStatistics.倒三角成功 }}/{{ seasonTacticsStatistics.倒三角 }} -
+                    {{ Math.round(seasonTacticsStatistics.倒三角成功率 * 100) / 100 }}%
+                </div>
             </div>
             <div class="flex justify-between">
                 <div class>中路渗透</div>
-                <div class>18/65 - 27.6%</div>
+                <div class>{{ seasonTacticsStatistics.中路渗透成功 }}/{{ seasonTacticsStatistics.中路渗透 }} -
+                    {{ Math.round(seasonTacticsStatistics.中路渗透成功率 * 100) / 100 }}%
+                </div>
             </div>
             <div class="flex justify-between">
                 <div class>边路内切</div>
-                <div class>4/55 - 7.2%</div>
+                <div class>{{ seasonTacticsStatistics.边路内切成功 }}/{{ seasonTacticsStatistics.边路内切 }} -
+                    {{ Math.round(seasonTacticsStatistics.边路内切成功率 * 100) / 100 }}%
+                </div>
             </div>
             <div class="flex justify-between">
                 <div class>防守反击</div>
-                <div class>6/19 - 31.6%</div>
+                <div class>{{ seasonTacticsStatistics.防守反击成功 }}/{{ seasonTacticsStatistics.防守反击 }} -
+                    {{ Math.round(seasonTacticsStatistics.防守反击成功率 * 100) / 100 }}%
+                </div>
             </div>
             <!-- 比赛 -->
             <div class="font-semibold mt-4">比赛</div>
@@ -64,15 +74,20 @@
     </div>
 </template>
 <script setup lang="ts">
-import {getPlayerStatisticsAPI, getSeasonGoalStatisticsAPI} from "@/apis/club";
-import {ClubMePlayerStatisticsResponse, ClubMeSeasonGoalStatisticsResponse} from "@/interface/response/club";
+import {getPlayerStatisticsAPI, getSeasonGoalStatisticsAPI, getSeasonTacticsStatisticsAPI} from "@/apis/club";
+import {
+    ClubMePlayerStatisticsResponse,
+    ClubMeSeasonGoalStatisticsResponse,
+    ClubMeSeasonTacticsStatisticsResponse
+} from "@/interface/response/club";
 import {onMounted, Ref, ref} from "vue";
 
-let isLoading: Ref<number> = ref(2);
+let isLoading: Ref<number> = ref(3);
 let playerStatistics: Ref<ClubMePlayerStatisticsResponse | null> = ref(null);
 let seasonGoalStatistics: Ref<ClubMeSeasonGoalStatisticsResponse | null> = ref(null);
+let seasonTacticsStatistics: Ref<ClubMeSeasonTacticsStatisticsResponse | null> = ref(null);
 onMounted(() => {
-    isLoading.value = 2;
+    isLoading.value = 3;
     getPlayerStatisticsAPI().then((response: ClubMePlayerStatisticsResponse) => {
         playerStatistics.value = response;
         isLoading.value--;
@@ -80,6 +95,11 @@ onMounted(() => {
     });
     getSeasonGoalStatisticsAPI().then((response: ClubMeSeasonGoalStatisticsResponse) => {
         seasonGoalStatistics.value = response;
+        isLoading.value--;
+    }).catch((_error: any) => {
+    });
+    getSeasonTacticsStatisticsAPI().then((response: ClubMeSeasonTacticsStatisticsResponse) => {
+        seasonTacticsStatistics.value = response;
         isLoading.value--;
     }).catch((_error: any) => {
     });

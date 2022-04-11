@@ -30,6 +30,9 @@ const getPlayerStatisticsAPI = () => {
 const getSeasonGoalStatisticsAPI = () => {
     return http.get(`/club/me/season-goal-statistics`, null);
 };
+const getSeasonTacticsStatisticsAPI = () => {
+    return http.get(`/club/me/season-tactics-statistics`, null);
+};
 export {
     getClubsAPI,
     getClubMeAPI,
@@ -41,4 +44,5 @@ export {
     getSeasonFinanceAPI,
     getPlayerStatisticsAPI,
     getSeasonGoalStatisticsAPI,
+    getSeasonTacticsStatisticsAPI
 };
