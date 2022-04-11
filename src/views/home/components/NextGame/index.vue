@@ -6,7 +6,7 @@
             <div class="flex items-center gap-7 justify-self-center">
                 <img
                     class="h-30"
-                    :src="'http://shu-huai.cn:13127/Public/' + teams[0] + '.png'"
+                    :src="'https://s1.s100.vip:13127/Public/' + teams[0] + '.png'"
                     alt="图片"
                 />
                 <div class="flex flex-col items-start gap-3">
@@ -49,7 +49,7 @@
                 </div>
                 <img
                     class="h-30"
-                    :src="'http://shu-huai.cn:13127/Public/' + teams[1] + '.png'"
+                    :src="'https://s1.s100.vip:13127/Public/' + teams[1] + '.png'"
                     alt="图片"
                 />
             </div>
