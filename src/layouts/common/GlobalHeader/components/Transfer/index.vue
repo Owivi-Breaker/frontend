@@ -161,7 +161,7 @@ function postWage(): void {
     negoHistory.value.push({
         isMe: true,
         message: negoWage.value,
-        avatar: 'http://lvshuhuai.cn:13127/Public/' + myName.value + '.png',
+        avatar: 'http://shu-huai.cn:13127/Public/' + myName.value + '.png',
     });
     if (negoEnd.value) {
         negoWage.value = '';
