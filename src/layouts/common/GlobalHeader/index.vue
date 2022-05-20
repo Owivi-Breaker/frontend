@@ -30,6 +30,11 @@
                     <icon-tabler:track-next class="text-20px"/>
                 </n-button>
             </hover-container>
+            <hover-container class="w-40px h-full" tooltip-content="度假">
+                <n-button :bordered="false" class="w-35px h-full" @click="holiday">
+                    <icon-tabler:track-next class="text-20px"/>
+                </n-button>
+            </hover-container>
             <!-- <global-search /> -->
             <github-site/>
             <full-screen/>
@@ -52,6 +57,25 @@
                     <n-button @click="ExitLogin">确认</n-button>
                     <n-button type="primary" @click="showExitModal = false">返回</n-button>
                 </div>
+            </div>
+        </n-modal>
+    </div>
+    <!-- 度假模态框 -->
+    <div>
+        <n-modal v-model:show="showHolidayModal" :mask-closable="false">
+            <div :bordered="false" class="s-card p-8 space-y-7 w-50 text-center">
+                <div class="s-title s-underline text-lg">我要度假</div>
+                <n-input-number v-if="!isHolidayLoading" v-model:value="holidayDays">
+                    <template #suffix>
+                        天
+                    </template>
+                </n-input-number>
+                <div v-if="!isHolidayLoading" class="flex items-center gap-6 justify-end">
+                    <n-button type="primary" @click="goOnHoliday">确认</n-button>
+                    <n-button @click="showHolidayModal = false">返回</n-button>
+                </div>
+                <n-spin v-if="isHolidayLoading">
+                </n-spin>
             </div>
         </n-modal>
     </div>
@@ -109,7 +133,7 @@ import {useRouterPush} from '@/composables';
 import {storage} from '@/utils';
 import type {GlobalHeaderProps} from '@/interface';
 import {getDateAPI} from '@/apis/user';
-import {nextTurnAPI} from '@/apis/nextTurn';
+import {nextTurnAPI, nextTurnHolidayAPI} from '@/apis/nextTurn';
 import {useStore} from '@/stores/store';
 import {getIncomingGamesAPI} from '@/apis/club';
 import GlobalLogo from '../GlobalLogo/index.vue';
@@ -200,7 +224,6 @@ function nextDay(): void {
                                 nextTick(() => {
                                     needTransfer.value = true;
                                 });
-                                console.log(needTransfer.value);
                             })
                             .catch((_error: {}) => {
                             });
@@ -212,6 +235,49 @@ function nextDay(): void {
             });
     }).catch((_error: {}) => {
     });
+}
+
+let showHolidayModal: Ref<boolean> = ref(false);
+let holidayDays: Ref<number> = ref(0);
+let isHolidayLoading: Ref<boolean> = ref(false);
+
+function holiday(): void {
+    showHolidayModal.value = true;
+}
+
+function goOnHoliday(): void {
+    isHolidayLoading.value = true;
+    nextTurnHolidayAPI({turn_num: holidayDays.value}).then(() => {
+        getDateAPI()
+            .then((response: { date: any }) => {
+                store.Date = response.date;
+                store.nextGame.distance--;
+                if (store.nextGame.distance <= 0) {
+                    getIncomingGamesAPI()
+                        .then((response: any) => {
+                            const nextGameDate = response[0].date;
+                            const teams = new Array<string>(2);
+                            teams[0] = response[0].club1_name;
+                            teams[1] = response[0].club2_name;
+                            store.nextGame.distance =
+                                (new Date(nextGameDate).getTime() / 1000 - new Date(store.Date).getTime() / 1000) / 24 / 60 / 60;
+                            store.nextGame.teams = teams;
+                            showHolidayModal.value = false;
+                            isHolidayLoading.value = false;
+                        })
+                        .catch((_error: {}) => {
+                        });
+                } else {
+                    showHolidayModal.value = false;
+                    isHolidayLoading.value = false;
+                }
+                nextTick(() => {
+                    needTransfer.value = true;
+                });
+            })
+            .catch((_error: {}) => {
+            });
+    })
 }
 
 defineExpose({ExitLogin, goPre, nextDay, showExitModal, showGameModal});
