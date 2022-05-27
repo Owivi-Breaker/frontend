@@ -100,7 +100,7 @@ onMounted(() => {
                     meta: store.Date,
                     avatar: () =>
                         h('img', {
-                            src: 'http://shu-huai.cn:13127/Public/' + response[item].player_info.club_name + ".png"
+                            src: 'http://shu-huai.cn:13182/chfs/shared/Public/' + response[item].player_info.club_name + ".png"
                         })
                 });
             }
@@ -142,7 +142,7 @@ onMounted(() => {
                     meta: store.Date,
                     avatar: () =>
                         h('img', {
-                            src: 'http://shu-huai.cn:13127/Public/' + response[item].player_info.club_name + ".png"
+                            src: 'http://shu-huai.cn:13182/chfs/shared/Public/' + response[item].player_info.club_name + ".png"
                         })
                 });
             }
@@ -161,7 +161,7 @@ function postWage(): void {
     negoHistory.value.push({
         isMe: true,
         message: negoWage.value,
-        avatar: 'http://shu-huai.cn:13127/Public/' + myName.value + '.png',
+        avatar: 'http://shu-huai.cn:13182/chfs/shared/Public/' + myName.value + '.png',
     });
     if (negoEnd.value) {
         negoWage.value = '';

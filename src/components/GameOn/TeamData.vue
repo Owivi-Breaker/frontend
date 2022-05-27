@@ -5,7 +5,7 @@
             <!-- <div class="pb-4">
             <img
                 v-if="props.club"
-                :src="'http://shu-huai.cn:13127/Public/' + props.club.name + '.png'"
+                :src="'http://shu-huai.cn:13182/chfs/shared/Public/' + props.club.name + '.png'"
                 alt="图片"
                 class="teamAvatar"
             />

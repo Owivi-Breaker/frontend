@@ -87,7 +87,7 @@
             <div class="flex items-center gap-12">
                 <div class="flex flex-col items-center gap-2">
                     <img
-                        :src="'http://shu-huai.cn:13127/Public/' + store.nextGame.teams[0] + '.png'"
+                        :src="'http://shu-huai.cn:13182/chfs/shared/Public/' + store.nextGame.teams[0] + '.png'"
                         alt="图片"
                         class="w-12 h-12"
                     />
@@ -101,7 +101,7 @@
 
                 <div class="flex flex-col items-center gap-2">
                     <img
-                        :src="'http://shu-huai.cn:13127/Public/' + store.nextGame.teams[1] + '.png'"
+                        :src="'http://shu-huai.cn:13182/chfs/shared/Public/' + store.nextGame.teams[1] + '.png'"
                         alt="图片"
                         class="w-12 h-12"
                     />
