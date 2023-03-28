@@ -21,6 +21,13 @@ pnpm i -g commitizen
 pnpm prepare
 ```
 
+## 运行
+
+```shell
+pnpm run serve 	# 正式环境
+pnpm run dev 	# 生产环境
+```
+
 ## 常用方法
 
 ### iconify 用法
