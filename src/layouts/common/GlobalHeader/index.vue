@@ -126,7 +126,7 @@
 import {defineComponent, nextTick, onBeforeUnmount, onMounted, Ref, ref} from 'vue';
 import {Router} from 'vue-router';
 import {ExitOutline} from '@vicons/ionicons5';
-import key from 'Keymaster';
+import key from 'keymaster';
 import {DarkModeContainer} from '@/components';
 import {useThemeStore} from '@/store';
 import {useRouterPush} from '@/composables';
